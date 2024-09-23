@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CheckoutMapper {
-    int insert(Checkout checkout);
+    Integer insert(Checkout checkout);
     List<Checkout> selectList();
     Optional<Checkout> selectOne(int id);
 }
