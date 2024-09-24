@@ -59,7 +59,7 @@
     });
 
 
-    // Worldwide Sales Chart
+    /* // Worldwide Sales Chart
     var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
     var myChart1 = new Chart(ctx1, {
         type: "bar",
@@ -85,10 +85,10 @@
         options: {
             responsive: true
         }
-    });
+    }); */
 
 
-    // Salse & Revenue Chart
+    /* // Salse & Revenue Chart
     var ctx2 = $("#salse-revenue").get(0).getContext("2d");
     var myChart2 = new Chart(ctx2, {
         type: "line",
@@ -111,11 +111,11 @@
         options: {
             responsive: true
         }
-    });
+    }); */
     
 
 
-    // Single Line Chart
+   /*  // Single Line Chart
     var ctx3 = $("#line-chart").get(0).getContext("2d");
     var myChart3 = new Chart(ctx3, {
         type: "line",
@@ -132,9 +132,9 @@
             responsive: true
         }
     });
+ */
 
-
-    // Single Bar Chart
+   /*  // Single Bar Chart
     var ctx4 = $("#bar-chart").get(0).getContext("2d");
     var myChart4 = new Chart(ctx4, {
         type: "bar",
@@ -154,10 +154,10 @@
         options: {
             responsive: true
         }
-    });
+    }); */
 
 
-    // Pie Chart
+ /*    // Pie Chart
     var ctx5 = $("#pie-chart").get(0).getContext("2d");
     var myChart5 = new Chart(ctx5, {
         type: "pie",
@@ -177,10 +177,10 @@
         options: {
             responsive: true
         }
-    });
+    }); */
 
 
-    // Doughnut Chart
+  /*   // Doughnut Chart
     var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
     var myChart6 = new Chart(ctx6, {
         type: "doughnut",
@@ -200,8 +200,88 @@
         options: {
             responsive: true
         }
-    });
+    }); */
 
     
 })(jQuery);
 
+document.getElementById('rowPerPage').addEventListener('change', function() {
+    // 선택된 값에 따라 테이블 행 수를 조정하는 로직
+    // 서버에 요청을 보내거나 클라이언트 측에서 테이블을 다시 렌더링
+    console.log('Selected rows per page:', this.value);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+
+    selectAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
+        });
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const stockTable = document.querySelector('.table-responsive table');
+    const selectedItemsTable = document.getElementById('selectedItemsTable').querySelector('tbody');
+
+    selectAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+            updateSelectedItems(checkbox);
+        });
+    });
+
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
+            updateSelectedItems(this);
+        });
+    });
+
+    function updateSelectedItems(checkbox) {
+        const row = checkbox.closest('tr');
+        const rowData = Array.from(row.cells).slice(1).map(cell => cell.textContent);
+        
+        if (checkbox.checked) {
+            const newRow = selectedItemsTable.insertRow();
+            rowData.forEach((text, index) => {
+                const cell = newRow.insertCell();
+                cell.textContent = text;
+            });
+            // 실사 수량 입력 필드 추가
+            //  const quantityCell = newRow.insertCell();
+            // const quantityInput = document.createElement('input');
+            // quantityInput.type = 'number';
+            // quantityInput.className = 'form-control';
+            // quantityInput.name = 'actualQuantity';
+            // quantityInput.required = true;
+            // quantityCell.appendChild(quantityInput);
+        } else {
+            Array.from(selectedItemsTable.rows).forEach((selectedRow, index) => {
+                if (selectedRow.cells[1].textContent === rowData[1]) {
+                    selectedItemsTable.deleteRow(index);
+                }
+            });
+        }
+    }
+
+    // // 폼 제출 이벤트 처리
+    // document.getElementById('stockCheckForm').addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //     // 여기에 실사 등록 로직을 추가하세요
+    //     console.log('실사 등록 폼이 제출되었습니다.');
+    // });
+});
