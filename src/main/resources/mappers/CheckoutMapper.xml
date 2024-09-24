@@ -4,6 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper>
     <insert id="insert" ></insert>
-    <select id="selectAll"></select>
+    <select id="selectList">
+        select c.checkout_id, c.checkout_warehouse_code, c.checkout_name
+        from checkout c, checkout_answer ca, checkout_question cq
+        where c.checkout_id = ca.checkout_id
+          and cq.checkout_question_id = ca.checkout_question_id
+          and cq.checkout_status = TRUE
+    </select>
     <select id="selectOne>"></select>
+    <select id="getCount" resultType="int">
+        select count(checkout_id) from checkout
+    </select>
 </mapper>
