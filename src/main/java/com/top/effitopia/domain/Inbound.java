@@ -1,12 +1,18 @@
 package com.top.effitopia.domain;
 
-import com.top.effitopia.dto.MemberDTO;
-import com.top.effitopia.dto.ProductDTO;
-import com.top.effitopia.dto.WarehouseDTO;
 import com.top.effitopia.enumeration.InboundStatus;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-
+@Getter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Inbound {
 
     private int inboundId;

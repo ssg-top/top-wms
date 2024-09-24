@@ -1,7 +1,17 @@
 package com.top.effitopia.domain;
 
 import com.top.effitopia.enumeration.ProductStorageType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Getter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     private int productId;               //상품아이디
