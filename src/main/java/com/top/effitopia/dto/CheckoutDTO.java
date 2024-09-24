@@ -15,4 +15,6 @@ public class CheckoutDTO {
     private Integer id;
     private WarehouseDTO warehouseDTO;
     private LocalDateTime regDate;
+    private String checkoutWarehouseCode;
+    private String checkoutName;
 }
