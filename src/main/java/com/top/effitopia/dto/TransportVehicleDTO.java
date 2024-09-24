@@ -1,5 +1,7 @@
 package com.top.effitopia.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +16,6 @@ public class TransportVehicleDTO {
     private MemberDTO memberDTO;
     private TransportVehicleCarTypeDTO transportVehicleCarTypeDTO;
     private TransportVehicleTemperatureTypeDTO transportVehicleTemperatureTypeDTO;
+    @NotEmpty
     private String carNum;
 }
