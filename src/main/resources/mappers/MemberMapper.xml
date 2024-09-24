@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.top.effitopia.mapper.MemberMapper">
+    <resultMap id = "Member" type ="Member">
+        <id property="id" column="member_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="status" column="status"/>
+        <result property="role" column="role"/>
+        <result property="businessNumber" column="business_number"/>
+        <result property="regDate" column="reg_date"/>
+        <association property="address" javaType="Address">
+            <result property="zipCode" column="zip_code"/>
+            <result property="roadNameAddress" column="road_name_address"/>
+            <result property="lotNumberAddress" column="lot_number_address"/>
+            <result property="detailAddress" column="detail_address"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="Member" useGeneratedKeys="true" keyProperty="id" keyColumn="member_id">
+        INSERT INTO member (username, password, name, phone, email, status, role, zip_code, road_name_address, lot_number_address, detail_address, business_number)
+        VALUES (#{username}, #{password}, #{name}, #{phone}, #{email}, #{status}, #{role}, #{address.zipCode}, #{address.roadNameAddress}, #{address.lotNumberAddress}, #{address.detailAddress}, #{businessNumber})
+    </insert>
+
+    <select id="selectOne" resultMap="Member" parameterType="int">
+        SELECT * FROM member WHERE member_id=#{id}
+    </select>
+
+    <select id="selectOneByUsername" resultMap="Member" parameterType="String">
+        SELECT * FROM member WHERE username=#{username}
+    </select>
+
+    <select id="selectAll" resultMap="Member">
+        SELECT * FROM member
+    </select>
+
+    <select id="existsByUsername" parameterType="String" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM member
+            WHERE username=#{username} LIMIT 1
+        )
+    </select>
+
+    <select id="existsByEmail" parameterType="String" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM member
+            WHERE email=#{email} LIMIT 1
+        )
+    </select>
+
+</mapper>
