@@ -1,31 +1,26 @@
-package com.top.effitopia.domain;
+package com.top.effitopia.dto;
 
 import com.top.effitopia.enumeration.MemberRole;
-import com.top.effitopia.enumeration.MemberStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Getter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Member {
+public class JoinDTO {
 
-    private Integer id;
     private String username;
     private String password;
     private String name;
     private String phone;
     private String email;
-    private MemberStatus status;
     private MemberRole role;
-    private Address address;
+    private String zipCode;
+    private String roadNameAddress;
+    private String lotNumberAddress;
+    private String detailAddress;
     private String businessNumber;
-    private LocalDateTime regDate;
-
-
 }
