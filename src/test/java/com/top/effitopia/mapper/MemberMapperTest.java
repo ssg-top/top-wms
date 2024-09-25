@@ -95,4 +95,34 @@ class MemberMapperTest {
         Assertions.assertEquals(newMember.getBusinessNumber(), findMember.getBusinessNumber());
     }
 
+    @Test
+    void updateStatus() {
+        memberMapper.insert(newMember);
+        int id = newMember.getId();
+        int rows = memberMapper.updateStatus(id, MemberStatus.REGISTERED);
+        Assertions.assertEquals(rows, 1);
+        Member member = memberMapper.selectOne(id).get();
+        Assertions.assertEquals(member.getStatus(), MemberStatus.REGISTERED);
+    }
+
+    @Test
+    void update() {
+        memberMapper.insert(newMember);
+        int id = newMember.getId();
+        Member updateMember = Member.builder()
+                .id(id)
+                .phone("01011111111")
+                .email(UUID.randomUUID().toString().substring(0, 6) + "@gmail.com")
+                .address(Address.builder()
+                        .roadNameAddress("update address1")
+                        .lotNumberAddress("update address2")
+                        .detailAddress("update address3")
+                        .build())
+                .build();
+        Member findMember = memberMapper.selectOne(id).get();
+        Assertions.assertEquals(memberMapper.update(updateMember), 1);
+        Assertions.assertEquals(findMember.getPhone(), updateMember.getPhone());
+        Assertions.assertEquals(findMember.getEmail(), updateMember.getEmail());
+    }
+
 }

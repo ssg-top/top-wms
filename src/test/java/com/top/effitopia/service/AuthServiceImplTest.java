@@ -10,12 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @Log4j2
 @SpringBootTest
-class AuthServiceTest {
+class AuthServiceImplTest {
 
-    @Autowired AuthService authService;
+    @Autowired
+    AuthServiceImpl authServiceImpl;
 
     @Test
-    void join() {
+    void save() {
         int randInt = (int) (Math.random() * 10000);
         JoinDTO joinDTO = JoinDTO.builder()
                 .username("test" + randInt)
@@ -30,6 +31,7 @@ class AuthServiceTest {
                 .detailAddress("")
                 .businessNumber("1234567890")
                 .build();
-        Assertions.assertTrue(authService.join(joinDTO));
+        log.info("username: {}", joinDTO.getUsername());
+        Assertions.assertTrue(authServiceImpl.save(joinDTO));
     }
 }
