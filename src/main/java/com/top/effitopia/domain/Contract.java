@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Contract {
 
-    private long id;
+    private Integer id;
 
     private Warehouse warehouse;
 

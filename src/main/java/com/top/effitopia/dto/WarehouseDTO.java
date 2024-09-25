@@ -1,6 +1,7 @@
 package com.top.effitopia.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.top.effitopia.domain.Address;
 import com.top.effitopia.enumeration.WarehouseType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class WarehouseDTO {
 
-    private long id;
+    private Integer id;
 
     @Nullable
     private MemberDTO memberDTO;
@@ -33,14 +34,7 @@ public class WarehouseDTO {
     @NotEmpty
     private String phone;
 
-    @NotEmpty
-    private String zip_code;
-
-    @NotEmpty
-    private String lotNumber;
-
-    @Nullable
-    private String detailAddress;
+    private Address address;
 
     private int	width;
 

@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Cell {
-    private long id;
+    private Integer id;
     private Warehouse warehouse;
     private int	code;
     private int	width;

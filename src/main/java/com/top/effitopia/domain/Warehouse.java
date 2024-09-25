@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Warehouse {
-    private long id;
+    private Integer id;
 
     private Member member;
 
@@ -26,11 +26,7 @@ public class Warehouse {
 
     private String phone;
 
-    private String zip_code;
-
-    private String lotNumber;
-
-    private String detailAddress;
+    private Address address;
 
     private int	width;
 

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ContractDTO {
 
-    private long id;
+    private Integer id;
 
     @NotEmpty
     private WarehouseDTO warehouseDTO;
