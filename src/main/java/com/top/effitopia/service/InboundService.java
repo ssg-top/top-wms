@@ -18,7 +18,5 @@ public interface InboundService {
 
     void saveList(List<InboundDTO> inboundDTOList);
 
-    void modifyList(List<InboundDTO> inboundDTOList);
-
     void removeList(List<Integer> inboundIdList);
 }

@@ -3,6 +3,7 @@ package com.top.effitopia.service;
 import com.top.effitopia.domain.Inbound;
 import com.top.effitopia.dto.InboundDTO;
 import com.top.effitopia.mapper.InboundMapper;
+import java.awt.print.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public class InboundServiceImpl implements InboundService {
 
     private final InboundMapper inboundMapper;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
     /**
      * InboundDTO 를 받아 새로운 입고 데이터를 생성하는 메서드
@@ -25,7 +26,7 @@ public class InboundServiceImpl implements InboundService {
      */
     @Override
     public boolean save(InboundDTO inboundDTO) {
-        Inbound inbound = dtoToEntity(inboundDTO);
+        Inbound inbound = modelMapper.map(inboundDTO, Inbound.class);
         return inboundMapper.insert(inbound) > 0;
     }
 
@@ -38,7 +39,8 @@ public class InboundServiceImpl implements InboundService {
      */
     @Override
     public boolean modify(InboundDTO inboundDTO) {
-        return false;
+        Inbound inbound = modelMapper.map(inboundDTO, Inbound.class);
+        return inboundMapper.update(inbound) > 0;
     }
 
     /**
@@ -52,25 +54,37 @@ public class InboundServiceImpl implements InboundService {
         return inboundMapper.delete(inboundId) > 0;
     }
 
+    /**
+     * 특정 입고 데이터를 조회하는 메서드
+     *
+     * @param inboundId 조회할 입고 데이터의 ID
+     * @return Optional<InboundDTO> - 조회된 입고 데이터
+     */
     @Override
     public Optional<InboundDTO> get(int inboundId) {
-        return Optional.empty();
+        Optional<Inbound> inbound = inboundMapper.selectOne(inboundId);
+        return Optional.ofNullable(modelMapper.map(inbound, InboundDTO.class));
     }
 
+    /**
+     * 모든 입고 데이터를 조회하는 메서드
+     *
+     * @return List<InboundDTO> 입고 데이터 리스트
+     */
     @Override
     public List<InboundDTO> getList() {
-        return null;
+        List<Inbound> inboundList = inboundMapper.selectAllList();
+        return inboundList.stream()
+            .map(inbound -> modelMapper.map(inbound, InboundDTO.class))
+            .toList();
     }
+
 
     @Override
     public void saveList(List<InboundDTO> inboundDTOList) {
 
     }
 
-    @Override
-    public void modifyList(List<InboundDTO> inboundDTOList) {
-
-    }
 
     @Override
     public void removeList(List<Integer> inboundIdList) {
@@ -97,6 +111,7 @@ public class InboundServiceImpl implements InboundService {
             .inboundStatus(inboundDTO.getInboundStatus())
             .build();
     }
+
 
     /**
      * Entity 를 InboundDTO 로 변환

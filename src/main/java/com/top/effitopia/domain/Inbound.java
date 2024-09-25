@@ -19,6 +19,7 @@ public class Inbound {
     private Member member;
     private Warehouse warehouse;
     private Product product;
+    private Vendor vendor;
     private LocalDate inboundRequestDate;
     private LocalDate inboundApprovedDate;
     private LocalDate inboundExpectDate;

@@ -1,5 +1,8 @@
 package com.top.effitopia.mapper;
 
-public class VendorMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface VendorMapper {
 
 }
