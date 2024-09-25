@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TempStockVO {
+public class TempStock {
     private int	tempStockID;	        //임시재고ID
     private int	changeAmount;	        //변동 수량
     private LocalDate manufacturingDate;//제조일자

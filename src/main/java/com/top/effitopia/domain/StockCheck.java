@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StockCheckVO {
+public class StockCheck {
     private int	stockCheckID;	    //재고실사ID
     private boolean	checkStatus;    //재고실사 상태
     private String	checkComment;	//재고실사 설명

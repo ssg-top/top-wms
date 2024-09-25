@@ -2,6 +2,7 @@ package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Inbound;
 import com.top.effitopia.dto.InboundSearchCond;
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,7 +18,7 @@ public interface InboundMapper {
 
     Optional<Inbound> selectOne(int inboundId);
 
-    //List<Inbound> selectAllList(Pageable pageable);
+    List<Inbound> selectAllList();
 
     int insertList(List<Inbound> inboundList);
 
