@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CheckoutQuestion {
     private Integer checkoutQuestionId;
+
     private String questionQuestionContent;
-    private boolean checkoutStatus;
 }
