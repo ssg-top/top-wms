@@ -3,16 +3,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper>
-    <insert id="insert" ></insert>
-    <select id="selectList">
-        select c.checkout_id, c.checkout_warehouse_code, c.checkout_name
-        from checkout c, checkout_answer ca, checkout_question cq
-        where c.checkout_id = ca.checkout_id
-          and cq.checkout_question_id = ca.checkout_question_id
-          and cq.checkout_status = TRUE
-    </select>
-    <select id="selectOne>"></select>
-    <select id="getCount" resultType="int">
-        select count(checkout_id) from checkout
+<!--    <insert id="insert" >-->
+<!--        INSERT INTO checkout (warehouse_id, reg_date, checkout_warehouse_code, checkout_name)-->
+<!--        VALUES (#{checkout.warehouseId}, #{checkout.regDate}, #{checkout.checkoutWarehouseCode}, #{checkout.checkoutName});-->
+<!--        SET @checkoutId = LAST_INSERT_ID();-->
+
+<!--        INSERT INTO checkout_question (checkout_question_content, checkout_status)-->
+<!--        VALUES (#{checkoutQuestion.checkoutQuestionContent}, #{checkoutQuestion.checkoutStatus});-->
+<!--        SET @checkoutQuestionId = LAST_INSERT_ID();-->
+
+<!--        INSERT INTO checkout_answer (checkout_id, checkout_question_id, checkout_answer_content)-->
+<!--        VALUES (@checkoutId, @checkoutQuestionId, #{checkoutAnswer.checkoutAnswerContent});-->
+<!--    </insert>-->
+<!--    <select id="selectList">-->
+<!--        select c.checkout_id, c.checkout_warehouse_code, c.checkout_name-->
+<!--        from checkout c, checkout_answer ca, checkout_question cq-->
+<!--        where c.checkout_id = ca.checkout_id-->
+<!--          and cq.checkout_question_id = ca.checkout_question_id-->
+<!--          and cq.checkout_status = TRUE-->
+<!--    </select>-->
+<!--    <select id="selectOne>"></select>-->
+<!--    <select id="getCount" resultType="int">-->
+<!--        select count(checkout_id) from checkout-->
+<!--    </select>-->
+
+
+    <insert id="insertCheckout" useGeneratedKeys="true" keyProperty="checkoutId">
+        INSERT INTO checkout (warehouse_id, checkout_content, reg_date)
+        VALUES (#{warehouse.warehouseId}, #{checkoutComment}, NOW())
+    </insert>
+    <insert id="insertCheckoutAnswer" useGeneratedKeys="true" keyProperty="checkoutAnswerId">
+        INSERT INTO checkout_answer (checkout_id, checkout_question_id, checkout_status)
+        VALUES (#{checkout.checkoutId}, #{checkoutQuestion.checkoutQuestionId}, #{checkoutStatus})
+    </insert>
+    <select id="getAllQuestions" resultType="com.top.effitopia.domain.CheckoutQuestion">
+        SELECT checkout_question_id, checkout_question_content
+        FROM checkout_question
     </select>
 </mapper>
