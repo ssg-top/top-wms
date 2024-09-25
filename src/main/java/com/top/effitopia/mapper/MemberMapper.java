@@ -1,7 +1,9 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Member;
+import com.top.effitopia.enumeration.MemberStatus;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +19,10 @@ public interface MemberMapper {
     List<Member> selectAll();
 
     boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
+
+    int update(Member member);
+
+    int updateStatus(@Param("id") int id, @Param("status") MemberStatus status);
 }

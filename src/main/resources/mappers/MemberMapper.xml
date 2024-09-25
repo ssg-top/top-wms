@@ -53,4 +53,16 @@
         )
     </select>
 
+    <update id="update" parameterType="Member">
+        UPDATE member
+        SET phone=#{phone}, email=#{email}, zip_code=#{address.zipCode}, road_name_address=#{address.roadNameAddress}, lot_number_address=#{address.lotNumberAddress}, detail_address=#{address.detailAddress}, mod_date=now()
+        WHERE member_id=#{id}
+    </update>
+
+    <update id="updateStatus" parameterType="Map">
+        UPDATE member
+        SET status=#{status}, mod_date=now()
+        WHERE member_id=#{id}
+    </update>
+
 </mapper>
