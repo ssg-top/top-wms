@@ -4,7 +4,10 @@ import com.top.effitopia.domain.Checkout;
 import com.top.effitopia.domain.CheckoutAnswer;
 import com.top.effitopia.domain.CheckoutQuestion;
 import com.top.effitopia.domain.Warehouse;
+import com.top.effitopia.dto.CheckoutDTO;
+import com.top.effitopia.dto.PageRequestDTO;
 import com.top.effitopia.enumeration.CheckoutStatus;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
+@Log4j2
 public class CheckoutMapperTest {
 
     @Autowired
@@ -68,4 +72,40 @@ public class CheckoutMapperTest {
 //        String test = checkoutMapper.selectAll(1);
 //        System.out.println(test);
 //    }
+
+    @Test
+    void testSelectList() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        List<CheckoutDTO> checkoutDTOList = checkoutMapper.selectList(pageRequestDTO);
+
+        assertNotNull(checkoutDTOList);
+        assertEquals(0, checkoutDTOList.size());
+
+        if (!checkoutDTOList.isEmpty()) {
+            assertNotNull(checkoutDTOList.get(0).getCheckoutId());
+        }
+    }
+
+    @Test
+    public void testGetCheckoutDetails() {
+        // Given: 테스트할 checkoutId
+        int checkoutId = 1;
+
+        // When: getCheckoutDetails 호출
+        Checkout checkout = checkoutMapper.getCheckoutDetails(checkoutId);
+
+        // Then: 결과가 null이 아닌지 확인
+        assertNotNull(checkout, "Checkout should not be null");
+        log.info("Checkout: {}", checkout);
+
+        // 특정 필드를 확인하는 테스트 (예: warehouseId가 예상대로인지)
+        assertEquals(1, checkout.getWarehouse().getId(), "Warehouse ID should be 1");
+
+        // CheckoutComment가 예상대로 있는지 확인
+        assertNotNull(checkout.getCheckoutComment(), "Checkout Comment should not be null");
+    }
 }

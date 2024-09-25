@@ -46,6 +46,14 @@ public class CheckoutController {
         model.addAttribute("responseDTO", checkoutService.getList(pageRequestDTO));
     }
 
+    @GetMapping("/checkouts/details")
+    public void read(Long checkoutId, PageRequestDTO pageRequestDTO, Model model) {
+        CheckoutDTO checkoutDTO = checkoutService.getOne(checkoutId);
+        log.info(checkoutDTO);
+
+        model.addAttribute("detail", checkoutDTO);
+    }
+
 //    @GetMapping("/register")
 //    public void showRegisterForm() {
 //        log.info("CheckoutController showRegisterForm GetMapping");

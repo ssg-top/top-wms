@@ -12,7 +12,9 @@ public interface CheckoutService {
 //    boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> answers);
 //
 //    List<CheckoutQuestionDTO> getAllQuestions();
+    PageResponseDTO<CheckoutDTO> getList(PageRequestDTO pageRequestDTO);
 
     boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> checkoutAnswers);
-    List<CheckoutDTO> getList(PageRequestDTO pageRequestDTO);
+
+    CheckoutDTO getOne(Long checkoutId);
 }

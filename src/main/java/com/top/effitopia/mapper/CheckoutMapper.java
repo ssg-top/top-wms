@@ -5,6 +5,7 @@ import com.top.effitopia.domain.CheckoutAnswer;
 import com.top.effitopia.dto.CheckoutDTO;
 import com.top.effitopia.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -23,10 +24,13 @@ public interface CheckoutMapper {
 //    List<CheckoutQuestion> getAllQuestions();
 
     List<CheckoutDTO> selectList(PageRequestDTO pageRequestDTO);
+    @Select("SELECT COUNT(*) FROM checkout")
+    int getTotalCount();
 
     int insertCheckout(Checkout checkout);
 
     int insertCheckoutAnswer(CheckoutAnswer checkoutAnswer);
 
+    Checkout getCheckoutDetails(int checkoutId);
 //    String selectAll(int id);
 }

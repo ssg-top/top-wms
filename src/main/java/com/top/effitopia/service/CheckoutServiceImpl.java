@@ -34,9 +34,26 @@ public class CheckoutServiceImpl implements CheckoutService {
 //                .pageRequestDTO(pageRequestDTO)
 //                .build();
 //    }
+    @Transactional(readOnly = true)
     @Override
-    public List<CheckoutDTO> getList(PageRequestDTO pageRequestDTO) {
-        return checkoutMapper.selectList(pageRequestDTO);
+    public PageResponseDTO<CheckoutDTO> getList(PageRequestDTO pageRequestDTO) {
+        List<CheckoutDTO> checkoutDTOList = checkoutMapper.selectList(pageRequestDTO);
+        int total = checkoutMapper.getTotalCount();
+        return PageResponseDTO.<CheckoutDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(checkoutDTOList)
+                .total(total)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CheckoutDTO getOne(Long checkoutId) {
+        // Checkout VO 가져오기
+        Checkout checkout = checkoutMapper.getCheckoutDetails(checkoutId.intValue());
+
+        // VO -> DTO 변환
+        return modelMapper.map(checkout, CheckoutDTO.class);
     }
 
 //    @Override
