@@ -1,9 +1,14 @@
 package com.top.effitopia.domain;
 
 import com.top.effitopia.enumeration.WarehouseType;
+import lombok.*;
 
 import java.time.LocalDateTime;
-
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Warehouse {
     private long warehouse_id;
     private Member member;

@@ -1,5 +1,12 @@
 package com.top.effitopia.domain;
 
+import lombok.*;
+
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class WarehouseCost {
     private long warehouse_cost_id;
     private Warehouse warehouse;

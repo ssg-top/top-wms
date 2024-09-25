@@ -1,9 +1,15 @@
 package com.top.effitopia.domain;
 
 import com.top.effitopia.enumeration.ContractStatus;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Contract {
     private long contract_id;
     private Warehouse warehouse;

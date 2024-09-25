@@ -1,7 +1,12 @@
 package com.top.effitopia.domain;
 
-import com.top.effitopia.dto.WarehouseDTO;
+import lombok.*;
 
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Cell {
     private long id;
     private Warehouse warehouse;
