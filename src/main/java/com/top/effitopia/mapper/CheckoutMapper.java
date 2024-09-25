@@ -2,7 +2,11 @@ package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Checkout;
 import com.top.effitopia.domain.CheckoutAnswer;
+import com.top.effitopia.dto.CheckoutDTO;
+import com.top.effitopia.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface CheckoutMapper {
@@ -17,6 +21,8 @@ public interface CheckoutMapper {
 //    Integer insertCheckoutAnswer(CheckoutAnswer checkoutAnswer);
 //
 //    List<CheckoutQuestion> getAllQuestions();
+
+    List<CheckoutDTO> selectList(PageRequestDTO pageRequestDTO);
 
     int insertCheckout(Checkout checkout);
 

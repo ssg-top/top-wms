@@ -27,12 +27,17 @@
         <result column="checkout_content" property="checkoutComment"/>
         <result column="reg_date" property="regDate"/>
     </resultMap>
-    <!-- ResultMap for CheckoutAnswer -->
     <resultMap id="checkoutAnswerResultMap" type="com.top.effitopia.domain.CheckoutAnswer">
         <id column="checkout_answer_id" property="checkoutAnswerId"/>
         <result column="checkout_question_id" property="checkoutQuestion.checkoutQuestionId"/>
         <result column="checkout_id" property="checkout.checkoutId"/>
         <result column="checkout_status_id" property="checkoutStatus"/>
+    </resultMap>
+    <resultMap id="CheckoutDTO" type="com.top.effitopia.dto.CheckoutDTO">
+        <result column="warehouse_id" property="warehouseDTO.id"/>
+        <result column="warehouse_name" property="warehouseDTO.name"/>
+        <result column="pass_count" property="checkoutComment"/>
+        <result column="reg_date" property="regDate"/>
     </resultMap>
     <!-- Insert for Checkout -->
     <insert id="insertCheckout" parameterType="com.top.effitopia.domain.Checkout">
@@ -55,5 +60,13 @@
         SELECT checkout_answer_id, checkout_question_id, checkout_id, checkout_status_id
         FROM checkout_answer
         WHERE checkout_answer_id = #{checkoutAnswerId}
+    </select>
+    <select id="selectlist" resultMap="CheckoutDTO">
+        SELECT c.warehouse_id, w.warehouse_name, COUNT(ca.checkout_status_id) AS pass_count, c.reg_date
+        FROM checkout c
+                 JOIN checkout_answer ca ON c.checkout_id = ca.checkout_id
+                 JOIN warehouse w ON c.warehouse_id = w.id
+        WHERE ca.checkout_status_id = 'PASS'
+        GROUP BY c.warehouse_id, w.warehouse_name, c.reg_date
     </select>
 </mapper>

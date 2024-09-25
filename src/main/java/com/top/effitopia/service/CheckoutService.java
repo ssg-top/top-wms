@@ -14,4 +14,5 @@ public interface CheckoutService {
 //    List<CheckoutQuestionDTO> getAllQuestions();
 
     boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> checkoutAnswers);
+    List<CheckoutDTO> getList(PageRequestDTO pageRequestDTO);
 }

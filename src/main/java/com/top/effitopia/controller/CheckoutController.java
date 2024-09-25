@@ -35,7 +35,17 @@ public class CheckoutController {
 //        }
 //        model.addAttribute("responseDTO", checkoutService.getList(pageRequestDTO));
 //    }
-//
+
+    @GetMapping("/list")
+    public void showList(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
+        log.info("CheckoutController showList GetMapping");
+        if (bindingResult.hasErrors()) {
+            log.info("CheckoutController showList GetMapping has Errors");
+            pageRequestDTO = PageRequestDTO.builder().build();
+        }
+        model.addAttribute("responseDTO", checkoutService.getList(pageRequestDTO));
+    }
+
 //    @GetMapping("/register")
 //    public void showRegisterForm() {
 //        log.info("CheckoutController showRegisterForm GetMapping");

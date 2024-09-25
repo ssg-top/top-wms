@@ -34,6 +34,10 @@ public class CheckoutServiceImpl implements CheckoutService {
 //                .pageRequestDTO(pageRequestDTO)
 //                .build();
 //    }
+    @Override
+    public List<CheckoutDTO> getList(PageRequestDTO pageRequestDTO) {
+        return checkoutMapper.selectList(pageRequestDTO);
+    }
 
 //    @Override
 //    @Transactional
