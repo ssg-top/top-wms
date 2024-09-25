@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class CustomerInquiry {
-    private int	inquiryID;          //문의글 ID
+    private int	id;                 //문의글 ID
     private String	inquiryTitle;   //문의글 제목
     private String	inquiryContent; //문의글 내용
     private String	inquiryWriter;  //문의글 작성자
