@@ -1,5 +1,6 @@
 package com.top.effitopia.domain;
 
+import com.top.effitopia.enumeration.CheckoutStatus;
 import lombok.*;
 
 @Getter
@@ -10,7 +11,9 @@ import lombok.*;
 public class CheckoutAnswer {
     private Integer checkoutAnswerId;
 
+    private Checkout checkout;
+
     private CheckoutQuestion checkoutQuestion;
 
-    private String checkoutAnswerContent;
+    private CheckoutStatus checkoutStatus;
 }
