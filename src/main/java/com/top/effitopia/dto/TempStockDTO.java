@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * 임시 재고 DTO
+ */
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +20,8 @@ public class TempStockDTO {
     private LocalDate manufacturingDate;//제조일자
     private LocalDate expirationDate;	//유통기한
     private LocalDate regDate;	        //재고생성일
-    private int	memberID;	            //회원ID
-    private int	cellID;	                //창고세부구역ID
-    private int	productID;	            //상품ID
-    private int	stockID;	            //재고ID
+    private MemberDTO memberDTO;	    //회원Dto
+    private CellDTO	cellDTO;	        //창고세부구역Dto
+    private ProductDTO productDTO;	    //상품Dto
+    private StockDTO stockDTO;	        //재고Dto
 }
