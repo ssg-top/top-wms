@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Checkout {
-    private Integer id;
+    private Integer checkoutId;
     private Warehouse warehouse;
     private LocalDateTime regDate;
     private String checkoutWarehouseCode;

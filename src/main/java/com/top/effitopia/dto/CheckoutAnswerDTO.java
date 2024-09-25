@@ -16,8 +16,6 @@ public class CheckoutAnswerDTO {
 
     private CheckoutQuestionDTO checkoutQuestionDTO;
 
-    private CheckoutDTO checkoutDTO;
-
     @NotEmpty(message = "추후 조치사항은 비어 있을 수 없습니다!")
     private String checkoutAnswerContent;
 }
