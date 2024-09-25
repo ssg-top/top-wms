@@ -56,34 +56,61 @@ public class CheckoutServiceImpl implements CheckoutService {
 //        int result = checkoutMapper.insert(checkout);
 //        return result >= 3;
 //    }
-
-
-    @Override
+//
+//
+//    @Override
+//    @Transactional
+//    public boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> answers) {
+//        log.info("CheckoutServiceImpl save");
+//
+//        Checkout checkout = modelMapper.map(checkoutDTO, Checkout.class);
+//        int result = checkoutMapper.insertCheckout(checkout);
+//
+//        for (CheckoutAnswerDTO answerDTO : answers) {
+//            CheckoutAnswer answer = CheckoutAnswer.builder()
+//                    .checkout(checkout)
+//                    .checkoutQuestion(modelMapper.map(answerDTO.getCheckoutQuestionDTO(), CheckoutQuestion.class))
+//                    .checkoutStatus(answerDTO.getCheckoutStatus())
+//                    .build();
+//
+//            checkoutMapper.insertCheckoutAnswer(answer);
+//        }
+//
+//        return result > 0;
+//    }
+//
+//    @Override
+//    public List<CheckoutQuestionDTO> getAllQuestions() {
+//        List<CheckoutQuestion> questions = checkoutMapper.getAllQuestions();
+//        return questions.stream()
+//                .map(question -> modelMapper.map(question, CheckoutQuestionDTO.class))
+//                .collect(Collectors.toList());
+//    }
     @Transactional
-    public boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> answers) {
-        log.info("CheckoutServiceImpl save");
-
+    @Override
+    public boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> checkoutAnswers) {
         Checkout checkout = modelMapper.map(checkoutDTO, Checkout.class);
-        int result = checkoutMapper.insertCheckout(checkout);
 
-        for (CheckoutAnswerDTO answerDTO : answers) {
+        int checkoutInsertCount = checkoutMapper.insertCheckout(checkout);
+
+        if (checkoutInsertCount == 0) {
+            return false;
+        }
+
+        for (CheckoutAnswerDTO answerDTO : checkoutAnswers) {
             CheckoutAnswer answer = CheckoutAnswer.builder()
                     .checkout(checkout)
                     .checkoutQuestion(modelMapper.map(answerDTO.getCheckoutQuestionDTO(), CheckoutQuestion.class))
                     .checkoutStatus(answerDTO.getCheckoutStatus())
                     .build();
 
-            checkoutMapper.insertCheckoutAnswer(answer);
+            int answerInsertCount = checkoutMapper.insertCheckoutAnswer(answer);
+
+            if (answerInsertCount == 0) {
+                return false;
+            }
         }
 
-        return result > 0;
-    }
-
-    @Override
-    public List<CheckoutQuestionDTO> getAllQuestions() {
-        List<CheckoutQuestion> questions = checkoutMapper.getAllQuestions();
-        return questions.stream()
-                .map(question -> modelMapper.map(question, CheckoutQuestionDTO.class))
-                .collect(Collectors.toList());
+        return true;
     }
 }

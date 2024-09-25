@@ -69,34 +69,28 @@ public class CheckoutController {
 //        return "redirect:/checkouts/list";
 //    }
 
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        log.info("CheckoutController showRegisterForm GetMapping");
-
-        List<CheckoutQuestionDTO> questionList = checkoutService.getAllQuestions();
-        model.addAttribute("questions", questionList);
-        return "/checkouts/register";
-    }
-
     @PostMapping("/register")
-    public String registerForm(
-            @Valid CheckoutDTO checkoutDTO,
-            @Valid List<CheckoutAnswerDTO> answers,  // 답변 리스트를 따로 받음
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
-
+    public String registerForm(@Valid CheckoutDTO checkoutDTO,
+                                 @Valid List<CheckoutAnswerDTO> checkoutAnswerDTO,
+                                 BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes) {
         log.info("CheckoutController registerForm PostMapping");
-
         if (bindingResult.hasErrors()) {
             log.info("CheckoutController registerForm PostMapping has Errors");
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/checkouts/register";
         }
 
-        log.info("checkoutDTO: {}", checkoutDTO);
-        log.info("answers: {}", answers);
+        boolean isSuccess = checkoutService.save(checkoutDTO, checkoutAnswerDTO);
 
-        checkoutService.save(checkoutDTO, answers);
-        return "redirect:/checkouts/list";
+        if (isSuccess) {
+            log.info("CheckoutController registerForm PostMapping has No Errors");
+            redirectAttributes.addFlashAttribute("success", "Checkout submitted successfully.");
+            return "redirect:/checkouts/list";
+        } else {
+            log.info("CheckoutController registerForm PostMapping has Errors");
+            redirectAttributes.addFlashAttribute("fail", "Checkout submission failed.");
+            return "redirect:/checkout/register";
+        }
     }
 }

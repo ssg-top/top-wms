@@ -2,42 +2,58 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper>
-<!--    <insert id="insert" >-->
-<!--        INSERT INTO checkout (warehouse_id, reg_date, checkout_warehouse_code, checkout_name)-->
-<!--        VALUES (#{checkout.warehouseId}, #{checkout.regDate}, #{checkout.checkoutWarehouseCode}, #{checkout.checkoutName});-->
-<!--        SET @checkoutId = LAST_INSERT_ID();-->
+<mapper namespace="com.top.effitopia.mapper.CheckoutMapper">
+<!--    <resultMap id = "CheckoutQuestion" type ="CheckoutQuestion">-->
+<!--        <id property="checkoutQuestionId" column="checkout_question_id"/>-->
+<!--        <result property="questionQuestionContent" column="checkout_question_content"/>-->
+<!--    </resultMap>-->
+<!--    <select id="selectAll" parameterType="int" resultType="String">-->
+<!--        SELECT * FROM checkout_question where id = #{id}-->
+<!--    </select>-->
 
-<!--        INSERT INTO checkout_question (checkout_question_content, checkout_status)-->
-<!--        VALUES (#{checkoutQuestion.checkoutQuestionContent}, #{checkoutQuestion.checkoutStatus});-->
-<!--        SET @checkoutQuestionId = LAST_INSERT_ID();-->
-
-<!--        INSERT INTO checkout_answer (checkout_id, checkout_question_id, checkout_answer_content)-->
-<!--        VALUES (@checkoutId, @checkoutQuestionId, #{checkoutAnswer.checkoutAnswerContent});-->
+<!--    <insert id="insertCheckout" parameterType="com.top.effitopia.domain.Checkout">-->
+<!--        INSERT INTO checkout (warehouse_id, checkout_content, reg_date)-->
+<!--        VALUES (#{warehouse.id}, #{checkoutComment}, CURRENT_TIMESTAMP)-->
 <!--    </insert>-->
-<!--    <select id="selectList">-->
-<!--        select c.checkout_id, c.checkout_warehouse_code, c.checkout_name-->
-<!--        from checkout c, checkout_answer ca, checkout_question cq-->
-<!--        where c.checkout_id = ca.checkout_id-->
-<!--          and cq.checkout_question_id = ca.checkout_question_id-->
-<!--          and cq.checkout_status = TRUE-->
-<!--    </select>-->
-<!--    <select id="selectOne>"></select>-->
-<!--    <select id="getCount" resultType="int">-->
-<!--        select count(checkout_id) from checkout-->
-<!--    </select>-->
+<!--    <insert id="insertCheckoutAnswer" parameterType="com.top.effitopia.domain.CheckoutAnswer">-->
+<!--        INSERT INTO checkout_answer (checkout_question_id, checkout_id, checkout_status_id)-->
+<!--        VALUES (#{checkoutQuestion.checkoutQuestionId}, #{checkout.checkoutId}, #{checkoutStatus})-->
+<!--    </insert>-->
 
-
-    <insert id="insertCheckout" useGeneratedKeys="true" keyProperty="checkoutId">
+    <!-- ResultMap for Checkout -->
+    <resultMap id="checkoutResultMap" type="com.top.effitopia.domain.Checkout">
+        <id column="checkout_id" property="checkoutId"/>
+        <result column="warehouse_id" property="warehouse.id"/>
+        <result column="checkout_content" property="checkoutComment"/>
+        <result column="reg_date" property="regDate"/>
+    </resultMap>
+    <!-- ResultMap for CheckoutAnswer -->
+    <resultMap id="checkoutAnswerResultMap" type="com.top.effitopia.domain.CheckoutAnswer">
+        <id column="checkout_answer_id" property="checkoutAnswerId"/>
+        <result column="checkout_question_id" property="checkoutQuestion.checkoutQuestionId"/>
+        <result column="checkout_id" property="checkout.checkoutId"/>
+        <result column="checkout_status_id" property="checkoutStatus"/>
+    </resultMap>
+    <!-- Insert for Checkout -->
+    <insert id="insertCheckout" parameterType="com.top.effitopia.domain.Checkout">
         INSERT INTO checkout (warehouse_id, checkout_content, reg_date)
-        VALUES (#{warehouse.warehouseId}, #{checkoutComment}, NOW())
+        VALUES (#{warehouse.id}, #{checkoutComment}, CURRENT_TIMESTAMP)
     </insert>
-    <insert id="insertCheckoutAnswer" useGeneratedKeys="true" keyProperty="checkoutAnswerId">
-        INSERT INTO checkout_answer (checkout_id, checkout_question_id, checkout_status)
-        VALUES (#{checkout.checkoutId}, #{checkoutQuestion.checkoutQuestionId}, #{checkoutStatus})
+    <!-- Insert for CheckoutAnswer -->
+    <insert id="insertCheckoutAnswer" parameterType="com.top.effitopia.domain.CheckoutAnswer">
+        INSERT INTO checkout_answer (checkout_question_id, checkout_id, checkout_status_id)
+        VALUES (#{checkoutQuestion.checkoutQuestionId}, #{checkout.checkoutId}, #{checkoutStatus})
     </insert>
-    <select id="getAllQuestions" resultType="com.top.effitopia.domain.CheckoutQuestion">
-        SELECT checkout_question_id, checkout_question_content
-        FROM checkout_question
+    <!-- Select query to fetch Checkout using ResultMap -->
+    <select id="getCheckoutById" resultMap="checkoutResultMap" parameterType="int">
+        SELECT checkout_id, warehouse_id, checkout_content, reg_date
+        FROM checkout
+        WHERE checkout_id = #{checkoutId}
+    </select>
+    <!-- Select query to fetch CheckoutAnswer using ResultMap -->
+    <select id="getCheckoutAnswerById" resultMap="checkoutAnswerResultMap" parameterType="int">
+        SELECT checkout_answer_id, checkout_question_id, checkout_id, checkout_status_id
+        FROM checkout_answer
+        WHERE checkout_answer_id = #{checkoutAnswerId}
     </select>
 </mapper>
