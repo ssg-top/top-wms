@@ -1,5 +1,7 @@
 package com.top.effitopia.service;
 
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.PageResponseDTO;
 import com.top.effitopia.dto.WarehouseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class WarehouseServiceImpl implements WarehouseService{
 
     @Override
-    public WarehouseResponseDTO<WarehouseDTO> getList(WarehouseRequestDTO pageRequestDTO) {
+    public PageResponseDTO<WarehouseDTO> getList(PageRequestDTO pageRequestDTO) {
         return null;
     }
 

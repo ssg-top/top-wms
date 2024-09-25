@@ -1,5 +1,6 @@
 package com.top.effitopia.controller;
 
+import com.top.effitopia.dto.PageRequestDTO;
 import com.top.effitopia.dto.WarehouseDTO;
 import com.top.effitopia.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class WarehouseController {
 
     private final WarehouseService warehouseService;
+
     @GetMapping("/warehouses/register")
     public void registerForm(Model model){
 
@@ -26,10 +28,12 @@ public class WarehouseController {
 
         return "";
     }
+
     @GetMapping("/warehouses/list")
-    public void getList(Model model, PageRequstDTO pageRequestDTO, BindingResult bindingResult){
+    public void getList(Model model, PageRequestDTO pageRequestDTO, BindingResult bindingResult){
 
     }
+
     @GetMapping("/warehouses/{id}")
     public void get(@PathVariable("id") Long warehouse_id, Model model){
 

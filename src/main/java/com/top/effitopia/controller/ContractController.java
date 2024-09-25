@@ -1,6 +1,8 @@
 package com.top.effitopia.controller;
 
 import com.top.effitopia.dto.ContractDTO;
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.service.ContractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,20 +18,20 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class ContractController {
+
+    private final ContractService contractService;
+
     @GetMapping("/warehouse-contracts/warehouse-list")
     public void getWarehouseList(Model model, PageRequestDTO pageRequestDTO, BindingResult bindingResult){
-
     }
 
     @GetMapping("/warehouse-contracts/register")
     public void registerForm(@PathVariable("id") Long id, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-
     }
 
     @PostMapping("/warehouse-contracts/register")
     public void register(ContractDTO contractDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
     }
-
 
     @GetMapping("/warehouse-contracts/request-list")
     public void getRequestList(Model model, PageRequestDTO pageRequestDTO, BindingResult bindingResult){

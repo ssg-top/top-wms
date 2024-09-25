@@ -17,32 +17,45 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WarehouseDTO {
-    private long warehouse_id;
+
+    private long id;
+
     @Nullable
     private MemberDTO memberDTO;
-    @NotEmpty
-    private WarehouseType warehouse_type;
-    private String warehouse_code;
 
-    private String warehouse_name;
     @NotEmpty
-    private String warehouse_phone;
+    private WarehouseType type;
+
+    private String code;
+
+    private String name;
+
     @NotEmpty
-    private String warehouse_warehouse_zip_code;
+    private String phone;
+
     @NotEmpty
-    private String warehouse_lot_number;
+    private String zip_code;
+
+    @NotEmpty
+    private String lotNumber;
+
     @Nullable
-    private String warehouse_detail_address;
+    private String detailAddress;
 
-    private int	warehouse_width;
+    private int	width;
 
-    private int	warehouse_length;
+    private int	length;
 
-    private int	warehouse_height;
+    private int	height;
+
     @NotNull
-    private int	warehouse_capacity;
-    private double warehouse_latitude;
-    private double warehouse_longitude;
-    private LocalDateTime reg_date;
-    private LocalDateTime mod_date;
+    private int	capacity;
+
+    private double latitude;
+
+    private double longitude;
+
+    private LocalDateTime regDate;
+
+    private LocalDateTime modDate;
 }
