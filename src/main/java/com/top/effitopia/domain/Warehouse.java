@@ -1,25 +1,50 @@
 package com.top.effitopia.domain;
 
+import com.top.effitopia.dto.MemberDTO;
 import com.top.effitopia.enumeration.WarehouseType;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
-
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Warehouse {
-    private long warehouse_id;
+    private long id;
+
     private Member member;
-    private WarehouseType warehouse_type;
-    private String warehouse_code;
-    private String warehouse_name;
-    private String warehouse_phone;
-    private String warehouse_warehouse_zip_code;
-    private String warehouse_lot_number;
-    private String warehouse_detail_address;
-    private int	warehouse_width;
-    private int	warehouse_length;
-    private int	warehouse_height;
-    private int	warehouse_capacity;
-    private double warehouse_latitude;
-    private double warehouse_longitube;
-    private LocalDateTime reg_date;
-    private LocalDateTime mod_date;
+
+    private WarehouseType type;
+
+    private String code;
+
+    private String name;
+
+    private String phone;
+
+    private String zip_code;
+
+    private String lotNumber;
+
+    private String detailAddress;
+
+    private int	width;
+
+    private int	length;
+
+    private int	height;
+
+    private int	capacity;
+
+    private double latitude;
+
+    private double longitude;
+
+    private LocalDateTime regDate;
+
+    private LocalDateTime modDate;
 }

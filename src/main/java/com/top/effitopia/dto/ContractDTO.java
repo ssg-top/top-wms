@@ -1,6 +1,5 @@
 package com.top.effitopia.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.top.effitopia.enumeration.ContractStatus;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -15,17 +14,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContractDTO {
-    private long contract_id;
+
+    private long id;
+
     @NotEmpty
     private WarehouseDTO warehouseDTO;
+
     @NotEmpty
     private MemberDTO memberDTO;
+
     @NotEmpty
-    private ContractStatus contract_status;
-    private LocalDateTime contract_start_date;
+    private ContractStatus status;
+
+    private LocalDateTime startDate;
+
     @NotNull
-    private int contract_date;
-    private LocalDateTime contract_end_date;
-    private LocalDateTime reg_date;
-    private LocalDateTime mod_date;
+    private int date;
+
+    private LocalDateTime endDate;
+
+    private LocalDateTime regDate;
+
+    private LocalDateTime modDate;
 }
