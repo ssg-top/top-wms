@@ -1,6 +1,7 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Address;
+import com.top.effitopia.domain.CustomerAnswer;
 import com.top.effitopia.domain.CustomerInquiry;
 import com.top.effitopia.domain.Member;
 import com.top.effitopia.enumeration.MemberRole;
@@ -76,5 +77,49 @@ public class CSCMapperTests {
 
         customerInquiryList.forEach(inquiry -> log.info(inquiry.toString()));
 
+    }
+
+    @Test
+    public void insertAnswerTest() {
+        Member member = Member.builder()
+                .id(1)
+                .username("admin" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("관리자")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTER_REQUEST)
+                .role(MemberRole.ADMIN)
+                .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .build();
+        memberMapper.insert(member);
+
+        CustomerInquiry customerInquiry = cscMapper.selectOneInquiry(3);
+        log.info(customerInquiry.toString());
+        CustomerAnswer customerAnswer = CustomerAnswer.builder()
+                .AnswerContent("답변테스트2")
+                .AnswerWriter(member.getName())
+                .inquiry(customerInquiry).build();
+
+        cscMapper.insertAnswer(customerAnswer);
+        log.info(customerAnswer.toString());
+    }
+
+    @Test
+    public void selectOneAnswerTest() {
+        CustomerAnswer customerAnswer = cscMapper.selectOneAnswer(2);
+        log.info(customerAnswer.toString());
+    }
+
+    @Test
+    public void updateAnswer() {
+        CustomerAnswer customerAnswer = CustomerAnswer.builder().id(2).AnswerContent("내용 수정 테스트").build();
+        log.info(customerAnswer.toString());
+        cscMapper.updateAnswer(customerAnswer);
+    }
+
+    @Test
+    public void removeAnswerTest() {
+        cscMapper.deleteAnswer(2);
     }
 }

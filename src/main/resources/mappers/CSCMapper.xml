@@ -34,22 +34,26 @@
     </delete>
 
 
-
+<resultMap id="CustomerAnswer" type="CustomerAnswer">
+    <id property="id" column="id"/>
+    <result property="AnswerContent" column="reply_content"/>
+    <result property="AnswerWriter" column="writer"/>
+</resultMap>
 
     <insert id="insertAnswer">
         insert into answer (inquiry_id, reply_content, writer)
         values (#{inquiry.id},  #{AnswerContent}, #{AnswerWriter} )
     </insert>
 
-    <select id="selectOneAnswer">
+    <select id="selectOneAnswer" resultMap="CustomerAnswer">
         select * from answer where id = #{no}
     </select>
 
     <update id="updateAnswer">
-        update answer set reply_content = #{AnswerContent}, where id = #{id}
+        update answer set reply_content = #{AnswerContent}, mod_date = now() where id = #{id}
     </update>
 
     <delete id="deleteAnswer">
-        delete from answer where id = #{id}
+        delete from answer where id = #{no}
     </delete>
 </mapper>

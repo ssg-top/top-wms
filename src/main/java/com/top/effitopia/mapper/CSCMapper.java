@@ -60,7 +60,7 @@ public interface CSCMapper {
      * @param: 조회할 답변ID
      * @return CustomerAnswer
      */
-    CustomerAnswer selectOneAnswer(int no);
+    CustomerAnswer selectOneAnswer(@Param("no")int no);
 
     /**
      * 답변 수정
@@ -72,5 +72,5 @@ public interface CSCMapper {
      * 답변 한개 삭제
      * @param: 삭제할 답변ID
      */
-    void deleteAnswer(int no);
+    void deleteAnswer(@Param("no") int no);
 }
