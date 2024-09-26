@@ -92,20 +92,15 @@ public class CheckoutMapperTest {
 
     @Test
     public void testGetCheckoutDetails() {
-        // Given: 테스트할 checkoutId
         int checkoutId = 1;
 
-        // When: getCheckoutDetails 호출
         Checkout checkout = checkoutMapper.getCheckoutDetails(checkoutId);
 
-        // Then: 결과가 null이 아닌지 확인
         assertNotNull(checkout, "Checkout should not be null");
         log.info("Checkout: {}", checkout);
 
-        // 특정 필드를 확인하는 테스트 (예: warehouseId가 예상대로인지)
         assertEquals(1, checkout.getWarehouse().getId(), "Warehouse ID should be 1");
 
-        // CheckoutComment가 예상대로 있는지 확인
         assertNotNull(checkout.getCheckoutComment(), "Checkout Comment should not be null");
     }
 }
