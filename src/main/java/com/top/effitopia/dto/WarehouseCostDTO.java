@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WarehouseCostDTO {
 
-    private long id;
+    private Integer id;
 
     private WarehouseDTO warehouseDTO;
 

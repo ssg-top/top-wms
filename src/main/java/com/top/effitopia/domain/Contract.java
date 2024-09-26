@@ -1,10 +1,6 @@
 package com.top.effitopia.domain;
 
-import com.top.effitopia.dto.MemberDTO;
-import com.top.effitopia.dto.WarehouseDTO;
 import com.top.effitopia.enumeration.ContractStatus;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Contract {
 
-    private long id;
+    private Integer id;
 
     private Warehouse warehouse;
 

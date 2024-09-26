@@ -3,5 +3,52 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.WarehouseMapper">
+    <resultMap id = "warehouse" type ="Warehouse">
+        <id property="id" column="warehouse_id"/>
+        <result property="code" column="warehouse_code"/>
+        <result property="name" column="warehouse_name"/>
+        <result property="phone" column="warehouse_phone"/>
+        <result property="zipCode" column="warehouse_zip_code"/>
+        <result property="roadName" column="warehouse_road_name"/>
+        <result property="lotNumber" column="warehouse_lot_number"/>
+        <result property="detailAddress" column="warehouse_detail_address"/>
+        <result property="width" column="warehouse_width"/>
+        <result property="length" column="warehouse_length"/>
+        <result property="height" column="warehouse_height"/>
+        <result property="capacity" column="warehouse_capacity"/>
+        <result property="latitude" column="warehouse_latitude"/>
+        <result property="longitude" column="warehouse_longitude"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        <association property="warehouseType" javaType="WarehouseType">
+            <id property="id" column="category_id"/>
+            <result property="type" column="warehouse_type"/>
+        </association>
+        <association property="member" javaType="Member">
+            <id property="id" column="member_id"/>
+            <result property="username" column="username"/>
+        </association>
+    </resultMap>
 
+    <select id="select" parameterType="Integer" resultMap="warehouse">
+        select * from warehouse where warehouse_id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="Warehouse">
+        INSERT INTO warehouse (member_id, category_id, warehouse_code, warehouse_name, warehouse_phone,
+                               warehouse_zip_code, warehouse_road_name, warehouse_lot_number, warehouse_detail_address,
+                               warehouse_width, warehouse_length, warehouse_height, warehouse_capacity,
+                               warehouse_latitude, warehouse_longitude, reg_date)
+        VALUES
+            (#{member.id}, #{warehouseType.id}, #{code}, #{name}, #{phone},#{zipCode} ,#{roadName}, #{lotNumber}, NULL,
+             #{width}, #{length}, #{height}, #{capacity}, #{latitude}, #{longitude}, NOW())
+    </insert>
+
+<!--    <select id="selectCellList" parameterType="com.top.effitopia.dto.PageRequestDTO">-->
+<!--        select * from Cell where warehouse_id = #{id} ORDER BY cell_id  DESC LIMIT #{skip}, #{size}-->
+<!--    </select>-->
+
+    <select id="selectWarehouseList" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
+        select * from warehouse ORDER BY warehouse_id DESC LIMIT #{skip}, #{size}
+    </select>
 </mapper>

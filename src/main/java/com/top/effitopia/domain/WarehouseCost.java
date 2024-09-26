@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 public class WarehouseCost {
 
-    private long id;
+    private Integer id;
 
     private Warehouse warehouse;
 

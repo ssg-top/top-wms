@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CellDTO {
 
-    private long id;
+    private Integer id;
 
     private WarehouseDTO warehouseDTO;
 
