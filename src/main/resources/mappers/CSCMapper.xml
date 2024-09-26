@@ -4,5 +4,52 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.CSCMapper">
 
+    <resultMap id="CustomerInquiry" type="CustomerInquiry">
+        <id property="id" column="inquiry_id"/>
+        <result property="inquiryTitle" column="inquiry_title"/>
+        <result property="inquiryContent" column="inquiry_contents"/>
+        <result property="inquiryWriter" column="writer"/>
+    </resultMap>
 
+<insert id="insertInquiry">
+
+    insert into inquiry (inquiry_title, inquiry_contents, writer, member_id) values (#{inquiryTitle}, #{inquiryContent}, #{inquiryWriter}, #{member.id})
+
+</insert>
+
+    <select id="selectInquiryList" resultMap="CustomerInquiry">
+        select * from inquiry order by inquiry_id desc
+    </select>
+
+    <select id="selectOneInquiry" resultMap="CustomerInquiry">
+        select * from inquiry where inquiry_id = #{no}
+    </select>
+
+    <update id="updateInquiry" parameterType="CustomerInquiry">
+        update inquiry set inquiry_contents = #{inquiryContent}, mod_date = now() where inquiry_id = #{id}
+    </update>
+
+    <delete id="deleteInquiry">
+        delete from inquiry where inquiry_id = #{no}
+    </delete>
+
+
+
+
+    <insert id="insertAnswer">
+        insert into answer (inquiry_id, reply_content, writer)
+        values (#{inquiry.id},  #{AnswerContent}, #{AnswerWriter} )
+    </insert>
+
+    <select id="selectOneAnswer">
+        select * from answer where id = #{no}
+    </select>
+
+    <update id="updateAnswer">
+        update answer set reply_content = #{AnswerContent}, where id = #{id}
+    </update>
+
+    <delete id="deleteAnswer">
+        delete from answer where id = #{id}
+    </delete>
 </mapper>

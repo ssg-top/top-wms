@@ -3,6 +3,7 @@ package com.top.effitopia.mapper;
 import com.top.effitopia.domain.CustomerAnswer;
 import com.top.effitopia.domain.CustomerInquiry;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface CSCMapper {
 
     /**
      * 문의글 등록
-     * @param customerInquiry
+     * @param: customerInquiry
      */
     void insertInquiry(CustomerInquiry customerInquiry);
 
@@ -30,7 +31,7 @@ public interface CSCMapper {
      * @param: 조회할 문의글ID
      * @return CustomerInquiry
      */
-    CustomerInquiry selectOneInquiry(int no);
+    CustomerInquiry selectOneInquiry(@Param("no") int no);
 
     /**
      * 문의글 수정
@@ -42,7 +43,7 @@ public interface CSCMapper {
      * 문의글 삭제
      * @param: 삭제할 문의글ID
      */
-    void deleteInquiry(int no);
+    void deleteInquiry(@Param("no") int no);
 
 
 //============================================================
