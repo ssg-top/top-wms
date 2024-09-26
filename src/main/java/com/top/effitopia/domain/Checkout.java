@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 public class Checkout {
     private Integer checkoutId;
     private Warehouse warehouse;
-    private String checkoutComment;
+    private String checkoutContent;
     private LocalDateTime regDate;
 }
