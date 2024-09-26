@@ -3,6 +3,7 @@ package com.top.effitopia.service;
 import com.top.effitopia.domain.Address;
 import com.top.effitopia.domain.Member;
 import com.top.effitopia.dto.MemberDTO;
+import com.top.effitopia.dto.PasswordUpdateDTO;
 import com.top.effitopia.enumeration.MemberRole;
 import com.top.effitopia.enumeration.MemberStatus;
 import com.top.effitopia.dto.JoinDTO;
@@ -82,13 +83,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean modifyStatus(int id, MemberStatus memberStatus) {
-        return false;
+    public boolean modifyStatus(Member member, MemberStatus memberStatus) {
+        if(memberStatus.equals(member.getStatus())) {
+            return false;
+        }
+        return memberMapper.updateStatus(member.getId(), memberStatus) == 1;
     }
 
     @Override
-    public boolean modifyPassword() {
-        return false;
+    public boolean modifyPassword(Member member, PasswordUpdateDTO dto) {
+        if(!dto.getNewPassword().equals(dto.getNewPasswordConfirm())) {
+            throw new BizException(ErrorCode.NOT_MATCHES_NEW_PASSWORD_CONFIRM);
+        } else if(!passwordEncoder.matches(dto.getCurrentPassword(), member.getPassword())){
+            throw new BizException(ErrorCode.NOT_MATCHES_PASSWORD);
+        } else if(passwordEncoder.matches(dto.getNewPassword(), member.getPassword())) {
+            throw new BizException(ErrorCode.DUPLICATE_PASSWORD);
+        }
+        String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
+        return memberMapper.updatePassword(member.getId(), encodedPassword);
     }
 
     @Override

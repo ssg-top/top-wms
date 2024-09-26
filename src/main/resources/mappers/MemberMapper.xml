@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.MemberMapper">
     <resultMap id = "Member" type ="Member">
         <id property="id" column="member_id"/>
@@ -62,6 +62,12 @@
     <update id="updateStatus" parameterType="Map">
         UPDATE member
         SET status=#{status}, mod_date=now()
+        WHERE member_id=#{id}
+    </update>
+
+    <update id="updatePassword" parameterType="Map">
+        UPDATE member
+        SET password=#{password}, mod_date=now()
         WHERE member_id=#{id}
     </update>
 
