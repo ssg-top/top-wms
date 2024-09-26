@@ -1,10 +1,5 @@
 package com.top.effitopia.domain;
 
-import com.top.effitopia.dto.MemberDTO;
-import com.top.effitopia.enumeration.WarehouseType;
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +13,7 @@ public class Warehouse {
 
     private Member member;
 
-    private WarehouseType type;
+    private WarehouseType warehouseType;
 
     private String code;
 
@@ -26,7 +21,13 @@ public class Warehouse {
 
     private String phone;
 
-    private Address address;
+    private String zipCode;
+
+    private String roadName;
+
+    private String lotNumber;
+
+    private String detailAddress;
 
     private int	width;
 
