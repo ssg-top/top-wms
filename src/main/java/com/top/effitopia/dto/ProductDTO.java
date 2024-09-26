@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductDTO {
 
-    private int productId;              //상품아이디
+    private Integer id;              //상품아이디
     private String subclassCategory;    //소분류
-    private String productName;         //상품명
+    private String name;         //상품명
     private String productBrand;        //상품브랜드
     private ProductStorageType productStorageType;  //상품보관타입
     private String productCost;         //상품원가
