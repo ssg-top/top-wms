@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InboundDTO {
 
-    private int inboundId;
+    private Integer Id;
     private MemberDTO memberDTO;
     private WarehouseDTO warehouseDTO;
     private ProductDTO productDTO;
@@ -28,39 +28,45 @@ public class InboundDTO {
     private LocalDate inboundCompletedDate;
     private InboundStatus inboundStatus;
 
-/*    private Inbound toInboundDTO(int memberId) {
+    private Inbound toEntity(int memberId,int warehouseId, int productId) {
         return Inbound.builder()
-            .inboundId(this.inboundId)
+            .id(this.Id)
             .member(Member.builder()
                 .id(memberId)
                 .build())
             .warehouse(Warehouse.builder()
-                .warehouse_id(warehouseId)
+                .id(warehouseId)
                 .build())
             .product(Product.builder()
-                .
+                .id(productId)
                 .build())
-            .inboundRequestDate(inboundDTO.getInboundRequestDate())
-            .inboundApprovedDate(inboundDTO.getInboundApprovedDate())
-            .inboundExpectDate(inboundDTO.getInboundExpectDate())
-            .inboundCompletedDate(inboundDTO.getInboundCompletedDate())
-            .inboundStatus(inboundDTO.getInboundStatus())
+            .inboundRequestDate(this.inboundRequestDate)
+            .inboundApprovedDate(this.inboundApprovedDate)
+            .inboundExpectDate(this.inboundExpectDate)
+            .inboundCompletedDate(this.inboundCompletedDate)
+            .inboundStatus(this.inboundStatus)
             .build();
     }
 
-    private InboundDTO toInbound(Inbound inbound) {
+    private InboundDTO toDTO(Inbound inbound) {
         return InboundDTO.builder()
-            .inboundId(inbound.getInboundId())
-            .member(inbound.getMember())
-            .warehouse(inbound.getWarehouse())
-            .product(inbound.getProduct())
+            .Id(inbound.getId())
+            .memberDTO(MemberDTO.builder()
+                .id(inbound.getMember().getId())
+                .username(inbound.getMember().getUsername())
+                .build())
+            .warehouseDTO(WarehouseDTO.builder()
+                .id(inbound.getWarehouse().getId())
+                .build())
+            .productDTO(ProductDTO.builder()
+                .id(inbound.getProduct().getId())
+                .build())
             .inboundRequestDate(inbound.getInboundRequestDate())
             .inboundApprovedDate(inbound.getInboundApprovedDate())
             .inboundExpectDate(inbound.getInboundExpectDate())
             .inboundCompletedDate(inbound.getInboundCompletedDate())
             .inboundStatus(inbound.getInboundStatus())
             .build();
-    }*/
-
+    } // 모든 데이터를 넣기
 
 }

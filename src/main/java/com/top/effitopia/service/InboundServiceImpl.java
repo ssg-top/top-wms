@@ -5,12 +5,14 @@ import com.top.effitopia.dto.InboundDTO;
 import com.top.effitopia.mapper.InboundMapper;
 import java.awt.print.Pageable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class InboundServiceImpl implements InboundService {
@@ -85,25 +87,34 @@ public class InboundServiceImpl implements InboundService {
 
     }
 
-
+    /**
+     * 특정 입고 요청들을 삭제하는 메서드
+     *
+     * @param inboundIdList 삭제할 삭제 리스트
+     */
     @Override
     public void removeList(List<Integer> inboundIdList) {
-
+        inboundMapper.deleteList(inboundIdList);
     }
 
+/*
 
-    /**
+    */
+/**
      * InboundDTO 를 Entity 로 변환
      *
      * @param inboundDTO InboundDTO 를 변환
      * @return 변환된 Inbound 엔티티 객체
-     */
+     *//*
+
     private Inbound dtoToEntity(InboundDTO inboundDTO) {
         return Inbound.builder()
             .inboundId(inboundDTO.getInboundId())
+*/
 /*            .member(inboundDTO.getMember())
             .warehouse(inboundDTO.getWarehouse())
-            .product(inboundDTO.getProduct())  */
+            .product(inboundDTO.getProduct())  *//*
+
             .inboundRequestDate(inboundDTO.getInboundRequestDate())
             .inboundApprovedDate(inboundDTO.getInboundApprovedDate())
             .inboundExpectDate(inboundDTO.getInboundExpectDate())
@@ -113,18 +124,22 @@ public class InboundServiceImpl implements InboundService {
     }
 
 
-    /**
+    */
+/**
      * Entity 를 InboundDTO 로 변환
      *
      * @param inbound Inbound(도메인)를 변환
      * @return 변환된 InboundDTO
-     */
+     *//*
+
     private InboundDTO entityToDTO(Inbound inbound) {
         return InboundDTO.builder()
             .inboundId(inbound.getInboundId())
+*/
 /*            .member(inbound.getMember())
             .warehouse(inbound.getWarehouse())
-            .product(inbound.getProduct())  */
+            .product(inbound.getProduct())  *//*
+
             .inboundRequestDate(inbound.getInboundRequestDate())
             .inboundApprovedDate(inbound.getInboundApprovedDate())
             .inboundExpectDate(inbound.getInboundExpectDate())
@@ -132,5 +147,6 @@ public class InboundServiceImpl implements InboundService {
             .inboundStatus(inbound.getInboundStatus())
             .build();
     }
+*/
 
 }

@@ -11,10 +11,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Vendor {
+public class ProductMajorCategory {
 
     private Integer id;
-    private String vendorName;
-    private Inbound inbound;
+    private String name;
 
 }
