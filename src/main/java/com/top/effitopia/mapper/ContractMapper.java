@@ -8,9 +8,11 @@ import java.util.List;
 
 @Mapper
 public interface ContractMapper {
-    int insert();
+    int insert(Contract contract);
     List<Contract> selectListAll(PageRequestDTO pageRequestDTO);
     List<Contract> selectListByStatus(Integer id, PageRequestDTO pageRequestDTO);
     List<Integer> updateList();
-    int update();
+    int update(Contract contract);
+
+    List<Integer> updateList(PageRequestDTO pageRequestDTO);
 }

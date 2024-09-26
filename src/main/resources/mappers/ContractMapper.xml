@@ -8,7 +8,25 @@
     </select>
 
     <select id="selectListByStatus" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
-        select * from contract WHERE contract_status_id = #{id} ORDER BY contract_id DESC LIMIT #{skip}, #{size}
+        select * from contract WHERE contract_status = #{contractStatus} ORDER BY contract_id DESC LIMIT #{skip}, #{size}
     </select>
 
+    <update id="update" parameterType="contract">
+        UPDATE contract
+        SET contract_status=#{status}, contract_start_date=now(), contract_end_date=date_add(now(),INTERVAL contract_date MONTH), mod_date=now()
+        WHERE contract_id=#{id}
+    </update>
+
+    <insert id="insert" parameterType="contract">
+        INSERT INTO contract (warehouse_id, contract_status, member_id, contract_date, reg_date)
+        VALUES (#{warehouse.id}, #{status}, #{member.id}, #{date}, NOW())
+    </insert>
+
+    <update id="updateList">
+        <foreach item="id" collection="com.top.effitopia.dto.PageRequestDTO" separator=";">
+            UPDATE contract
+            SET contract_status=#{status}, contract_start_date=now(), contract_end_date=date_add(now(),INTERVAL contract_date MONTH), mod_date=now()
+            WHERE contract_id=#{id}
+        </foreach>
+    </update>
 </mapper>
