@@ -22,68 +22,52 @@ public class CheckoutServiceImpl implements CheckoutService {
     private final CheckoutMapper checkoutMapper;
     private final ModelMapper modelMapper;
 
-//    @Override
-//    public PageResponseDTO<CheckoutDTO> getList(PageRequestDTO pageRequestDTO) {
-//        List<Checkout> checkoutList = checkoutMapper.selectList(pageRequestDTO);
-//        List<CheckoutDTO> checkoutDTOList = checkoutList.stream().map(vo->modelMapper.map(vo, CheckoutDTO.class)).toList();
-//        int total = checkoutMapper.getCount(pageRequestDTO);
-//        return PageResponseDTO
-//                .<CheckoutDTO>withAll()
-//                .dtoList(checkoutDTOList)
-//                .total(total)
-//                .pageRequestDTO(pageRequestDTO)
-//                .build();
-//    }
-
-//    @Override
-//    @Transactional
-//    public boolean save(CheckoutDTO checkoutDTO, CheckoutQuestionDTO checkoutQuestionDTO, CheckoutAnswerDTO checkoutAnswerDTO) {
-//        log.info("CheckoutServiceImpl save");
-//        Checkout checkout = modelMapper.map(checkoutDTO, Checkout.class);
-//        CheckoutQuestion checkoutQuestion = modelMapper.map(checkoutQuestionDTO, CheckoutQuestion.class);
-//        CheckoutAnswer checkoutAnswer = modelMapper.map(checkoutAnswerDTO, CheckoutAnswer.class);
-//        log.info(checkout);
-//        int result = checkoutMapper.insert(checkout, checkoutQuestion, checkoutAnswer);
-//        return result >= 3;
-//    }
-
-//    @Override
-//    @Transactional
-//    public boolean save(CheckoutDTO checkoutDTO) {
-//        log.info("CheckoutServiceImpl save");
-//        Checkout checkout = modelMapper.map(checkoutDTO, Checkout.class);
-//        log.info(checkout);
-//        int result = checkoutMapper.insert(checkout);
-//        return result >= 3;
-//    }
-
-
     @Override
-    @Transactional
-    public boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> answers) {
-        log.info("CheckoutServiceImpl save");
-
-        Checkout checkout = modelMapper.map(checkoutDTO, Checkout.class);
-        int result = checkoutMapper.insertCheckout(checkout);
-
-        for (CheckoutAnswerDTO answerDTO : answers) {
-            CheckoutAnswer answer = CheckoutAnswer.builder()
-                    .checkout(checkout)
-                    .checkoutQuestion(modelMapper.map(answerDTO.getCheckoutQuestionDTO(), CheckoutQuestion.class))
-                    .checkoutStatus(answerDTO.getCheckoutStatus())
-                    .build();
-
-            checkoutMapper.insertCheckoutAnswer(answer);
-        }
-
-        return result > 0;
+    public PageResponseDTO<CheckoutDTO> getList(PageRequestDTO pageRequestDTO) {
+        List<Checkout> voList = checkoutMapper.selectList(pageRequestDTO);
+        List<CheckoutDTO> dtoList = voList.stream()
+                .map(vo -> modelMapper.map(vo, CheckoutDTO.class))
+                .collect(Collectors.toList());
+        int total = checkoutMapper.getTotalCount(pageRequestDTO);
+        return PageResponseDTO.<CheckoutDTO>withAll()
+                .dtoList(dtoList)
+                .total(total)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
     }
 
     @Override
-    public List<CheckoutQuestionDTO> getAllQuestions() {
-        List<CheckoutQuestion> questions = checkoutMapper.getAllQuestions();
-        return questions.stream()
-                .map(question -> modelMapper.map(question, CheckoutQuestionDTO.class))
-                .collect(Collectors.toList());
+    public CheckoutDTO getOne(Integer checkoutId) {
+        Checkout checkout = checkoutMapper.getCheckoutDetails(checkoutId);
+        return modelMapper.map(checkout, CheckoutDTO.class);
+    }
+
+    @Transactional
+    @Override
+    public boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> checkoutAnswers) {
+        Checkout checkout = modelMapper.map(checkoutDTO, Checkout.class);
+        int result = checkoutMapper.insertCheckout(checkout);
+        if (result == 0) {
+            return false;
+        }
+
+        List<CheckoutAnswer> answers = checkoutAnswers.stream()
+                .map(answerDTO -> {
+                    CheckoutQuestion question = modelMapper.map(answerDTO.getCheckoutQuestionDTO(), CheckoutQuestion.class);
+
+                    return CheckoutAnswer.builder()
+                            .checkout(checkout)
+                            .checkoutQuestion(question)
+                            .checkoutStatus(answerDTO.getCheckoutStatus())
+                            .build();
+                }).toList();
+
+        for (CheckoutAnswer answer : answers) {
+            int answerResult = checkoutMapper.insertCheckoutAnswer(answer);
+            if (answerResult == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
