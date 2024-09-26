@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
@@ -54,9 +55,10 @@ public class CSCMapperTests {
 
     @Test
     public void selectOneInquiryTest() {
-        CustomerInquiry customerInquiry = cscMapper.selectOneInquiry(2);
+        Optional<CustomerInquiry>  customerInquiry = cscMapper.selectOneInquiry(5);
 
-        log.info("customerInquiry : " + customerInquiry);
+        customerInquiry.ifPresent(inquiry -> log.info("customerInquiry : " + inquiry));
+
     }
 
     @Test
@@ -94,21 +96,24 @@ public class CSCMapperTests {
                 .build();
         memberMapper.insert(member);
 
-        CustomerInquiry customerInquiry = cscMapper.selectOneInquiry(3);
+        Optional<CustomerInquiry> customerInquiry = cscMapper.selectOneInquiry(3);
         log.info(customerInquiry.toString());
-        CustomerAnswer customerAnswer = CustomerAnswer.builder()
-                .AnswerContent("답변테스트2")
-                .AnswerWriter(member.getName())
-                .inquiry(customerInquiry).build();
+        if(customerInquiry.isPresent()) {
+            CustomerAnswer customerAnswer = CustomerAnswer.builder()
+                    .AnswerContent("답변테스트2")
+                    .AnswerWriter(member.getName())
+                    .inquiry(customerInquiry.get()).build();
+            cscMapper.insertAnswer(customerAnswer);
+            log.info(customerAnswer.toString());
+        }
 
-        cscMapper.insertAnswer(customerAnswer);
-        log.info(customerAnswer.toString());
     }
 
     @Test
     public void selectOneAnswerTest() {
-        CustomerAnswer customerAnswer = cscMapper.selectOneAnswer(2);
-        log.info(customerAnswer.toString());
+        Optional<CustomerAnswer> customerAnswer = cscMapper.selectOneAnswer(2);
+        customerAnswer.ifPresent(answer -> log.info(answer.toString()));
+
     }
 
     @Test

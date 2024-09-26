@@ -56,4 +56,8 @@
     <delete id="deleteAnswer">
         delete from answer where id = #{no}
     </delete>
+
+    <delete id="deleteAnswerToInquiryId">
+        delete from answer where inquiry_id = #{no}
+    </delete>
 </mapper>
