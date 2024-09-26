@@ -15,7 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Inbound {
 
-    private int inboundId;
+    private Integer id;
     private Member member;
     private Warehouse warehouse;
     private Product product;
