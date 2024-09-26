@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.top.effitopia.mapper.RevenueMapper">
+
+    <insert id="insert" parameterType="Revenue">
+        INSERT INTO revenue(warehouse_id, member_id, revenue_category, amount, revenue_details, request_date, complete_date, payment_method, is_paid, del_flag)
+        VALUES (#{warehouse.id}, #{member.id}, #{category}, #{amount}, #{revenueDetails}, #{requestDate}, #{completeDate}, #{paymentMethod}, #{isPaid}, #{delFlag})
+    </insert>
+
+    <select id="selectOne" parameterType="int" resultType="Revenue">
+        SELECT * FROM revenue
+        WHERE revenue_id=#{id}
+    </select>
+
+    <select id="selectAll" resultType="Revenue">
+        SELECT * FROM revenue
+    </select>
+
+    <update id="update" parameterType="Revenue">
+        UPDATE revenue SET warehouse_id=#{warehouse.id}, revenue_category=#{category}, amount=#{amount}, revenue_details=#{revenueDetails}, request_date=#{requestDate}, mod_date=now()
+        WHERE revenue_id=#{id}
+    </update>
+
+    <update id="updatePaymentInfo" parameterType="Revenue">
+        UPDATE revenue SET complete_date=#{completeDate}, payment_method=#{paymentMethod}, is_paid=#{isPaid}, mod_date=now()
+        WHERE revenue_id=#{id}
+    </update>
+
+    <update id="delete" parameterType="int">
+        UPDATE revenue SET del_flag=true, mod_date=now()
+        WHERE revenue_id=#{id}
+    </update>
+
+</mapper>
