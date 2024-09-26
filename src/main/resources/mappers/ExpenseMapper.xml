@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.top.effitopia.mapper.ExpenseMapper">
+
+    <insert id="insert" parameterType="Expense">
+        INSERT INTO expense(warehouse_id, expense_category, amount, expense_details, expense_date, is_paid, del_flag)
+        VALUES (#{warehouse.id}, #{category}, #{amount}, #{expenseDetails}, #{expenseDate}, #{isPaid}, #{delFlag})
+    </insert>
+
+    <select id="selectOne" parameterType="int" resultType="Expense">
+        SELECT * FROM expense
+        WHERE expense_id=#{id}
+    </select>
+
+    <select id="selectAll" resultType="Expense">
+        SELECT * FROM expense
+    </select>
+
+    <update id="update" parameterType="Expense">
+        UPDATE expense SET expense_category=#{category}, amount=#{amount}, expense_details=#{expenseDetails}, expense_date=#{expenseDate}, is_paid=#{isPaid})
+        WHERE expense_id=#{id}
+    </update>
+
+    <update id="delete" parameterType="int">
+        UPDATE expense SET del_flag=true, mod_date=now()
+        WHERE expense_id=#{id}
+    </update>
+</mapper>

@@ -1,7 +1,9 @@
 package com.top.effitopia.service;
 
+import com.top.effitopia.domain.Member;
 import com.top.effitopia.dto.JoinDTO;
 import com.top.effitopia.dto.MemberDTO;
+import com.top.effitopia.dto.PasswordUpdateDTO;
 import com.top.effitopia.enumeration.MemberStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,12 @@ public interface AuthService {
     List<MemberDTO> getList();
 
     boolean modify(MemberDTO memberDTO);
-    boolean modifyPassword();
-    boolean modifyStatus(int id, MemberStatus memberStatus);
 
     boolean save(JoinDTO joinDTO);
+
+    boolean modifyStatus(Member member, MemberStatus memberStatus);
+
+    boolean modifyPassword(Member member, PasswordUpdateDTO dto);
 
     boolean checkDuplicateUsername(String username);
 
