@@ -56,6 +56,12 @@
         select * from warehouse ORDER BY warehouse_id DESC LIMIT #{skip}, #{size}
     </select>
 
+    <update id="updateList" parameterType="com.top.effitopia.dto.PageRequestDTO">
+        UPDATE warehouse
+        SET member_id=#{member.id}, warehouse_name=#{name}, warehouse_phone=#{phone}, mod_date=NOW()
+        WHERE warehouse_id=#{id}
+    </update>
+
     <update id="update" parameterType="warehouse">
         UPDATE warehouse
         SET member_id=#{member.id}, warehouse_name=#{name}, warehouse_phone=#{phone}, mod_date=NOW()

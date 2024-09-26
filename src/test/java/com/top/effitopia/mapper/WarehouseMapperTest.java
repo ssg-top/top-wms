@@ -44,6 +44,7 @@ public class WarehouseMapperTest {
         warehouseType = WarehouseType.builder().id(1).type("냉동").build();
 
         member = Member.builder()
+                .id(1)
                 .username("manager" + (int)(Math.random() * 10000))
                 .password(UUID.randomUUID().toString().substring(0, 33))
                 .name("name")
@@ -57,7 +58,7 @@ public class WarehouseMapperTest {
         address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
 
         warehouse = Warehouse.builder().
-                    member(null).
+                    member(member).
                     warehouseType(warehouseType).
                     code("code").
                     name("name").
