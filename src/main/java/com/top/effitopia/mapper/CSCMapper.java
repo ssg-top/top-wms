@@ -3,8 +3,10 @@ package com.top.effitopia.mapper;
 import com.top.effitopia.domain.CustomerAnswer;
 import com.top.effitopia.domain.CustomerInquiry;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -15,7 +17,7 @@ public interface CSCMapper {
 
     /**
      * 문의글 등록
-     * @param customerInquiry
+     * @param: customerInquiry
      */
     void insertInquiry(CustomerInquiry customerInquiry);
 
@@ -30,7 +32,7 @@ public interface CSCMapper {
      * @param: 조회할 문의글ID
      * @return CustomerInquiry
      */
-    CustomerInquiry selectOneInquiry(int no);
+     Optional<CustomerInquiry>  selectOneInquiry(@Param("no") int no);
 
     /**
      * 문의글 수정
@@ -42,7 +44,7 @@ public interface CSCMapper {
      * 문의글 삭제
      * @param: 삭제할 문의글ID
      */
-    void deleteInquiry(int no);
+    void deleteInquiry(@Param("no") int no);
 
 
 //============================================================
@@ -59,7 +61,7 @@ public interface CSCMapper {
      * @param: 조회할 답변ID
      * @return CustomerAnswer
      */
-    CustomerAnswer selectOneAnswer(int no);
+    Optional<CustomerAnswer>  selectOneAnswer(@Param("no")int no);
 
     /**
      * 답변 수정
@@ -71,5 +73,11 @@ public interface CSCMapper {
      * 답변 한개 삭제
      * @param: 삭제할 답변ID
      */
-    void deleteAnswer(int no);
+    void deleteAnswer(@Param("no") int no);
+
+    /**
+     * 답변 한개 삭제
+     * @param: 문의글 ID
+     */
+    void deleteAnswerToInquiryId(@Param("no") int no);
 }

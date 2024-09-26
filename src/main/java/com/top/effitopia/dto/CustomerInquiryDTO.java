@@ -1,5 +1,6 @@
 package com.top.effitopia.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +16,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class CustomerInquiryDTO {
-    private int inquiryID;          //문의글 ID
+    private int id;                 //문의글 ID
+    @NotEmpty
     private String inquiryTitle;    //문의글 제목
+    @NotEmpty
     private String inquiryContent;  //문의글 내용
     private String inquiryWriter;   //문의글 작성자
     private Boolean inquiryState;   //문의글 답변 상태
