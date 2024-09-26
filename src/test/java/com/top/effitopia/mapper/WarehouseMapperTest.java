@@ -27,8 +27,14 @@ public class WarehouseMapperTest {
     WarehouseType warehouseType;
 
     @Test
-    public void selectTest(){
-        warehouse = warehouseMapper.select(24);
+    public void selectIdTest(){
+        warehouse = warehouseMapper.selectId(1);
+        log.info(warehouse);
+    }
+
+    @Test
+    public void selectNameTest(){
+        warehouse = warehouseMapper.selectName("신사 냉동 창고");
         log.info(warehouse);
     }
 

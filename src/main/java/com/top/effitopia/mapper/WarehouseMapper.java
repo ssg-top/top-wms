@@ -14,6 +14,7 @@ public interface WarehouseMapper {
     List<Cell> selectCellList(Integer id, PageRequestDTO pageRequestDTO);
     int update(Warehouse warehouse);
     int delete(Integer warehouse_id);
-    Warehouse select(Integer id);
+    Warehouse selectId(Integer id);
+    Warehouse selectName(String name);
     int insert(Warehouse warehouse);
 }

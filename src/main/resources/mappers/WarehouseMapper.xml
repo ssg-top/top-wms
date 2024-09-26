@@ -30,8 +30,12 @@
         </association>
     </resultMap>
 
-    <select id="select" parameterType="Integer" resultMap="warehouse">
+    <select id="selectId" parameterType="Integer" resultMap="warehouse">
         select * from warehouse where warehouse_id = #{id}
+    </select>
+
+    <select id="selectName" parameterType="String" resultMap="warehouse">
+        select * from warehouse where warehouse_name = #{name}
     </select>
 
     <insert id="insert" parameterType="Warehouse">
