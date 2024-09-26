@@ -3,5 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.ContractMapper">
+    <select id="selectListAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
+        select * from contract ORDER BY contract_id DESC LIMIT #{skip}, #{size}
+    </select>
+
+    <select id="selectListByStatus" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
+        select * from contract WHERE contract_status_id = #{id} ORDER BY contract_id DESC LIMIT #{skip}, #{size}
+    </select>
 
 </mapper>

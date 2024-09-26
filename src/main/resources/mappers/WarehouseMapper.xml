@@ -44,11 +44,17 @@
              #{width}, #{length}, #{height}, #{capacity}, #{latitude}, #{longitude}, NOW())
     </insert>
 
-<!--    <select id="selectCellList" parameterType="com.top.effitopia.dto.PageRequestDTO">-->
-<!--        select * from Cell where warehouse_id = #{id} ORDER BY cell_id  DESC LIMIT #{skip}, #{size}-->
-<!--    </select>-->
+    <select id="selectCellList" parameterType="com.top.effitopia.dto.PageRequestDTO">
+        select * from Cell where warehouse_id = #{id} ORDER BY cell_id  DESC LIMIT #{skip}, #{size}
+    </select>
 
     <select id="selectWarehouseList" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
         select * from warehouse ORDER BY warehouse_id DESC LIMIT #{skip}, #{size}
     </select>
+
+    <update id="update" parameterType="warehouse">
+        UPDATE warehouse
+        SET member_id=#{member.id}, warehouse_name=#{name}, warehouse_phone=#{phone}, mod_date=NOW()
+        WHERE warehouse_id=#{id}
+    </update>
 </mapper>

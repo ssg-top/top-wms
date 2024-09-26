@@ -68,11 +68,11 @@ public class WarehouseMapperTest {
                     longitude(0.00002).
                     regDate(LocalDateTime.now()).build();
 
-        warehouseMapper.insert(warehouse);
+        log.info(warehouseMapper.insert(warehouse));
     }
 
     @Test
-    public void selectWarehouseList(){
+    public void selectWarehouseListTest(){
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
 
         List<Warehouse> warehouseList = warehouseMapper.selectWarehouseList(pageRequestDTO);
@@ -81,11 +81,48 @@ public class WarehouseMapperTest {
     }
 
     @Test
-    public void selectCellList(){
+    public void selectCellListTest(){
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
 
         List<Cell> cellList = warehouseMapper.selectCellList(13, pageRequestDTO);
 
         log.info(cellList);
+    }
+
+    @Test
+    public void updateTest(){
+        member = Member.builder()
+                .username("manager" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("name")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTER_REQUEST)
+                .role(MemberRole.WAREHOUSE_MANAGER)
+                .address(Address.builder().zipCode("zip").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .build();
+
+        address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
+
+        warehouse = Warehouse.builder().
+                id(1).
+                member(member).
+                warehouseType(warehouseType).
+                code("code").
+                name("name").
+                phone("010-1234-5678").
+                zipCode(address.getZipCode()).
+                roadName(address.getRoadNameAddress()).
+                lotNumber(address.getLotNumberAddress()).
+                detailAddress(address.getDetailAddress()).
+                width(1).
+                length(2).
+                height(3).
+                capacity(4).
+                latitude(0.00001).
+                longitude(0.00002).
+                regDate(LocalDateTime.now()).build();
+        int result = warehouseMapper.update(warehouse);
+        log.info(result);
     }
 }
