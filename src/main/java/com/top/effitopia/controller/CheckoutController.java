@@ -12,11 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 
 @Controller
 @RequestMapping("/checkouts")
@@ -26,8 +26,26 @@ public class CheckoutController {
 
     private final CheckoutService checkoutService;
 
+    @GetMapping
+    public void showRegisterForm() {
+        log.info("CheckoutController showRegisterForm GetMapping");
+    }
+
+    @PostMapping("/register")
+    public String registerForm(@ModelAttribute("checkoutDTO") @Valid CheckoutDTO checkoutDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("CheckoutController registerForm PostMapping");
+        if (bindingResult.hasErrors()) {
+            log.info("CheckoutController registerForm PostMapping has Errors");
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/checkouts/register";
+        }
+        checkoutService.register(checkoutDTO);
+        redirectAttributes.addFlashAttribute("registerSuccess", "새로운 안전 점검 데이터를 등록하였습니다.");
+        return "redirect:/checkouts/list";
+    }
+
     @GetMapping("/list")
-    public void showList(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
+    public void showList(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
         log.info("CheckoutController showList GetMapping");
         if (bindingResult.hasErrors()) {
             log.info("CheckoutController showList GetMapping has Errors");
@@ -36,35 +54,9 @@ public class CheckoutController {
         model.addAttribute("responseDTO", checkoutService.getList(pageRequestDTO));
     }
 
-    @GetMapping("/checkouts/details")
-    public void read(Integer checkoutId, PageRequestDTO pageRequestDTO, Model model) {
-        CheckoutDTO checkoutDTO = checkoutService.getOne(checkoutId);
-        log.info(checkoutDTO);
-        model.addAttribute("detail", checkoutDTO);
-    }
-
-    @PostMapping("/register")
-    public String registerForm(@Valid CheckoutDTO checkoutDTO,
-                               @Valid List<CheckoutAnswerDTO> checkoutAnswerDTO,
-                               BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes) {
-        log.info("CheckoutController registerForm PostMapping");
-        if (bindingResult.hasErrors()) {
-            log.info("CheckoutController registerForm PostMapping has Errors");
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/checkouts/register";
-        }
-
-        boolean isSuccess = checkoutService.save(checkoutDTO, checkoutAnswerDTO);
-
-        if (isSuccess) {
-            log.info("CheckoutController registerForm PostMapping has No Errors");
-            redirectAttributes.addFlashAttribute("success", "Checkout submitted successfully.");
-            return "redirect:/checkouts/list";
-        } else {
-            log.info("CheckoutController registerForm PostMapping has Errors");
-            redirectAttributes.addFlashAttribute("fail", "Checkout submission failed.");
-            return "redirect:/checkout/register";
-        }
+    @GetMapping("/checkout/read")
+    public void read(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Integer checkoutId, Model model) {
+        log.info("CheckoutController read GetMapping");
+        model.addAttribute("checkout", checkoutService.getCheckoutDetail(checkoutId));
     }
 }
