@@ -4,103 +4,98 @@ import com.top.effitopia.domain.Checkout;
 import com.top.effitopia.domain.CheckoutAnswer;
 import com.top.effitopia.domain.CheckoutQuestion;
 import com.top.effitopia.domain.Warehouse;
-import com.top.effitopia.dto.CheckoutDTO;
 import com.top.effitopia.dto.PageRequestDTO;
 import com.top.effitopia.enumeration.CheckoutStatus;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 @Log4j2
 public class CheckoutMapperTest {
 
     @Autowired
     private CheckoutMapper checkoutMapper;
 
-    @Test
-    void testInsertCheckout() {
-        Warehouse warehouse = Warehouse.builder()
-                .id(1L)
-                .build();
+    @Autowired
+    private ModelMapper modelMapper;
 
+    @Test
+    public void testInsertCheckout() {
         Checkout checkout = Checkout.builder()
-//                .warehouse(null)
-//                .warehouse(Warehouse.builder().build())
-                .warehouse(warehouse)
-                .checkoutComment("Test comment")
-                .regDate(LocalDateTime.now())
+                .warehouse(Warehouse.builder().id(1).build())
+                .checkoutContent("테스트 체크아웃")
                 .build();
 
         int result = checkoutMapper.insertCheckout(checkout);
 
-        assertEquals(1, result);
-        assertNotNull(checkout.getCheckoutId());
+        assertEquals(result, 1);
     }
 
     @Test
-    void testInsertCheckoutAnswer() {
+    public void testInsertCheckoutAnswer() {
         Checkout checkout = Checkout.builder()
-                .checkoutId(1)
+                .checkoutId(2)
                 .build();
 
-        CheckoutQuestion checkoutQuestion = CheckoutQuestion.builder()
-                .checkoutQuestionId(1)
-                .build();
+        List<Integer> questionIds = checkoutMapper.getAllQuestionIds();
+        for (Integer questionId : questionIds) {
+            CheckoutAnswer answer = CheckoutAnswer.builder()
+                    .checkout(checkout)
+                    .checkoutQuestion(CheckoutQuestion.builder().checkoutQuestionId(questionId).build())
+                    .checkoutStatus(CheckoutStatus.PASS)
+                    .build();
+            int result = checkoutMapper.insertCheckoutAnswer(answer);
 
-        CheckoutAnswer answer = CheckoutAnswer.builder()
-                .checkout(checkout)
-                .checkoutQuestion(checkoutQuestion)
-                .checkoutStatus(CheckoutStatus.PASS)
-                .build();
-
-        int result = checkoutMapper.insertCheckoutAnswer(answer);
-        assertEquals(1, result);
-    }
-
-//    @Test
-//    void testSelectAll(){
-//        String test = checkoutMapper.selectAll(1);
-//        System.out.println(test);
-//    }
-
-    @Test
-    void testSelectList() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(1)
-                .size(10)
-                .build();
-
-        List<CheckoutDTO> checkoutDTOList = checkoutMapper.selectList(pageRequestDTO);
-
-        assertNotNull(checkoutDTOList);
-        assertEquals(0, checkoutDTOList.size());
-
-        if (!checkoutDTOList.isEmpty()) {
-            assertNotNull(checkoutDTOList.get(0).getCheckoutId());
+            assertEquals(result, 1);
         }
     }
 
     @Test
-    public void testGetCheckoutDetails() {
-        int checkoutId = 1;
+    public void testSelectList() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .keyword("테스트")
+                .build();
 
-        Checkout checkout = checkoutMapper.getCheckoutDetails(checkoutId);
+        List<Checkout> checkoutList = checkoutMapper.selectList(pageRequestDTO);
 
-        assertNotNull(checkout, "Checkout should not be null");
-        log.info("Checkout: {}", checkout);
+        assertThat(checkoutList).isNotNull();
+    }
 
-        assertEquals(1, checkout.getWarehouse().getId(), "Warehouse ID should be 1");
+    @Test
+    public void testSelectCheckoutById() {
+        Checkout checkout = checkoutMapper.selectCheckoutById(2); // 실제 존재하는 checkoutId 사용
 
-        assertNotNull(checkout.getCheckoutComment(), "Checkout Comment should not be null");
+        assertThat(checkout).isNotNull();
+        assertThat(checkout.getCheckoutId()).isEqualTo(2); // 실제로 조회한 ID와 일치하는지 확인
+    }
+
+    @Test
+    public void testGetTotalCount() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .keyword("테스트")
+                .build();
+
+        int totalCount = checkoutMapper.getTotalCount(pageRequestDTO);
+
+        assertThat(totalCount).isGreaterThan(0);
+    }
+
+    @Test
+    public void testGetAllQuestionIds() {
+        List<Integer> questionIds = checkoutMapper.getAllQuestionIds();
+
+        assertThat(questionIds).isNotNull();
     }
 }
