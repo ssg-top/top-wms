@@ -46,6 +46,19 @@ public class InboundServiceImpl implements InboundService {
     }
 
     /**
+     * 특정 입고요청 리스트를 승인하는 메서드
+     * @param
+     * @return 승인 성공하면 true, 실패하면 false
+     */
+    @Override
+    public boolean approveInboundRequests(List<InboundDTO> inboundDTOList) {
+        List<Inbound> inboundList = inboundDTOList.stream()
+            .map(dto -> modelMapper.map(dto, Inbound.class))
+            .toList();
+        return inboundMapper.approveList(inboundList) > 0;
+    }
+
+    /**
      * 특정 입고 데이터를 삭제하는 메서드
      *
      * @param inboundId 삭제할 입고 데이터의 ID
@@ -84,7 +97,6 @@ public class InboundServiceImpl implements InboundService {
 
     @Override
     public void saveList(List<InboundDTO> inboundDTOList) {
-
     }
 
     /**

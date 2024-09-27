@@ -18,7 +18,6 @@ public class Inbound {
     private Integer id;
     private Member member;
     private Warehouse warehouse;
-    private Product product;
     private Vendor vendor;
     private LocalDate inboundRequestDate;
     private LocalDate inboundApprovedDate;

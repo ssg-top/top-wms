@@ -10,6 +10,8 @@ public interface InboundService {
 
     boolean modify(InboundDTO inboundDTO);
 
+    boolean approveInboundRequests(List<InboundDTO> inboundDTOList);
+
     boolean remove(int inboundId);
 
     Optional<InboundDTO> get(int inboundId);

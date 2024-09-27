@@ -14,7 +14,7 @@ import lombok.ToString;
 public class Vendor {
 
     private Integer id;
-    private String vendorName;
-    private Inbound inbound;
+    private String name;
+    private boolean delFlag;
 
 }
