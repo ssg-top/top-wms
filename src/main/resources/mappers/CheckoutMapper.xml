@@ -3,5 +3,68 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.CheckoutMapper">
+    <!-- CheckoutResultMap -->
+    <resultMap id="CheckoutResultMap" type="Checkout">
+        <id property="checkoutId" column="checkout_id"/>
+        <result property="checkoutContent" column="checkout_content"/>
+        <result property="regDate" column="reg_date"/>
+        <!-- association 먼저 -->
+        <association property="warehouse" javaType="Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="code" column="warehouse_code"/>
+        </association>
+    </resultMap>
 
+    <!-- CheckoutAnswerResultMap -->
+    <resultMap id="CheckoutAnswerResultMap" type="CheckoutAnswer">
+        <id property="checkoutAnswerId" column="checkout_answer_id"/>
+        <result property="checkoutStatus" column="checkout_status"/>
+        <association property="checkout" javaType="Checkout" resultMap="CheckoutResultMap"/>
+        <association property="checkoutQuestion" javaType="CheckoutQuestion">
+            <id property="checkoutQuestionId" column="checkout_question_id"/>
+            <result property="questionQuestionContent" column="checkout_question_content"/>
+        </association>
+    </resultMap>
+
+    <!-- checkout 데이터 등록 -->
+    <insert id="insertCheckout" parameterType="Checkout" useGeneratedKeys="true" keyProperty="checkoutId" keyColumn="checkout_id">
+        INSERT INTO checkout (warehouse_id, checkout_content, reg_date)
+        VALUES (#{warehouse.id}, #{checkoutContent}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <!-- checkout_answer 데이터 등록 -->
+    <insert id="insertCheckoutAnswer" parameterType="CheckoutAnswer" useGeneratedKeys="true" keyProperty="checkoutAnswerId" keyColumn="checkout_answer_id">
+        INSERT INTO checkout_answer (checkout_id, checkout_question_id, checkout_status)
+        VALUES (#{checkout.checkoutId}, #{checkoutQuestion.checkoutQuestionId}, #{checkoutStatus})
+    </insert>
+
+    <!-- checkout 리스트 조회 -->
+    <select id="selectList" resultMap="CheckoutResultMap">
+        SELECT c.checkout_id, w.warehouse_name, c.checkout_content, c.reg_date, c.warehouse_id
+        FROM checkout c
+                 JOIN warehouse w ON c.warehouse_id = w.warehouse_id
+        WHERE c.checkout_content LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY c.checkout_id DESC
+            LIMIT #{skip}, #{size}
+    </select>
+
+    <!-- 특정 checkout 조회 -->
+    <select id="selectCheckoutById" resultMap="CheckoutResultMap">
+        SELECT c.checkout_id, w.warehouse_name, c.checkout_content, c.reg_date, c.warehouse_id
+        FROM checkout c
+                 JOIN warehouse w ON c.warehouse_id = w.warehouse_id
+        WHERE c.checkout_id = #{checkoutId}
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*)
+        FROM checkout
+        WHERE checkout_content LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <!-- 모든 질문 ID 조회 -->
+    <select id="getAllQuestionIds" resultType="int">
+        SELECT checkout_question_id FROM checkout_question
+    </select>
 </mapper>

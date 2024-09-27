@@ -2,12 +2,11 @@ package com.top.effitopia.service;
 
 import com.top.effitopia.dto.*;
 
-import java.util.List;
-
 public interface CheckoutService {
+
+    void register(CheckoutDTO checkoutDTO);
+
     PageResponseDTO<CheckoutDTO> getList(PageRequestDTO pageRequestDTO);
 
-    boolean save(CheckoutDTO checkoutDTO, List<CheckoutAnswerDTO> checkoutAnswers);
-
-    CheckoutDTO getOne(Integer checkoutId);
+    CheckoutDTO getCheckoutDetail(Integer checkoutId);
 }

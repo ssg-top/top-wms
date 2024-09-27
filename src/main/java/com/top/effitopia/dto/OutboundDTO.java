@@ -16,7 +16,6 @@ public class OutboundDTO {
     private Integer outboundId;
     private OutboundStatus outboundStatus;
     private OrderDTO orderDTO;
-    private WaybillDTO waybillDTO;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 }

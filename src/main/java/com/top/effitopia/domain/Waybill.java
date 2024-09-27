@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Waybill {
     private Integer waybillId;
+    private Outbound outbound;
     private WaybillStatus waybillStatus;
     private String waybillNum;
     private double waybillPrice;

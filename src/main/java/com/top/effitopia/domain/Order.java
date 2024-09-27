@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class Order {
     private Integer orderId;
-//    private Stock stock;
+    private Stock stock;
     private String buyerName;
     private String zipCode;
     private String buyerRoadName;

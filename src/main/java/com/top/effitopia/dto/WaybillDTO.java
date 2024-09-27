@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 public class WaybillDTO {
     private Integer waybillId;
+    private OutboundDTO outboundDTO;
     private WaybillStatus waybillStatus;
     @NotEmpty
     private String waybillNum;

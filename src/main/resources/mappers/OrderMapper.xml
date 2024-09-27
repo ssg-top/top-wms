@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.top.effitopia.mapper.OrderMapper">
+
+    <!-- 주문 정보와 관련된 결과 매핑 -->
+    <resultMap id="OrderResultMap" type="com.top.effitopia.domain.Order">
+        <id property="orderId" column="order_id"/>
+        <result property="stock.id" column="stock_id"/>
+        <result property="buyerName" column="buyer_name"/>
+        <result property="zipCode" column="zipcode"/>
+        <result property="buyerRoadName" column="buyer_road_name"/>
+        <result property="buyerLotNumber" column="buyer_lot_number"/>
+        <result property="buyerDetailAddress" column="buyer_detail_address"/>
+        <result property="buyerLatitude" column="buyer_latitude"/>
+        <result property="buyerLongitude" column="buyer_longitude"/>
+        <result property="buyerQuantity" column="buyer_quantity"/>
+    </resultMap>
+
+    <!-- 주문 정보 저장 -->
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+        INSERT INTO orders (stock_id, buyer_name, zipcode, buyer_road_name, buyer_lot_number, buyer_detail_address,
+                            buyer_latitude, buyer_longitude, buyer_quantity)
+        VALUES (#{stock.id}, #{buyerName}, #{zipCode}, #{buyerRoadName}, #{buyerLotNumber}, #{buyerDetailAddress},
+                #{buyerLatitude}, #{buyerLongitude}, #{buyerQuantity})
+    </insert>
+
+    <!-- 주문 정보 수정 -->
+    <update id="updateOrder">
+        UPDATE orders
+        SET buyer_name = #{buyerName},
+            zipcode = #{zipCode},
+            buyer_road_name = #{buyerRoadName},
+            buyer_lot_number = #{buyerLotNumber},
+            buyer_detail_address = #{buyerDetailAddress},
+            buyer_latitude = #{buyerLatitude},
+            buyer_longitude = #{buyerLongitude},
+            buyer_quantity = #{buyerQuantity}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <!-- 주문 정보 조회 -->
+    <select id="selectOrderById" resultMap="OrderResultMap">
+        SELECT *
+        FROM orders
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 모든 주문 정보 조회 -->
+    <select id="selectAllOrders" resultMap="OrderResultMap">
+        SELECT *
+        FROM orders
+    </select>
+</mapper>
