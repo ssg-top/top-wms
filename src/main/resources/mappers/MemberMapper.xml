@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.MemberMapper">
-    <resultMap id = "Member" type ="Member">
+    <resultMap id="Member" type="Member">
         <id property="id" column="member_id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
@@ -53,6 +53,13 @@
         )
     </select>
 
+    <select id="existsByNameAndEmail" parameterType="Map" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1 FROM member
+        WHERE name=#{name} AND email=#{email} LIMIT 1
+        )
+    </select>
+
     <update id="update" parameterType="Member">
         UPDATE member
         SET phone=#{phone}, email=#{email}, zip_code=#{address.zipCode}, road_name_address=#{address.roadNameAddress}, lot_number_address=#{address.lotNumberAddress}, detail_address=#{address.detailAddress}, mod_date=now()
@@ -70,5 +77,15 @@
         SET password=#{password}, mod_date=now()
         WHERE member_id=#{id}
     </update>
+
+    <select id="selectAssignableWarehouseManagerList" resultMap="Member">
+        SELECT *
+        FROM member m
+        WHERE m.role='WAREHOUSE_MANAGER' AND m.status='REGISTERED' AND NOT EXISTS (
+            SELECT 1
+            FROM warehouse w
+            WHERE m.member_id = w.member_id
+        )
+    </select>
 
 </mapper>

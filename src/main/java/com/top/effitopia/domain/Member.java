@@ -26,6 +26,7 @@ public class Member {
     private Address address;
     private String businessNumber;
     private LocalDateTime regDate;
+    private LocalDateTime modDate;
 
 
 }
