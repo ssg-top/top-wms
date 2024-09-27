@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authentication Mail Template</title>
+</head>
+<body>
+<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+  <tr>
+    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
+      <div style="font-family: arial,helvetica,sans-serif; font-size: 20px; line-height: 140%; text-align: left; word-wrap: break-word;">
+        <p style="line-height: 140%;"><span style="color: #3598db; line-height: 28px;"><strong>Effitopia</strong> </span>메일 인증 번호</p>
+      </div>
+      <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
+        <p style="line-height: 140%;">아래 인증번호를 인증번호 입력창에 입력해 주세요.</p>
+      </div>
+      <div>
+        <h2 th:text="${code}"></h2>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

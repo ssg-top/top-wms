@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 public interface AuthService {
 
-
     MemberDTO getOne(int id);
 
     List<MemberDTO> getList();
@@ -29,4 +28,9 @@ public interface AuthService {
 
     boolean checkDuplicateEmail(String email);
 
+    String processIdInquiry(String email);
+
+    String processPasswordInquiry(String username);
+
+    boolean verifyMailCode(String email, String code);
 }

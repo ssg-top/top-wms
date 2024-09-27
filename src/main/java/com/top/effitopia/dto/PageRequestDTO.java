@@ -8,23 +8,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageRequestDTO {
+public class PageRequestDTO<T> {
 
-    private String[] types;
-
+    private T searchCond;
     private String keyword;
-
-    private boolean finished;
-
-    private LocalDate from;
-    
-    private LocalDate to;
 
     @Builder.Default
     @Min(value = 1)
@@ -34,7 +26,7 @@ public class PageRequestDTO {
     @Builder.Default
     @Min(value = 10)
     @Max(value = 100)
-    private int size = 10;
+    private int size = 15;
 
     private String link;
 
@@ -45,8 +37,8 @@ public class PageRequestDTO {
     public String getLink() {
         if (link == null) {
             StringBuilder builder = new StringBuilder();
-            builder.append("page = " + this.page);
-            builder.append("& size = " + this.size);
+            builder.append("page=" + this.page);
+            builder.append("&size=" + this.size);
         }
         return link;
     }

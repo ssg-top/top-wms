@@ -10,18 +10,34 @@ import com.top.effitopia.dto.JoinDTO;
 import com.top.effitopia.exception.BizException;
 import com.top.effitopia.exception.ErrorCode;
 import com.top.effitopia.mapper.MemberMapper;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final MailService mailService;
+    private final RedisService redisService;
+
+    @Value("${mail.template-path}")
+    private String mailTemplatePath;
+    @Value("${mail.title.id-inquiry}")
+    private String idInquiryMailTitle;
+    @Value("${mail.title.password-inquiry}")
+    private String passwordInquiryMailTitle;
+    @Value("${mail.auth_code_expiration_time}")
+    private String authCodeExpirationTime;
+
 
     @Override
     public boolean save(JoinDTO joinDTO) {
@@ -113,5 +129,59 @@ public class AuthServiceImpl implements AuthService {
         return memberMapper.existsByEmail(email);
     }
 
+    @Override
+    public String processIdInquiry(String email) {
+        if(!memberMapper.existsByEmail(email)) {
+            throw new BizException(ErrorCode.NOT_EXISTS_EMAIL);
+        }
+        return sendAuthMail(email, idInquiryMailTitle);
+    }
+
+    @Override
+    public String processPasswordInquiry(String username) {
+        Member member = memberMapper.selectOneByUsername(username)
+                .orElseThrow(() -> new BizException(ErrorCode.NOT_EXISTS_MEMBER));
+        if(MemberStatus.LEAVED.equals(member.getStatus())) {
+            throw new BizException(ErrorCode.NOT_EXISTS_MEMBER);
+        }
+        return sendAuthMail(member.getEmail(), passwordInquiryMailTitle);
+    }
+
+    @Override
+    public boolean verifyMailCode(String email, String code) {
+        String findCode = redisService.getValue(email);
+        if (findCode == null) {
+            return false;
+        }
+        return findCode.equals(code);
+    }
+
+    private String sendAuthMail(String email, String title) {
+        Map<String, String> params = new HashMap<>();
+        String code = generateCode();
+        params.put("code", code);
+        try {
+            mailService.sendMail(title, email, mailTemplatePath, params);
+            redisService.setValues(email, code);
+        } catch (MessagingException e) {
+            throw new BizException(ErrorCode.FAIL_TO_SEND_MAIL);
+        }
+        return code;
+    }
+
+    /**
+     * 랜덤 숫자 코드 6자리 생성
+     *
+     * @return
+     */
+    private String generateCode() {
+        int codeLength = 6;
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < codeLength; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
 
 }
