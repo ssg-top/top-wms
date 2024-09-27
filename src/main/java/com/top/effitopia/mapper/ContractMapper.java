@@ -1,6 +1,7 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Contract;
+import com.top.effitopia.dto.ContractDTO;
 import com.top.effitopia.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,9 +11,8 @@ import java.util.List;
 public interface ContractMapper {
     int insert(Contract contract);
     List<Contract> selectListAll(PageRequestDTO pageRequestDTO);
-    List<Contract> selectListByStatus(Integer id, PageRequestDTO pageRequestDTO);
-    List<Integer> updateList();
+    List<Contract> selectListByStatus(PageRequestDTO pageRequestDTO);
     int update(Contract contract);
-
-    List<Integer> updateList(PageRequestDTO pageRequestDTO);
+    void updateApprovalList(List<Contract> contractList);
+    void updateRejectList(List<Contract> contractList);
 }

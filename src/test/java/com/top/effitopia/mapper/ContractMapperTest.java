@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @Log4j2
@@ -30,20 +32,20 @@ public class ContractMapperTest {
 
     @Test
     public void selectListAllTest(){
-//        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().size(10).page(1).build();
-//
-//        List<Contract> contractList = contractMapper.selectListAll(pageRequestDTO);
-//
-//        log.info(contractList);
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().size(10).page(1).build();
+
+        List<Contract> contractList = contractMapper.selectListAll(pageRequestDTO);
+
+        log.info(contractList);
     }
 
     @Test
     public void selectListByStatusTest(){
-//        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().size(10).page(1).build();
-//
-//        List<Contract> contractStatusList = contractMapper.selectListByStatus(1,pageRequestDTO);
-//
-//        log.info(contractStatusList);
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().searchCond(ContractStatus.APPROVE).build();
+
+        List<Contract> contractStatusList = contractMapper.selectListByStatus(pageRequestDTO);
+
+        log.info(contractStatusList);
     }
 
     @Test
@@ -86,6 +88,7 @@ public class ContractMapperTest {
         Contract contract = Contract.builder().
                             warehouse(warehouse).
                             member(member).
+                            startDate(LocalDateTime.now()).
                             status(ContractStatus.APPROVE).
                             date(10).
                             regDate(LocalDateTime.now()).build();
@@ -143,7 +146,24 @@ public class ContractMapperTest {
     }
 
     @Test
-    public void updateListTest(){
+    public void updateApprovalListTest(){
+        List<Contract> contractList = new ArrayList<>();
 
+        contractList.add(Contract.builder().id(3).status(ContractStatus.REQUEST).build());
+        contractList.add(Contract.builder().id(4).status(ContractStatus.REQUEST).build());
+        contractList.add(Contract.builder().id(5).status(ContractStatus.REQUEST).build());
+
+        contractMapper.updateApprovalList(contractList);
+    }
+
+    @Test
+    public void updateRejectListTest(){
+        List<Contract> contractList = new ArrayList<>();
+
+        contractList.add(Contract.builder().id(3).status(ContractStatus.REQUEST).build());
+        contractList.add(Contract.builder().id(4).status(ContractStatus.REQUEST).build());
+        contractList.add(Contract.builder().id(5).status(ContractStatus.REQUEST).build());
+
+        contractMapper.updateRejectList(contractList);
     }
 }

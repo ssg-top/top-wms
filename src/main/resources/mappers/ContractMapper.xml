@@ -8,25 +8,35 @@
     </select>
 
     <select id="selectListByStatus" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
-        select * from contract WHERE contract_status = #{contractStatus} ORDER BY contract_id DESC LIMIT #{skip}, #{size}
+        select * from contract WHERE contract_status = #{searchCond} ORDER BY contract_id DESC LIMIT #{skip}, #{size}
     </select>
 
     <update id="update" parameterType="contract">
         UPDATE contract
-        SET contract_status=#{status}, contract_start_date=now(), contract_end_date=date_add(now(),INTERVAL contract_date MONTH), mod_date=now()
+        SET contract_status=#{status}, contract_end_date=date_add(now(),INTERVAL contract_num_of_months MONTH), mod_date=now()
         WHERE contract_id=#{id}
     </update>
 
     <insert id="insert" parameterType="contract">
-        INSERT INTO contract (warehouse_id, contract_status, member_id, contract_date, reg_date)
-        VALUES (#{warehouse.id}, #{status}, #{member.id}, #{date}, NOW())
+        INSERT INTO contract (warehouse_id, member_id, contract_start_date, contract_num_of_months, contract_status, reg_date)
+        VALUES (#{warehouse.id}, #{member.id}, #{startDate}, #{date}, #{status}, NOW())
     </insert>
 
-    <update id="updateList">
-        <foreach item="id" collection="com.top.effitopia.dto.PageRequestDTO" separator=";">
-            UPDATE contract
-            SET contract_status=#{status}, contract_start_date=now(), contract_end_date=date_add(now(),INTERVAL contract_date MONTH), mod_date=now()
-            WHERE contract_id=#{id}
+    <update id="updateApprovalList" parameterType="java.util.List">
+        UPDATE contract
+        SET contract_status='APPROVAL'
+        WHERE contract_id IN
+        <foreach item="contract" collection="list" open="("  close=")" separator=",">
+            #{contract.id}
+        </foreach>
+    </update>
+
+    <update id="updateRejectList" parameterType="java.util.List">
+        UPDATE contract
+        SET contract_status='REJECT'
+        WHERE contract_id IN
+        <foreach item="contract" collection="list" open="("  close=")" separator=",">
+            #{contract.id}
         </foreach>
     </update>
 </mapper>

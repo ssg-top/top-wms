@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
@@ -89,9 +88,9 @@ public class WarehouseMapperTest {
 
     @Test
     public void selectCellListTest(){
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().searchCond(6).page(1).size(10).build();
 
-        List<Cell> cellList = warehouseMapper.selectCellList(13, pageRequestDTO);
+        List<Cell> cellList = warehouseMapper.selectCellList(pageRequestDTO);
 
         log.info(cellList);
     }
@@ -131,5 +130,12 @@ public class WarehouseMapperTest {
                 regDate(LocalDateTime.now()).build();
         int result = warehouseMapper.update(warehouse);
         log.info(result);
+    }
+
+    @Test
+    public void getCountTest(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+        int num = warehouseMapper.getCount(pageRequestDTO);
+        log.info(num);
     }
 }
