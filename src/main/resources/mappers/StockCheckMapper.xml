@@ -3,4 +3,43 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.StockCheckMapper">
+    <insert id="insertStockCheck">
+        insert into stock_check (check_comment, check_amount, stock_id, cell_id )
+        values (#{checkComment}, #{checkAmount}, #{stock.id}, #{cell.id})
+    </insert>
+
+    <update id="updateStockCheck">
+        update stock_check set check_amount = #{checkAmount} where stock_check_id = #{id}
+    </update>
+
+    <delete id="deleteStockCheck">
+        delete from stock_check where stock_check_id = #{id}
+    </delete>
+
+    <select id="selectListStockCheck">
+        select * from stock_check sc
+            join stock s on sc.stock_id = s.stock_id
+            join cell c on sc.cell_id = c.cell_id
+    </select>
+
+    <select id="selectOneStockCheck">
+        select * from stock_check sc
+            join stock s on sc.stock_id = s.stock_id
+            join cell c on sc.cell_id = c.cell_id
+            where stock_check_id = #{id}
+    </select>
+    
+    <update id="updateListStockCheck">
+        <foreach collection="stockCheckList" item="item">
+            update  stock_check set check_amount = #{item.checkAmount} where stock_check_id = #{item.id}
+        </foreach>
+    </update>
+    
+    <delete id="deleteListStockCheck">
+        <foreach collection="longList" item="item">
+            delete from stock_check where stock_check_id = #{item}
+        </foreach>
+    </delete>
+
+
 </mapper>

@@ -3,4 +3,145 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.StockMapper">
+
+    <resultMap id="Product" type="Product">
+        <id property="id" column="product_id"/>
+        <result property="subclassCategoryId" column="subclass_id"/>
+        <result property="name" column="product_name"/>
+        <result property="productBrand" column="product_brand"/>
+        <result property="productCost" column="product_cost"/>
+        <result property="productSelling" column="product_selling"/>
+        <result property="productInfo" column="product_info"/>
+        <result property="inboundBoxWidth" column="inbound_box_width"/>
+        <result property="inboundBoxLength" column="inbound_box_length"/>
+        <result property="InboundBoxHeight" column="inbound_box_height"/>
+        <result property="productWeight" column="product_weight"/>
+        <result property="productImg" column="product_img"/>
+        <result property="productStorageType" column="storage_type"/>
+    </resultMap>
+
+    
+
+    
+    <resultMap id="Stock" type="Stock">
+        <id property="id" column="stock_id"/>
+        <result property="stockAmount" column="amount"/>
+        <result property="manufacturingDate" column="manufacturing_date"/>
+        <result property="expirationDate" column="expiration_date"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        
+        <association property="member" javaType="Member">
+            <id property="id" column="member_id"/>
+            <result property="name" column="name"/>
+            <result property="phone" column="phone"/>
+            <result property="email" column="email"/>
+            <result property="businessNumber" column="business_number"/>
+            <association property="address" javaType="Address">
+                <result property="zipCode" column="zip_code"/>
+                <result property="roadNameAddress" column="road_name_address"/>
+                <result property="lotNumberAddress" column="lot_number_address"/>
+                <result property="detailAddress" column="detail_address"/>
+            </association>
+        </association>
+        
+        <association property="cell" javaType="Cell">
+            <id property="id" column="cell_id"/>
+            <result property="capacity" column="cell_capacity"/>
+            <association property="warehouse" javaType="Warehouse">
+                <id property="id" column="warehouse_id"/>
+                <result property="code" column="warehouse_code"/>
+                <result property="name" column="warehouse_name"/>
+                <result property="phone" column="warehouse_phone"/>
+                <result property="zipCode" column="warehouse_zip_code"/>
+                <result property="roadName" column="warehouse_road_name"/>
+                <result property="lotNumber" column="warehouse_lot_number"/>
+                <result property="detailAddress" column="warehouse_detail_address"/>
+            </association>
+        </association>
+
+        <association property="product" column="product_id" resultMap="Product"/>
+    </resultMap>
+
+    <resultMap id="TempStock" type="TempStock">
+        <id property="id" column="temp_stock_id"/>
+        <result property="changeAmount" column="amount"/>
+        <result property="manufacturingDate" column="manufacturing_date"/>
+        <result property="expirationDate" column="expiration_date"/>
+        <result property="regDate" column="reg_date"/>
+
+        <association property="member" javaType="Member">
+            <id property="id" column="member_id"/>
+            <result property="name" column="name"/>
+            <result property="phone" column="phone"/>
+            <result property="email" column="email"/>
+            <result property="businessNumber" column="business_number"/>
+            <association property="address" javaType="Address">
+                <result property="zipCode" column="zip_code"/>
+                <result property="roadNameAddress" column="road_name_address"/>
+                <result property="lotNumberAddress" column="lot_number_address"/>
+                <result property="detailAddress" column="detail_address"/>
+            </association>
+        </association>
+
+        <association property="cell" javaType="Cell">
+            <id property="id" column="cell_id"/>
+            <result property="capacity" column="cell_capacity"/>
+            <association property="warehouse" javaType="Warehouse">
+                <id property="id" column="warehouse_id"/>
+                <result property="code" column="warehouse_code"/>
+                <result property="name" column="warehouse_name"/>
+                <result property="phone" column="warehouse_phone"/>
+                <result property="zipCode" column="warehouse_zip_code"/>
+                <result property="roadName" column="warehouse_road_name"/>
+                <result property="lotNumber" column="warehouse_lot_number"/>
+                <result property="detailAddress" column="warehouse_detail_address"/>
+            </association>
+        </association>
+
+        <association property="product" column="product_id" resultMap="Product"/>
+
+    </resultMap>
+
+<!-- =============================================================================================== -->
+
+    <select id="selectListStock" resultMap="Stock">
+        select * from stock s
+            join member m on s.member_id = m.member_id
+            join cell c on s.cell_id = c.cell_id
+            join product p on s.product_id = p.product_id
+    </select>
+    
+    <select id="selectOneStock" resultMap="Stock">
+        select * from stock s
+        join member m on s.member_id = m.member_id
+        join cell c on s.cell_id = c.cell_id
+        join product p on s.product_id = p.product_id
+        where stock_id = #{id}
+    </select>
+
+    <update id="updateList">
+        call update_tempstock_to_stock
+    </update>
+
+<!--    <update id="applyList">-->
+
+<!--    </update>-->
+
+
+
+
+
+
+    <select id="selectListTempStock" resultMap="TempStock">
+        select * from temp_stock ts
+        join member m on ts.member_id = m.member_id
+        join cell c on ts.cell_id = c.cell_id
+        join product p on ts.product_id = p.product_id
+    </select>
+
+
+
+
+
 </mapper>
