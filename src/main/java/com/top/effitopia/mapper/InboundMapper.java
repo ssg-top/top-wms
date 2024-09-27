@@ -22,6 +22,8 @@ public interface InboundMapper {
 
     int insertList(List<Inbound> inboundList);
 
+    int approveList(List<Inbound> inboundList);
+
     int updateList(List<Inbound> inboundList);
 
     int deleteList(List<Integer> inboundIds);
