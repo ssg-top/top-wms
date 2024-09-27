@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,15 +18,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-//@Transactional
 @Log4j2
 public class CheckoutMapperTest {
 
     @Autowired
     private CheckoutMapper checkoutMapper;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Test
     public void testInsertCheckout() {
@@ -75,10 +70,10 @@ public class CheckoutMapperTest {
 
     @Test
     public void testSelectCheckoutById() {
-        Checkout checkout = checkoutMapper.selectCheckoutById(2); // 실제 존재하는 checkoutId 사용
+        Checkout checkout = checkoutMapper.selectCheckoutById(2);
 
         assertThat(checkout).isNotNull();
-        assertThat(checkout.getCheckoutId()).isEqualTo(2); // 실제로 조회한 ID와 일치하는지 확인
+        assertThat(checkout.getCheckoutId()).isEqualTo(2);
     }
 
     @Test
