@@ -14,7 +14,6 @@ public class Outbound {
     private Integer outboundId;
     private OutboundStatus outboundStatus;
     private Order order;
-    private Waybill waybill;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 }
