@@ -32,7 +32,7 @@ public interface CSCMapper {
      * @param: 조회할 문의글ID
      * @return CustomerInquiry
      */
-     Optional<CustomerInquiry>  selectOneInquiry(@Param("no") int no);
+     Optional<CustomerInquiry>  selectOneInquiry(@Param("id") int id);
 
     /**
      * 문의글 수정
@@ -44,7 +44,7 @@ public interface CSCMapper {
      * 문의글 삭제
      * @param: 삭제할 문의글ID
      */
-    void deleteInquiry(@Param("no") int no);
+    void deleteInquiry(@Param("id") int id);
 
 
 //============================================================
@@ -61,7 +61,7 @@ public interface CSCMapper {
      * @param: 조회할 답변ID
      * @return CustomerAnswer
      */
-    Optional<CustomerAnswer>  selectOneAnswer(@Param("no")int no);
+    Optional<CustomerAnswer>  selectOneAnswer(@Param("id")int id);
 
     /**
      * 답변 수정
@@ -73,11 +73,11 @@ public interface CSCMapper {
      * 답변 한개 삭제
      * @param: 삭제할 답변ID
      */
-    void deleteAnswer(@Param("no") int no);
+    void deleteAnswer(@Param("id") int id);
 
     /**
      * 답변 한개 삭제
      * @param: 문의글 ID
      */
-    void deleteAnswerToInquiryId(@Param("no") int no);
+    void deleteAnswerToInquiryId(@Param("id") int id);
 }

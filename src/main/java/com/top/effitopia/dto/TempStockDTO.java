@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class TempStockDTO {
-    private int	tempStockID;	        //임시재고ID
+    private int	id;	                    //임시재고ID
     private int	changeAmount;	        //변동 수량
     private LocalDate manufacturingDate;//제조일자
     private LocalDate expirationDate;	//유통기한
@@ -23,5 +23,4 @@ public class TempStockDTO {
     private MemberDTO memberDTO;	    //회원Dto
     private CellDTO	cellDTO;	        //창고세부구역Dto
     private ProductDTO productDTO;	    //상품Dto
-    private StockDTO stockDTO;	        //재고Dto
 }
