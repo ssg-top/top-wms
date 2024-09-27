@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.CheckoutMapper">
-
     <!-- CheckoutResultMap -->
     <resultMap id="CheckoutResultMap" type="Checkout">
         <id property="checkoutId" column="checkout_id"/>

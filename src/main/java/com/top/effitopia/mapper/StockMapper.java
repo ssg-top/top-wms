@@ -2,8 +2,10 @@ package com.top.effitopia.mapper;
 
 
 import com.top.effitopia.domain.Stock;
+import com.top.effitopia.domain.StockCheck;
 import com.top.effitopia.domain.TempStock;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,10 +22,29 @@ public interface StockMapper {
     List<Stock> selectListStock();
 
     /**
+     * 재고 테이블의 상품 하나 조회
+     * @param id
+     * @return
+     */
+    Stock selectOneStock(@Param("id")int id);
+
+    /**
      * 임시재고를 재고 테이블에 반영
      * @param: 재고 List
      */
-    void updateList(List<Stock> stockList);
+    void updateList();
+
+
+    /**
+     * 재고실사테이블을 재고테이블에 반영
+     * @param stockCheckList
+     */
+    void applyList(List<StockCheck> stockCheckList);
+    
+    
+    
+    
+
 
     /**
      * 임시재고 테이블에 상품 등록( 입고 및 출고시 )

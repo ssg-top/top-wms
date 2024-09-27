@@ -27,4 +27,6 @@ public interface MemberMapper {
     int updateStatus(@Param("id") int id, @Param("status") MemberStatus status);
 
     boolean updatePassword(@Param("id")int id, @Param("status") String encodedPassword);
+
+    List<Member> selectAssignableWarehouseManagerList();
 }
