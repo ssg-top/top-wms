@@ -30,8 +30,12 @@
         </association>
     </resultMap>
 
-    <select id="select" parameterType="Integer" resultMap="warehouse">
+    <select id="selectId" parameterType="Integer" resultMap="warehouse">
         select * from warehouse where warehouse_id = #{id}
+    </select>
+
+    <select id="selectName" parameterType="String" resultMap="warehouse">
+        select * from warehouse where warehouse_name = #{name}
     </select>
 
     <insert id="insert" parameterType="Warehouse">
@@ -44,11 +48,21 @@
              #{width}, #{length}, #{height}, #{capacity}, #{latitude}, #{longitude}, NOW())
     </insert>
 
-<!--    <select id="selectCellList" parameterType="com.top.effitopia.dto.PageRequestDTO">-->
-<!--        select * from Cell where warehouse_id = #{id} ORDER BY cell_id  DESC LIMIT #{skip}, #{size}-->
-<!--    </select>-->
+    <select id="selectCellList" parameterType="com.top.effitopia.dto.PageRequestDTO">
+        select * from Cell where warehouse_id = #{searchCond} ORDER BY cell_id  DESC LIMIT #{skip}, #{size}
+    </select>
 
-    <select id="selectWarehouseList" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
+    <select id="selectWarehouseList" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="Warehouse">
         select * from warehouse ORDER BY warehouse_id DESC LIMIT #{skip}, #{size}
+    </select>
+
+    <update id="update" parameterType="warehouse">
+        UPDATE warehouse
+        SET member_id=#{member.id}, warehouse_name=#{name}, warehouse_phone=#{phone}, mod_date=NOW()
+        WHERE warehouse_id=#{id}
+    </update>
+
+    <select id="getCount" resultType="int">
+        select count(warehouse_id) from warehouse
     </select>
 </mapper>
