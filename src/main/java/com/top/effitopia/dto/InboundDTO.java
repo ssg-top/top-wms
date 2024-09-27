@@ -17,10 +17,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InboundDTO {
 
-    private Integer Id;
+    private Integer id;
     private MemberDTO memberDTO;
     private WarehouseDTO warehouseDTO;
-    private ProductDTO productDTO;
     private VendorDTO vendorDTO;
     private LocalDate inboundRequestDate;
     private LocalDate inboundApprovedDate;
@@ -28,17 +27,14 @@ public class InboundDTO {
     private LocalDate inboundCompletedDate;
     private InboundStatus inboundStatus;
 
-    private Inbound toEntity(int memberId,int warehouseId, int productId) {
+    private Inbound toEntity(int memberId,int warehouseId) {
         return Inbound.builder()
-            .id(this.Id)
+            .id(this.id)
             .member(Member.builder()
                 .id(memberId)
                 .build())
             .warehouse(Warehouse.builder()
                 .id(warehouseId)
-                .build())
-            .product(Product.builder()
-                .id(productId)
                 .build())
             .inboundRequestDate(this.inboundRequestDate)
             .inboundApprovedDate(this.inboundApprovedDate)
@@ -50,7 +46,7 @@ public class InboundDTO {
 
     private InboundDTO toDTO(Inbound inbound) {
         return InboundDTO.builder()
-            .Id(inbound.getId())
+            .id(inbound.getId())
             .memberDTO(MemberDTO.builder()
                 .id(inbound.getMember().getId())
                 .username(inbound.getMember().getUsername())
@@ -58,15 +54,12 @@ public class InboundDTO {
             .warehouseDTO(WarehouseDTO.builder()
                 .id(inbound.getWarehouse().getId())
                 .build())
-            .productDTO(ProductDTO.builder()
-                .id(inbound.getProduct().getId())
-                .build())
             .inboundRequestDate(inbound.getInboundRequestDate())
             .inboundApprovedDate(inbound.getInboundApprovedDate())
             .inboundExpectDate(inbound.getInboundExpectDate())
             .inboundCompletedDate(inbound.getInboundCompletedDate())
             .inboundStatus(inbound.getInboundStatus())
             .build();
-    } // 모든 데이터를 넣기
+    }
 
 }

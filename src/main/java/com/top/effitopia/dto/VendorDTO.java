@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VendorDTO {
 
-    private Integer id;   //거래처아이디
-    private String name;  //거래처명
-    private Inbound inbound;    //입고아이디
+    private Integer id;
+    private String name;
+    private boolean delFlag;
 
 }
