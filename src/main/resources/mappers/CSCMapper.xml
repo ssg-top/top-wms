@@ -4,12 +4,40 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.CSCMapper">
 
+
     <resultMap id="CustomerInquiry" type="CustomerInquiry">
         <id property="id" column="inquiry_id"/>
         <result property="inquiryTitle" column="inquiry_title"/>
         <result property="inquiryContent" column="inquiry_contents"/>
         <result property="inquiryWriter" column="writer"/>
+        <result property="inquiryState" column="inquiry_state"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+
+        <association property="member" javaType="Member">
+            <id property="id" column="member_id"/>
+            <result property="name" column="name"/>
+            <result property="phone" column="phone"/>
+            <result property="email" column="email"/>
+            <result property="businessNumber" column="business_number"/>
+            <association property="address" javaType="Address">
+                <result property="zipCode" column="zip_code"/>
+                <result property="roadNameAddress" column="road_name_address"/>
+                <result property="lotNumberAddress" column="lot_number_address"/>
+                <result property="detailAddress" column="detail_address"/>
+            </association>
+        </association>
     </resultMap>
+
+    <resultMap id="CustomerAnswer" type="CustomerAnswer">
+        <id property="id" column="id"/>
+        <result property="AnswerContent" column="reply_content"/>
+        <result property="AnswerWriter" column="writer"/>
+        <association property="inquiry" column="inquiry_id" javaType="com.top.effitopia.domain.CustomerInquiry" resultMap="CustomerInquiry"/>
+    </resultMap>
+
+
+
 
 <insert id="insertInquiry">
 
@@ -18,11 +46,11 @@
 </insert>
 
     <select id="selectInquiryList" resultMap="CustomerInquiry">
-        select * from inquiry order by inquiry_id desc
+        select * from inquiry i join member m on i.member_id = m.member_id order by inquiry_id desc
     </select>
 
     <select id="selectOneInquiry" resultMap="CustomerInquiry">
-        select * from inquiry where inquiry_id = #{no}
+        select * from inquiry i join member m on i.member_id = m.member_id where inquiry_id = #{id}
     </select>
 
     <update id="updateInquiry" parameterType="CustomerInquiry">
@@ -30,15 +58,11 @@
     </update>
 
     <delete id="deleteInquiry">
-        delete from inquiry where inquiry_id = #{no}
+        delete from inquiry where inquiry_id = #{id}
     </delete>
 
 
-<resultMap id="CustomerAnswer" type="CustomerAnswer">
-    <id property="id" column="id"/>
-    <result property="AnswerContent" column="reply_content"/>
-    <result property="AnswerWriter" column="writer"/>
-</resultMap>
+
 
     <insert id="insertAnswer">
         insert into answer (inquiry_id, reply_content, writer)
@@ -46,18 +70,18 @@
     </insert>
 
     <select id="selectOneAnswer" resultMap="CustomerAnswer">
-        select * from answer where id = #{no}
+        select * from answer a join inquiry i on a.inquiry_id = i.inquiry_id where answer_id = #{id}
     </select>
 
     <update id="updateAnswer">
-        update answer set reply_content = #{AnswerContent}, mod_date = now() where id = #{id}
+        update answer set reply_content = #{AnswerContent}, mod_date = now() where answer_id = #{id}
     </update>
 
     <delete id="deleteAnswer">
-        delete from answer where id = #{no}
+        delete from answer where answer_id = #{id}
     </delete>
 
     <delete id="deleteAnswerToInquiryId">
-        delete from answer where inquiry_id = #{no}
+        delete from answer where inquiry_id = #{id}
     </delete>
 </mapper>
