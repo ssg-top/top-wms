@@ -29,35 +29,95 @@ public class CSCMapperTests {
 
     @Test
     public void insertInquiryTest() {
-        Member member = Member.builder()
-                .id(1)
+       /* Member admin = Member.builder()
                 .username("admin" + (int)(Math.random() * 10000))
                 .password(UUID.randomUUID().toString().substring(0, 33))
-                .name("name")
+                .name("총관리자")
                 .phone("01012345678")
                 .email("example@gmail.com")
                 .status(MemberStatus.REGISTER_REQUEST)
                 .role(MemberRole.ADMIN)
                 .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
                 .build();
-        memberMapper.insert(member);
+        memberMapper.insert(admin);
+        Member warehouseManager = Member.builder()
+                .username("manager" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("창고관리자")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTER_REQUEST)
+                .role(MemberRole.WAREHOUSE_MANAGER)
+                .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .build();
+        memberMapper.insert(warehouseManager);
+        Member proprietor = Member.builder()
+                .username("proprietor" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("판매자1")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTER_REQUEST)
+                .role(MemberRole.BUSINESS_PROPRIETOR)
+                .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .businessNumber("1234567890")
+                .build();
 
-        CustomerInquiry customerInquiry = CustomerInquiry.builder()
-                .member(member)
-                .inquiryTitle("테스트1")
-                .inquiryContent("내용테스트")
-                .inquiryWriter(member.getName())
-                .inquiryState(false).build();
+        memberMapper.insert(proprietor);
+        Member dispatcher = Member.builder()
+                .username("dispatcher" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("판매자2")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTER_REQUEST)
+                .role(MemberRole.BUSINESS_PROPRIETOR)
+                .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .build();
+            memberMapper.insert(dispatcher);
 
-        cscMapper.insertInquiry(customerInquiry);
-        log.info(member);
+        memberMapper.insert(proprietor);
+        Member seller = Member.builder()
+                .username("seller" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("판매자3")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTER_REQUEST)
+                .role(MemberRole.BUSINESS_PROPRIETOR)
+                .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .build();
+        memberMapper.insert(seller);*/
+
+
+        Optional<Member> optionalMember = memberMapper.selectOne(6);
+
+        if(optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            CustomerInquiry customerInquiry = CustomerInquiry.builder()
+                    .member(member)
+                    .inquiryTitle("테스트1")
+                    .inquiryContent("내용테스트")
+                    .inquiryWriter(member.getName())
+                    .inquiryState(false).build();
+
+            cscMapper.insertInquiry(customerInquiry);
+            log.info(member);
+        }
+
+
+
     }
 
     @Test
     public void selectOneInquiryTest() {
-        Optional<CustomerInquiry>  customerInquiry = cscMapper.selectOneInquiry(5);
+        Optional<CustomerInquiry>  customerInquiry = cscMapper.selectOneInquiry(1);
 
         customerInquiry.ifPresent(inquiry -> log.info("customerInquiry : " + inquiry));
+        log.info("num : " + customerInquiry.get().getMember().getName());
+        Optional<Member> member = memberMapper.selectOne(6);
+        member.ifPresent(mem -> log.info("member : " + mem.getName()));
+
 
     }
 

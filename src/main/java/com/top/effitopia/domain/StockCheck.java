@@ -17,5 +17,5 @@ public class StockCheck {
     private LocalDate checkDate;	//재고실사 일시
     private LocalDate	applyDate;	//재고실사 반영 일시
     private Stock	stock;	        //재고정보
-    private int	cell;	            //창고세부구역ID
+    private Cell	cell;	        //창고세부구역ID
 }

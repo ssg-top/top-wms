@@ -22,5 +22,4 @@ public class TempStock {
     private Member member;              //회원정보
     private Cell	cell;               //창고세부구역
     private Product	product;            //상품정보
-    private Stock stock;                //재고정보
 }
