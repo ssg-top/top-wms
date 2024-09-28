@@ -10,7 +10,7 @@ import lombok.*;
 public class Cell {
     private Integer id;
     private Warehouse warehouse;
-    private int	code;
+    private String code;
     private int	width;
     private int	length;
     private int	height;

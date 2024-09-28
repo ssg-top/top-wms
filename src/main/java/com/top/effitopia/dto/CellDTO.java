@@ -16,7 +16,7 @@ public class CellDTO {
 
     private WarehouseDTO warehouseDTO;
 
-    private int	code;
+    private String code;
 
     private int	width;
 
