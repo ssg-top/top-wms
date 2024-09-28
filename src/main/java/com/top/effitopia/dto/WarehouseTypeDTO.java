@@ -2,7 +2,7 @@ package com.top.effitopia.dto;
 
 import lombok.*;
 
-@Getter
+@Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
