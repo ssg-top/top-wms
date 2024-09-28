@@ -15,4 +15,5 @@ public interface ContractMapper {
     int update(Contract contract);
     void updateApprovalList(List<Contract> contractList);
     void updateRejectList(List<Contract> contractList);
+    int getCount(PageRequestDTO pageRequestDTO);
 }

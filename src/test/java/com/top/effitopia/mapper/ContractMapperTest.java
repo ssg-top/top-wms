@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @Log4j2
@@ -27,8 +27,6 @@ public class ContractMapperTest {
     Warehouse warehouse;
     Member member;
     Address address;
-
-    ContractStatus contractStatus;
 
     @Test
     public void selectListAllTest(){
@@ -85,10 +83,14 @@ public class ContractMapperTest {
                 longitude(0.00002).
                 regDate(LocalDateTime.now()).build();
 
+        String dateString = "2024-09-28 15:30:45";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+
         Contract contract = Contract.builder().
                             warehouse(warehouse).
                             member(member).
-                            startDate(LocalDateTime.now()).
+                            startDate(dateTime).
                             status(ContractStatus.APPROVE).
                             date(10).
                             regDate(LocalDateTime.now()).build();

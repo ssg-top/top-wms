@@ -3,11 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.ContractMapper">
-    <select id="selectListAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
-        select * from contract ORDER BY contract_id DESC LIMIT #{skip}, #{size}
+    <resultMap id ="contract" type ="Contract">
+        <id property="id" column="contract_id"/>
+        <result property="startDate" column="contract_start_date"/>
+        <result property="date" column="contract_num_of_months"/>
+        <result property="endDate" column="contract_end_date"/>
+        <result property="status" column="contract_status"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        <association property="warehouse" javaType="Warehouse">
+            <id property="id" column="warehouse_id"/>
+        </association>
+        <association property="member" javaType="Member">
+            <id property="id" column="member_id"/>
+        </association>
+    </resultMap>
+    <select id="selectListAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="contract">
+        select * from contract c
+        JOIN warehouse w ON c.warehouse_id = w.warehouse_id
+        JOIN member m ON c.member_id = m.member_id
+        ORDER BY contract_id
+        DESC LIMIT #{skip}, #{size}
     </select>
 
-    <select id="selectListByStatus" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="hashmap">
+    <select id="selectListByStatus" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="contract">
         select * from contract WHERE contract_status = #{searchCond} ORDER BY contract_id DESC LIMIT #{skip}, #{size}
     </select>
 
@@ -18,8 +37,8 @@
     </update>
 
     <insert id="insert" parameterType="contract">
-        INSERT INTO contract (warehouse_id, member_id, contract_start_date, contract_num_of_months, contract_status, reg_date)
-        VALUES (#{warehouse.id}, #{member.id}, #{startDate}, #{date}, #{status}, NOW())
+        INSERT INTO contract (warehouse_id, member_id, contract_start_date, contract_num_of_months, contract_end_date, contract_status, reg_date)
+        VALUES (#{warehouse.id}, #{member.id}, #{startDate}, #{date}, DATE_ADD(#{startDate}, INTERVAL #{date} MONTH), #{status}, NOW())
     </insert>
 
     <update id="updateApprovalList" parameterType="java.util.List">
@@ -39,4 +58,8 @@
             #{contract.id}
         </foreach>
     </update>
+
+    <select id="getCount" resultType="int">
+        select count(warehouse_id) from warehouse
+    </select>
 </mapper>
