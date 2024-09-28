@@ -23,4 +23,5 @@ public class StockCheckDTO {
     private LocalDate applyDate;	//재고실사 반영 일시
     private StockDTO stockDTO;	    //재고Dto
     private CellDTO	cellDTO;	    //창고세부구역Dto
+    private boolean tempStockState; //임시재고 상태
 }
