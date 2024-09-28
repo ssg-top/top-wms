@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.StockMapper">
 
+<!-- 상품 매핑    -->
     <resultMap id="Product" type="Product">
         <id property="id" column="product_id"/>
         <result property="subclassCategoryId" column="subclass_id"/>
@@ -21,7 +22,7 @@
     </resultMap>
 
     
-
+<!--재고 매핑-->
     
     <resultMap id="Stock" type="Stock">
         <id property="id" column="stock_id"/>
@@ -30,7 +31,7 @@
         <result property="expirationDate" column="expiration_date"/>
         <result property="regDate" column="reg_date"/>
         <result property="modDate" column="mod_date"/>
-        
+
         <association property="member" javaType="Member">
             <id property="id" column="member_id"/>
             <result property="name" column="name"/>
@@ -44,7 +45,7 @@
                 <result property="detailAddress" column="detail_address"/>
             </association>
         </association>
-        
+
         <association property="cell" javaType="Cell">
             <id property="id" column="cell_id"/>
             <result property="capacity" column="cell_capacity"/>
@@ -63,6 +64,7 @@
         <association property="product" column="product_id" resultMap="Product"/>
     </resultMap>
 
+<!--    임시재고 매핑-->
     <resultMap id="TempStock" type="TempStock">
         <id property="id" column="temp_stock_id"/>
         <result property="changeAmount" column="amount"/>
@@ -105,13 +107,33 @@
 
 <!-- =============================================================================================== -->
 
+
+<!--재고 여러개 조회-->
     <select id="selectListStock" resultMap="Stock">
         select * from stock s
             join member m on s.member_id = m.member_id
             join cell c on s.cell_id = c.cell_id
             join product p on s.product_id = p.product_id
+            join warehouse w on c.warehouse_id = w.warehouse_id
+            <where>
+                <if test="searchCond.memberName != null and searchCond.keyword != null">
+                     AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
+                </if>
+                <if test="searchCond.wareHouse != null">
+                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
+                </if>
+                <if test="searchCond.productName != null and searchCond.keyword != null">
+                    AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+                </if>
+                <if test="searchCond.startDate != null and searchCond.endDate != null">
+                    AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+                </if>
+            </where>
+            order by stock_id
+            limit #{skip}, #{size}
     </select>
-    
+
+<!--재고 하나 조회-->
     <select id="selectOneStock" resultMap="Stock">
         select * from stock s
         join member m on s.member_id = m.member_id
@@ -120,28 +142,82 @@
         where stock_id = #{id}
     </select>
 
+<!--임시재고를 재고로 반영-->
     <update id="updateList">
         call update_tempstock_to_stock
     </update>
 
-<!--    <update id="applyList">-->
 
-<!--    </update>-->
+    <select id="getStockCount" resultType="int">
+        select count(stock_id) from stock s
+        join member m on s.member_id = m.member_id
+        join cell c on s.cell_id = c.cell_id
+        join product p on s.product_id = p.product_id
+        join warehouse w on c.warehouse_id = w.warehouse_id
+        <where>
+            <if test="searchCond.memberName != null and searchCond.keyword != null">
+                AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
+            </if>
+            <if test="searchCond.wareHouse != null">
+                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
+            </if>
+            <if test="searchCond.productName != null and searchCond.keyword != null">
+                AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+            </if>
+            <if test="searchCond.startDate != null and searchCond.endDate != null">
+                AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+            </if>
+        </where>
+    </select>
 
 
 
 
-
-
+<!--임시재고 여러개 조회-->
     <select id="selectListTempStock" resultMap="TempStock">
         select * from temp_stock ts
         join member m on ts.member_id = m.member_id
         join cell c on ts.cell_id = c.cell_id
         join product p on ts.product_id = p.product_id
+        <where>
+            <if test="searchCond.memberName != null and searchCond.keyword != null">
+                AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
+            </if>
+            <if test="searchCond.wareHouse != null">
+                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
+            </if>
+            <if test="searchCond.productName != null and searchCond.keyword != null">
+                AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+            </if>
+            <if test="searchCond.startDate != null and searchCond.endDate != null">
+                AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+            </if>
+        </where>
+        order by stock_id
+        limit #{skip}, #{size}
     </select>
 
+    <select id="getTempStockCount" resultType="int">
+        select count(temp_stock_id) from temp_stock ts
+        join member m on ts.member_id = m.member_id
+        join cell c on ts.cell_id = c.cell_id
+        join product p on ts.product_id = p.product_id
+        <where>
+            <if test="searchCond.memberName != null and searchCond.keyword != null">
+                AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
+            </if>
+            <if test="searchCond.wareHouse != null">
+                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
+            </if>
+            <if test="searchCond.productName != null and searchCond.keyword != null">
+                AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+            </if>
+            <if test="searchCond.startDate != null and searchCond.endDate != null">
+                AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+            </if>
+        </where>
 
-
+    </select>
 
 
 </mapper>
