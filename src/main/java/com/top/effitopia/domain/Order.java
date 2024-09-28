@@ -10,6 +10,7 @@ import lombok.*;
 public class Order {
     private Integer orderId;
     private Stock stock;
+    private Member member;
     private String buyerName;
     private String zipCode;
     private String buyerRoadName;
