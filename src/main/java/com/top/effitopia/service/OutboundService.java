@@ -1,19 +1,20 @@
 package com.top.effitopia.service;
 
-import com.top.effitopia.dto.OrderDTO;
-import com.top.effitopia.dto.OutboundDTO;
-import com.top.effitopia.dto.PageRequestDTO;
-import com.top.effitopia.dto.PageResponseDTO;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.enumeration.OutboundStatus;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface OutboundService {
-    void registerOrderAndOutbound(OrderDTO orderDTO);
 
-    PageResponseDTO<OutboundDTO> getList(PageRequestDTO pageRequestDTO);
+    void registerOrder(OrderDTO orderDTO);
 
-    OutboundDTO getOutboundDetail(Integer outboundId);
+    void updateOrder(Integer id, OrderDTO orderDTO);
 
-    void updateOutboundStatus(Integer outboundId, OutboundStatus status);
+    void updateOrderStatus(Integer id, OutboundStatus status);
 
-    void updateOrder(OrderDTO orderDTO);
+    List<OrderDTO> getOrders(PageRequestDTO pageRequestDTO);
+
+    Optional<DetailsDTO> getOrderDetails(Integer id);
 }
