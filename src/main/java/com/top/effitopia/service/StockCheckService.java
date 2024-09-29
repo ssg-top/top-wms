@@ -21,7 +21,8 @@ public interface StockCheckService {
     public void saveListStockCheck(List<StockCheckDTO> stockCheckDTOList);
     public void modifyListStockCheck(List<StockCheckDTO> stockCheckDTOList);
     public void removeListStockCheck(List<Integer> idList);
-
     public PageResponseDTO<StockCheckDTO> getListStockCheck(PageRequestDTO pageRequestDTO);
+
+    public void applyListStockCheck(List<StockCheckDTO> stockCheckDTOList);
 
 }

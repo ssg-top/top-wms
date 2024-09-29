@@ -109,26 +109,28 @@
 
 
 <!--재고 여러개 조회-->
-    <select id="selectListStock" resultMap="Stock">
+    <select id="selectListStock" resultMap="Stock" resultType="List">
         select * from stock s
             join member m on s.member_id = m.member_id
             join cell c on s.cell_id = c.cell_id
             join product p on s.product_id = p.product_id
             join warehouse w on c.warehouse_id = w.warehouse_id
-            <where>
-                <if test="searchCond.memberName != null and searchCond.keyword != null">
-                     AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
+        <where>
+            <if test="searchCond != null">
+                <if test="searchCond.memberName != null">
+                    AND m.name LIKE CONCAT('%', #{searchCond.memberName}, '%')
                 </if>
-                <if test="searchCond.wareHouse != null">
-                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
+                <if test="searchCond.wareHouseName != null">
+                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouseName}, '%')
                 </if>
-                <if test="searchCond.productName != null and searchCond.keyword != null">
+                <if test="searchCond.productName != null">
                     AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
                 </if>
-                <if test="searchCond.startDate != null and searchCond.endDate != null">
+                <if test="searchCond.startDate != null  and searchCond.endDate != null">
                     AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
                 </if>
-            </where>
+            </if>
+        </where>
             order by stock_id
             limit #{skip}, #{size}
     </select>
@@ -155,18 +157,20 @@
         join product p on s.product_id = p.product_id
         join warehouse w on c.warehouse_id = w.warehouse_id
         <where>
-            <if test="searchCond.memberName != null and searchCond.keyword != null">
-                AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
+            <if test="searchCond != null">
+            <if test="searchCond.memberName != null">
+                AND m.name LIKE CONCAT('%', #{searchCond.memberName}, '%')
             </if>
-            <if test="searchCond.wareHouse != null">
-                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
+            <if test="searchCond.wareHouseName != null">
+                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouseName}, '%')
             </if>
-            <if test="searchCond.productName != null and searchCond.keyword != null">
+            <if test="searchCond.productName != null">
                 AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
             </if>
-            <if test="searchCond.startDate != null and searchCond.endDate != null">
+            <if test="searchCond.startDate != null  and searchCond.endDate != null">
                 AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
             </if>
+             </if>
         </where>
     </select>
 
@@ -179,18 +183,21 @@
         join member m on ts.member_id = m.member_id
         join cell c on ts.cell_id = c.cell_id
         join product p on ts.product_id = p.product_id
+        join warehouse w on c.warehouse_id = w.warehouse_id
         <where>
-            <if test="searchCond.memberName != null and searchCond.keyword != null">
-                AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
-            </if>
-            <if test="searchCond.wareHouse != null">
-                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
-            </if>
-            <if test="searchCond.productName != null and searchCond.keyword != null">
-                AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
-            </if>
-            <if test="searchCond.startDate != null and searchCond.endDate != null">
-                AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+            <if test="searchCond != null">
+                <if test="searchCond.memberName != null">
+                    AND m.name LIKE CONCAT('%', #{searchCond.memberName}, '%')
+                </if>
+                <if test="searchCond.wareHouseName != null">
+                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouseName}, '%')
+                </if>
+                <if test="searchCond.productName != null">
+                    AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+                </if>
+                <if test="searchCond.startDate != null  and searchCond.endDate != null">
+                    AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+                </if>
             </if>
         </where>
         order by stock_id
@@ -202,18 +209,21 @@
         join member m on ts.member_id = m.member_id
         join cell c on ts.cell_id = c.cell_id
         join product p on ts.product_id = p.product_id
+        join warehouse w on c.warehouse_id = w.warehouse_id
         <where>
-            <if test="searchCond.memberName != null and searchCond.keyword != null">
-                AND m.username LIKE CONCAT('%', #{searchCond.memberName}, '%')
-            </if>
-            <if test="searchCond.wareHouse != null">
-                AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouse}, '%')
-            </if>
-            <if test="searchCond.productName != null and searchCond.keyword != null">
-                AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
-            </if>
-            <if test="searchCond.startDate != null and searchCond.endDate != null">
-                AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+            <if test="searchCond != null">
+                <if test="searchCond.memberName != null">
+                    AND m.name LIKE CONCAT('%', #{searchCond.memberName}, '%')
+                </if>
+                <if test="searchCond.wareHouseName != null">
+                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouseName}, '%')
+                </if>
+                <if test="searchCond.productName != null">
+                    AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+                </if>
+                <if test="searchCond.startDate != null  and searchCond.endDate != null">
+                    AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+                </if>
             </if>
         </where>
 

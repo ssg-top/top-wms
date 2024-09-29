@@ -1,11 +1,13 @@
 package com.top.effitopia.controller;
 
-import com.top.effitopia.dto.StockCheckDTO;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.service.StockCheckService;
+import com.top.effitopia.service.StockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,30 +39,48 @@ public class StockCheckController {
     }
 
     @GetMapping("/list")
-    public void listStockCheck() {
+    public void listStockCheck(PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
         log.info("listStockCheck StockCheckController.............");
+        PageResponseDTO<StockCheckDTO> pageResponseDTO = stockCheckService.getListStockCheck(pageRequestDTO);
+        log.info("pageResponseDTO : " + pageResponseDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
     }
 
     @GetMapping("/read")
-    public void readStockCheck() {
+    public void readStockCheck(Id id, PageRequestDTO pageRequestDTO, Model model) {
         log.info("readStockCheck StockCheckController.............");
+        StockCheckDTO stockCheckDTO = stockCheckService.getstockCheck(id.getId());
+        model.addAttribute("stockCheck", stockCheckDTO);
     }
 
     @PostMapping("/modify")
-    public String modifyStockCheck() {
+    public String modifyStockCheck(@Valid StockCheckDTO stockCheckDTO, PageRequestDTO pageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("modifyStockCheck StockCheckController.............");
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors());
+            return "redirect:/list";
+        }
+
+        stockCheckService.modifyStockCheck(stockCheckDTO);
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
         return "redirect:/list";
     }
 
     @PostMapping("/remove")
-    public String removeStockCheck() {
+    public String removeStockCheck(Id id, PageRequestDTO pageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("removeStockCheck StockCheckController.............");
+        stockCheckService.removeStockCheck(id.getId());
+        redirectAttributes.addAttribute("page", 1);
+        redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
         return "redirect:/list";
     }
 
     @PostMapping("/apply")
-    public String applyStockCheck() {
+    public String applyStockCheck(PageRequestDTO pageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("applyStockCheck StockCheckController.............");
+        //stockCheckService.applyListStockCheck();
         return "redirect:/list";
     }
 }

@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/stocks")
+@RequestMapping("/stock")
 public class StockController {
 
     private final StockService stockService;
+
+
+
 
     @GetMapping("/list")
     public void listStock(PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {

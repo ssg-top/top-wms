@@ -73,6 +73,8 @@ public class StockCheckServiceImpl implements StockCheckService{
         stockCheckMapper.deleteListStockCheck(idList);
     }
 
+
+
     @Override
     public PageResponseDTO<StockCheckDTO> getListStockCheck(PageRequestDTO pageRequestDTO) {
         List<StockCheck> stockCheckList = stockCheckMapper.selectListStockCheck(pageRequestDTO);
@@ -81,5 +83,11 @@ public class StockCheckServiceImpl implements StockCheckService{
 
         int total = stockCheckMapper.getStockCheckCount(pageRequestDTO);
         return new PageResponseDTO<>(pageRequestDTO, stockCheckDTOList, total);
+    }
+
+    @Override
+    public void applyListStockCheck(List<StockCheckDTO> stockCheckDTOList) {
+        List<StockCheck> stockCheckList = stockCheckDTOList.stream().map(stockCheckDTO-> modelMapper.map(stockCheckDTO, StockCheck.class)).collect(Collectors.toList());
+        stockCheckMapper.applyList(stockCheckList);
     }
 }
