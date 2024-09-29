@@ -168,4 +168,10 @@ public class ContractMapperTest {
 
         contractMapper.updateRejectList(contractList);
     }
+
+    @Test
+    public void getOneTest(){
+        WarehouseCost warehouseCost = contractMapper.getOne(1);
+        log.info(warehouseCost);
+    }
 }
