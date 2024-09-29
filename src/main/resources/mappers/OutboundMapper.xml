@@ -4,70 +4,70 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.OutboundMapper">
 
-    <!-- 출고 정보 매핑 -->
-    <resultMap id="OutboundResultMap" type="com.top.effitopia.domain.Outbound">
-        <id property="outboundId" column="outbound_id"/>
-        <result property="outboundStatus" column="outbound_status"/>
-        <result property="regDate" column="reg_date"/>
-        <result property="modDate" column="mod_date"/>
+<!--    &lt;!&ndash; 출고 정보 매핑 &ndash;&gt;-->
+<!--    <resultMap id="OutboundResultMap" type="com.top.effitopia.domain.Outbound">-->
+<!--        <id property="outboundId" column="outbound_id"/>-->
+<!--        <result property="outboundStatus" column="outbound_status"/>-->
+<!--        <result property="regDate" column="reg_date"/>-->
+<!--        <result property="modDate" column="mod_date"/>-->
 
-        <association property="order" javaType="com.top.effitopia.domain.Order">
-            <id property="orderId" column="order_id"/>
-            <result property="stock.id" column="stock_id"/>
-            <result property="buyerName" column="buyer_name"/>
-            <result property="zipCode" column="zipcode"/>
-            <result property="buyerRoadName" column="buyer_road_name"/>
-            <result property="buyerLotNumber" column="buyer_lot_number"/>
-            <result property="buyerDetailAddress" column="buyer_detail_address"/>
-            <result property="buyerLatitude" column="buyer_latitude"/>
-            <result property="buyerLongitude" column="buyer_longitude"/>
-            <result property="buyerQuantity" column="buyer_quantity"/>
-            <result property="regDate" column="ord.reg_date"/>
-        </association>
-    </resultMap>
+<!--        <association property="order" javaType="com.top.effitopia.domain.Order">-->
+<!--            <id property="orderId" column="order_id"/>-->
+<!--            <result property="stock.id" column="stock_id"/>-->
+<!--            <result property="buyerName" column="buyer_name"/>-->
+<!--            <result property="zipCode" column="zipcode"/>-->
+<!--            <result property="buyerRoadName" column="buyer_road_name"/>-->
+<!--            <result property="buyerLotNumber" column="buyer_lot_number"/>-->
+<!--            <result property="buyerDetailAddress" column="buyer_detail_address"/>-->
+<!--            <result property="buyerLatitude" column="buyer_latitude"/>-->
+<!--            <result property="buyerLongitude" column="buyer_longitude"/>-->
+<!--            <result property="buyerQuantity" column="buyer_quantity"/>-->
+<!--            <result property="regDate" column="ord.reg_date"/>-->
+<!--        </association>-->
+<!--    </resultMap>-->
 
-    <!-- 출고 정보 저장 -->
-    <insert id="insertOutbound" useGeneratedKeys="true" keyProperty="outboundId" keyColumn="outbound_id">
-        INSERT INTO outbound (order_id, outbound_status, reg_date)
-        VALUES (#{order.orderId}, #{outboundStatus}, #{regDate})
-    </insert>
+<!--    &lt;!&ndash; 출고 정보 저장 &ndash;&gt;-->
+<!--    <insert id="insertOutbound" useGeneratedKeys="true" keyProperty="outboundId" keyColumn="outbound_id">-->
+<!--        INSERT INTO outbound (order_id, outbound_status, reg_date)-->
+<!--        VALUES (#{order.orderId}, #{outboundStatus}, #{regDate})-->
+<!--    </insert>-->
 
-    <!-- 출고 리스트 조회 -->
-    <select id="selectList" resultMap="OutboundResultMap">
-        SELECT o.*, ord.*
-        FROM outbound o
-        JOIN orders ord ON o.order_id = ord.order_id
-        WHERE 1=1
-        <if test="searchCond != null and searchCond.keyword != null">
-            AND ord.buyer_name LIKE CONCAT('%', #{searchCond.keyword}, '%')
-        </if>
-        ORDER BY o.reg_date DESC
-        LIMIT #{skip}, #{size}
-    </select>
+<!--    &lt;!&ndash; 출고 리스트 조회 &ndash;&gt;-->
+<!--    <select id="selectList" resultMap="OutboundResultMap">-->
+<!--        SELECT o.*, ord.*-->
+<!--        FROM outbound o-->
+<!--        JOIN orders ord ON o.order_id = ord.order_id-->
+<!--        WHERE 1=1-->
+<!--        <if test="searchCond != null and searchCond.keyword != null">-->
+<!--            AND ord.buyer_name LIKE CONCAT('%', #{searchCond.keyword}, '%')-->
+<!--        </if>-->
+<!--        ORDER BY o.reg_date DESC-->
+<!--        LIMIT #{skip}, #{size}-->
+<!--    </select>-->
 
-    <!-- 총 데이터 개수 -->
-    <select id="getTotalCount" resultType="int">
-        SELECT COUNT(*)
-        FROM outbound o
-        JOIN orders ord ON o.order_id = ord.order_id
-        WHERE 1=1
-        <if test="searchCond != null and searchCond.keyword != null">
-            AND ord.buyer_name LIKE CONCAT('%', #{searchCond.keyword}, '%')
-        </if>
-    </select>
+<!--    &lt;!&ndash; 총 데이터 개수 &ndash;&gt;-->
+<!--    <select id="getTotalCount" resultType="int">-->
+<!--        SELECT COUNT(*)-->
+<!--        FROM outbound o-->
+<!--        JOIN orders ord ON o.order_id = ord.order_id-->
+<!--        WHERE 1=1-->
+<!--        <if test="searchCond != null and searchCond.keyword != null">-->
+<!--            AND ord.buyer_name LIKE CONCAT('%', #{searchCond.keyword}, '%')-->
+<!--        </if>-->
+<!--    </select>-->
 
-    <!-- 출고 상세 조회 -->
-    <select id="selectDetail" resultMap="OutboundResultMap">
-        SELECT o.*, ord.*
-        FROM outbound o
-                 JOIN orders ord ON o.order_id = ord.order_id
-        WHERE o.outbound_id = #{outboundId}
-    </select>
+<!--    &lt;!&ndash; 출고 상세 조회 &ndash;&gt;-->
+<!--    <select id="selectDetail" resultMap="OutboundResultMap">-->
+<!--        SELECT o.*, ord.*-->
+<!--        FROM outbound o-->
+<!--                 JOIN orders ord ON o.order_id = ord.order_id-->
+<!--        WHERE o.outbound_id = #{outboundId}-->
+<!--    </select>-->
 
-    <!-- 출고 상태 업데이트 -->
-    <update id="updateStatus">
-        UPDATE outbound
-        SET outbound_status = #{status}
-        WHERE outbound_id = #{outboundId}
-    </update>
+<!--    &lt;!&ndash; 출고 상태 업데이트 &ndash;&gt;-->
+<!--    <update id="updateStatus">-->
+<!--        UPDATE outbound-->
+<!--        SET outbound_status = #{status}-->
+<!--        WHERE outbound_id = #{outboundId}-->
+<!--    </update>-->
 </mapper>
