@@ -1,8 +1,10 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Contract;
+import com.top.effitopia.domain.WarehouseCost;
 import com.top.effitopia.dto.ContractDTO;
 import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.WarehouseCostDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,4 +18,5 @@ public interface ContractMapper {
     void updateApprovalList(List<Contract> contractList);
     void updateRejectList(List<Contract> contractList);
     int getCount(PageRequestDTO pageRequestDTO);
+    WarehouseCost getOne(Integer id);
 }

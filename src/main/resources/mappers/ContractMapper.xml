@@ -18,6 +18,16 @@
             <id property="id" column="member_id"/>
         </association>
     </resultMap>
+    <resultMap id = "warehouseCost" type="WarehouseCost">
+        <id property="id" column="warehouse_cost_id"></id>
+        <result property="contractCost" column="warehouse_contract_cost"/>
+        <result property="storageCostPerArea" column="storage_cost_per_area"/>
+        <result property="inboundBasicFee" column="inbound_basic_fee"/>
+        <result property="outboundBasicFee" column="outbound_basic_fee"/>
+        <association property="warehouse" javaType="Warehouse">
+            <id property="id" column="warehouse_id"/>
+        </association>
+    </resultMap>
     <select id="selectListAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="contract">
         select * from contract c
         JOIN warehouse w ON c.warehouse_id = w.warehouse_id
@@ -36,7 +46,7 @@
         WHERE contract_id=#{id}
     </update>
 
-    <insert id="insert" parameterType="contract">
+    <insert id="insert" parameterType="contract" >
         INSERT INTO contract (warehouse_id, member_id, contract_start_date, contract_num_of_months, contract_end_date, contract_status, reg_date)
         VALUES (#{warehouse.id}, #{member.id}, #{startDate}, #{date}, DATE_ADD(#{startDate}, INTERVAL #{date} MONTH), #{status}, NOW())
     </insert>
@@ -61,5 +71,9 @@
 
     <select id="getCount" resultType="int">
         select count(warehouse_id) from warehouse
+    </select>
+
+    <select id="getOne" parameterType="Integer" resultMap="warehouseCost">
+        select * from warehouse_cost where warehouse_id = #{id}
     </select>
 </mapper>
