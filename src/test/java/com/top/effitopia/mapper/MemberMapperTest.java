@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @Slf4j
 @SpringBootTest
-@Transactional
 class MemberMapperTest {
 
     @Autowired
@@ -32,7 +31,7 @@ class MemberMapperTest {
                 .password(UUID.randomUUID().toString().substring(0, 33))
                 .name("name")
                 .phone("01012345678")
-                .email("example@gmail.com")
+                .email("2330914@naver.com")
                 .status(MemberStatus.REGISTER_REQUEST)
                 .role(MemberRole.ADMIN)
                 .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
@@ -68,7 +67,7 @@ class MemberMapperTest {
                 .phone("01012345678")
                 .email("example@gmail.com")
                 .status(MemberStatus.REGISTER_REQUEST)
-                .role(MemberRole.BUSINESS_PROPRIETOR)
+                .role(MemberRole.DISPATCHER)
                 .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
                 .build();
 
@@ -114,9 +113,10 @@ class MemberMapperTest {
                 .phone("01011111111")
                 .email(UUID.randomUUID().toString().substring(0, 6) + "@gmail.com")
                 .address(Address.builder()
-                        .roadNameAddress("update address1")
-                        .lotNumberAddress("update address2")
-                        .detailAddress("update address3")
+                        .zipCode("update address1")
+                        .roadNameAddress("update address2")
+                        .lotNumberAddress("update address3")
+                        .detailAddress("update address4")
                         .build())
                 .build();
         Member findMember = memberMapper.selectOne(id).get();
