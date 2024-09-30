@@ -1,27 +1,108 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.ProductMapper">
 
+  <resultMap id="Product" type="Product">
+    <id property="id" column="product_id"/>
+    <result property="name" column="product_name"/>
+    <result property="productBrand" column="product_brand"/>
+    <result property="productStorageType" column="storage_type"/>
+    <result property="productCost" column="product_cost"/>
+    <result property="productSelling" column="product_selling"/>
+    <result property="productInfo" column="product_info"/>
+    <result property="inboundBoxWidth" column="inbound_box_width"/>
+    <result property="inboundBoxLength" column="inbound_box_length"/>
+    <result property="inboundBoxHeight" column="inbound_box_height"/>
+    <result property="productWeight" column="product_weight"/>
+    <result property="productImg" column="product_img"/>
+
+    <association property="productSubclassCategory"
+      javaType="com.top.effitopia.domain.ProductSubclassCategory">
+      <id property="subclassId" column="subclass_id"/>
+      <result property="subclassName" column="subclass_name"/>
+
+      <association property="productMiddleCategory"
+        javaType="com.top.effitopia.domain.ProductMiddleCategory">
+        <id property="middleId" column="middle_id"/>
+        <result property="middleName" column="middle_name"/>
+
+        <association property="productMajorCategory"
+          javaType="com.top.effitopia.domain.ProductMajorCategory">
+          <id property="majorId" column="major_id"/>
+          <result property="majorName" column="major_name"/>
+        </association>
+      </association>
+    </association>
+  </resultMap>
+
   <select id="selectAllProducts" resultType="Product">
-    SELECT * FROM product;
+    SELECT
+    p.product_id,
+    p.product_name,
+    p.product_brand,
+    p.storage_type,
+    p.product_cost,
+    p.product_selling,
+    p.product_info,
+    p.inbound_box_width,
+    p.inbound_box_length,
+    p.inbound_box_height,
+    p.product_weight,
+    p.product_img,
+    c.subclass_id,
+    c.subclass_name,
+    m.middle_id,
+    m.middle_name,
+    j.major_id,
+    j.major_name
+    FROM product p
+    LEFT JOIN product_subclass_category c ON p.subclass_id = c.subclass_id
+    LEFT JOIN product_middle_category m ON c.middle_id = m.middle_id
+    LEFT JOIN product_major_category j ON m.major_id = j.major_id
+    WHERE 1=1
+    <if test="searchCond.productName != null and searchCond.productName != ''">
+      AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+    </if>
+    <if test="searchCond.productBrand != null and searchCond.productBrand != ''">
+      AND p.product_brand LIKE CONCAT('%', #{searchCond.productBrand}, '%')
+    </if>
+    <if test="searchCond.majorCategoryId != null">
+      AND j.major_id = #{searchCond.majorCategoryId}
+    </if>
+    <if test="searchCond.middleCategoryId != null">
+      AND m.middle_id = #{searchCond.middleCategoryId}
+    </if>
+    <if test="searchCond.subclassCategoryId != null">
+      AND c.subclass_id = #{searchCond.subclassCategoryId}
+    </if>
+    LIMIT #{skip}, #{size}
   </select>
 
-<!--  <select id="selectList" resultType="Product">-->
-<!--    SELECT *-->
-<!--    FROM product-->
-<!--    WHERE 1=1-->
-<!--    <if test="ProductSearchCond.productName != null">-->
-<!--      AND product_name LIKE CONCAT('%', #{ProductSearchCond.productName}, '%')-->
-<!--    </if>-->
-<!--    <if test="ProductSearchCond.productBrand != null">-->
-<!--      AND product_name LIKE CONCAT('%', #{ProductSearchCond.productBrand}, '%')-->
-<!--    </if>-->
-<!--    <if test="ProductSearchCond.productName != null">-->
-<!--      AND product_name LIKE CONCAT('%', #{ProductSearchCond.productName}, '%')-->
-<!--    </if>-->
-<!--    LIMIT #{pageable.offset}, #{pageable.pageSize}-->
-<!--  </select>-->
+  <select id="getCount" parameterType="com.top.effitopia.dto.ProductSearchCond" resultType="int">
+    SELECT COUNT(*)
+    FROM product p
+    LEFT JOIN product_subclass_category c ON p.subclass_id = c.subclass_id
+    LEFT JOIN product_middle_category m ON c.middle_id = m.middle_id
+    LEFT JOIN product_major_category j ON m.major_id = j.major_id
+    WHERE 1=1
+    <if test="productName != null and productName != ''">
+      AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+    </if>
+    <if test="productBrand != null and productBrand != ''">
+      AND p.product_brand LIKE CONCAT('%', #{productBrand}, '%')
+    </if>
+    <if test="majorCategoryId != null">
+      AND j.major_id = #{majorCategoryId}
+    </if>
+    <if test="middleCategoryId != null">
+      AND m.middle_id = #{middleCategoryId}
+    </if>
+    <if test="subclassCategoryId != null">
+      AND c.subclass_id = #{subclassCategoryId}
+    </if>
+  </select>
+
 
 </mapper>
