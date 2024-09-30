@@ -42,15 +42,19 @@
         </association>
     </resultMap>
 
+    <resultMap id ="warehouseType" type ="WarehouseType">
+        <id property="id" column="category_id"/>
+        <result property="type" column="warehouse_type"/>
+    </resultMap>
+
     <select id="selectId" parameterType="Integer" resultMap="warehouse">
         select * from warehouse w
         join warehouse_category wc on w.category_id = wc.category_id
         where warehouse_id = #{id}
     </select>
 
-    <select id="selectName" parameterType="String" resultMap="warehouse">
-        select * from warehouse w
-        join warehouse_category wc on w.category_id = wc.category_id
+    <select id="selectName" parameterType="String">
+        select warehouse_name from warehouse
         where warehouse_name = #{name}
     </select>
 
@@ -83,5 +87,15 @@
 
     <select id="getCount" resultType="int">
         select count(warehouse_id) from warehouse
+    </select>
+
+    <select id="getWarehouseUtilization" parameterType="int" resultType="double">
+        SELECT sum(p.inbound_box_width * p.inbound_box_height * p.inbound_box_length * s.amount) / w.warehouse_capacity * 100.0 AS utilization
+        FROM stock s, product p, warehouse w, cell c
+        WHERE w.warehouse_id=#{warehouseId} AND s.product_id=p.product_id AND c.cell_id=s.cell_id AND c.warehouse_id=w.warehouse_id;
+    </select>
+
+    <select id = "selectAllType" resultMap="warehouseType">
+        select * from warehouse_category
     </select>
 </mapper>
