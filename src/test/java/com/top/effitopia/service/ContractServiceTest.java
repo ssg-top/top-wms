@@ -1,32 +1,27 @@
 package com.top.effitopia.service;
 
-import ch.qos.logback.core.net.SMTPAppenderBase;
-import com.top.effitopia.domain.Address;
-import com.top.effitopia.domain.Member;
-import com.top.effitopia.domain.WarehouseType;
+import com.top.effitopia.domain.*;
 import com.top.effitopia.dto.*;
+import com.top.effitopia.enumeration.ContractStatus;
 import com.top.effitopia.enumeration.MemberRole;
 import com.top.effitopia.enumeration.MemberStatus;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
 @Log4j2
-public class WarehouseServiceTest {
+public class ContractServiceTest {
 
     @Autowired
-    private WarehouseService warehouseService;
+    private ContractService contractService;
 
-    WarehouseDTO warehouseDTO;
+    WarehouseDTO WarehouseDTO;
 
     MemberDTO memberDTO;
 
@@ -35,32 +30,9 @@ public class WarehouseServiceTest {
     WarehouseType warehouseType;
 
     @Test
-    public void getWarehouseListTest(){
-
-    }
-
-    @Test
-    public void getCellListTest(){
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().searchCond(1).page(1).size(10).build();
-        PageResponseDTO<CellDTO> responseDTO = warehouseService.getCellList(pageRequestDTO);
-        responseDTO.getDtoList().forEach(log::info);
-
-    }
-
-    @Test
-    public void getIdTest(){
-
-    }
-
-    @Test
-    public void getNameTest(){
-        Optional<String> name = warehouseService.get("판교 냉장 창고");
-        log.info(name);
-    }
-
-    @Test
-    public void getModifyTest(){
+    public void modifyTest(){
         warehouseType = WarehouseType.builder().id(1).type("냉동").build();
+        address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
 
         memberDTO = memberDTO.builder()
                 .id(2)
@@ -76,10 +48,10 @@ public class WarehouseServiceTest {
                 .lotNumberAddress("")
                 .build();
 
-        address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
 
-        warehouseDTO = WarehouseDTO.builder().
-                id(35).
+
+        WarehouseDTO = WarehouseDTO.builder().
+                id(1).
                 memberDTO(memberDTO).
                 warehouseType(warehouseType).
                 code("ccccccc").
@@ -97,13 +69,29 @@ public class WarehouseServiceTest {
                 longitude(0.00002).
                 regDate(LocalDateTime.now()).build();
 
-        boolean result = warehouseService.modify(warehouseDTO);
+        ContractDTO contractDTO = ContractDTO.builder().id(1)
+                .warehouseDTO(WarehouseDTO)
+                .memberDTO(memberDTO)
+                .startDate(LocalDateTime.now())
+                .date(10)
+                .endDate(LocalDateTime.now().plusMonths(10))
+                .status(ContractStatus.APPROVE)
+                .regDate(LocalDateTime.now())
+                .build();
+
+        boolean result = contractService.modify(contractDTO);
         log.info(result);
+    }
+
+    @Test
+    public void getContractListTest(){
+
     }
 
     @Test
     public void saveTest(){
         warehouseType = WarehouseType.builder().id(1).type("냉동").build();
+        address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
 
         memberDTO = memberDTO.builder()
                 .id(2)
@@ -119,9 +107,8 @@ public class WarehouseServiceTest {
                 .lotNumberAddress("")
                 .build();
 
-        address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
-
-        warehouseDTO = WarehouseDTO.builder().
+        WarehouseDTO = WarehouseDTO.builder().
+                id(1).
                 memberDTO(memberDTO).
                 warehouseType(warehouseType).
                 code("ccccccc").
@@ -139,12 +126,28 @@ public class WarehouseServiceTest {
                 longitude(0.00002).
                 regDate(LocalDateTime.now()).build();
 
-        warehouseService.save(warehouseDTO);
+        ContractDTO contractDTO = ContractDTO.builder()
+                .warehouseDTO(WarehouseDTO)
+                .memberDTO(memberDTO)
+                .startDate(LocalDateTime.now())
+                .date(10)
+                .endDate(LocalDateTime.now().plusMonths(10))
+                .status(ContractStatus.APPROVE)
+                .regDate(LocalDateTime.now())
+                .build();
+
+        boolean result = contractService.save(contractDTO);
+        log.info(result);
     }
 
     @Test
-    public void getTypeListTest(){
-        List<WarehouseTypeDTO> dtoList = warehouseService.getTypeList();
-        log.info(dtoList);
+    public void approvalModifyTest(){
+
+    }
+
+    @Test
+    public void getOneTest(){
+        Optional<WarehouseCostDTO> warehouseCostDTO = contractService.get(1);
+        log.info(warehouseCostDTO);
     }
 }

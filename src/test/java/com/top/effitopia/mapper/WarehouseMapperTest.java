@@ -33,8 +33,8 @@ public class WarehouseMapperTest {
 
     @Test
     public void selectNameTest(){
-        warehouse = warehouseMapper.selectName("신사 냉동 창고");
-        log.info(warehouse);
+        String name = warehouseMapper.selectName("신사 냉동 창고");
+        log.info(name);
     }
 
     @Test
@@ -137,5 +137,11 @@ public class WarehouseMapperTest {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
         int num = warehouseMapper.getCount(pageRequestDTO);
         log.info(num);
+    }
+
+    @Test
+    public void getTypeListTest(){
+        List<WarehouseType> typeList = warehouseMapper.selectAllType();
+        log.info(typeList);
     }
 }

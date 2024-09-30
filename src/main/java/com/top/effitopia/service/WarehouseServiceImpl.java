@@ -1,17 +1,17 @@
 package com.top.effitopia.service;
 
 import com.top.effitopia.domain.Cell;
+import com.top.effitopia.domain.Member;
 import com.top.effitopia.domain.Warehouse;
-import com.top.effitopia.dto.CellDTO;
-import com.top.effitopia.dto.PageRequestDTO;
-import com.top.effitopia.dto.PageResponseDTO;
-import com.top.effitopia.dto.WarehouseDTO;
+import com.top.effitopia.domain.WarehouseType;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.mapper.WarehouseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,11 +26,13 @@ public class WarehouseServiceImpl implements WarehouseService{
     private final ModelMapper modelMapper;
 
     @Override
-    public PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<WarehouseDTO> pageRequestDTO) {
-        List<Warehouse> warehouseList = warehouseMapper.selectWarehouseList(pageRequestDTO);
-        List<WarehouseDTO> warehouseDTOList = warehouseList.stream().map(vo->modelMapper.map(vo, WarehouseDTO.class)).collect(Collectors.toList());
+    public PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<Warehouse> pageRequestDTO) {
+        List<Warehouse> warehouseList =  warehouseMapper.selectWarehouseList(pageRequestDTO);
+        log.info(warehouseList);
+        List<WarehouseDTO> warehouseDTOList = changedListDTO(warehouseList);
+        log.info(warehouseDTOList);
         int total = warehouseMapper.getCount(pageRequestDTO);
-        PageResponseDTO<WarehouseDTO> pageResponseDTO = PageResponseDTO
+        PageResponseDTO pageResponseDTO = PageResponseDTO
                 .<WarehouseDTO>withAll()
                 .dtoList(warehouseDTOList)
                 .total(total)
@@ -40,11 +42,11 @@ public class WarehouseServiceImpl implements WarehouseService{
     }
 
     @Override
-    public PageResponseDTO<CellDTO> getCellList(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<CellDTO> getCellList(PageRequestDTO<Cell> pageRequestDTO) {
         List<Cell> cellList = warehouseMapper.selectCellList(pageRequestDTO);
         List<CellDTO> cellDTOList = cellList.stream().map(vo->modelMapper.map(vo, CellDTO.class)).collect(Collectors.toList());
         int total = warehouseMapper.getCount(pageRequestDTO);
-        PageResponseDTO<CellDTO> pageResponseDTO = PageResponseDTO
+        PageResponseDTO pageResponseDTO = PageResponseDTO
                 .<CellDTO>withAll()
                 .dtoList(cellDTOList)
                 .total(total)
@@ -56,19 +58,102 @@ public class WarehouseServiceImpl implements WarehouseService{
     @Override
     public Optional<WarehouseDTO> get(Integer id) {
         Warehouse warehouse = warehouseMapper.selectId(id);
-        WarehouseDTO warehouseDTO = modelMapper.map(warehouse, WarehouseDTO.class);
+        WarehouseDTO warehouseDTO = changedDTO(warehouse);
         return Optional.ofNullable(warehouseDTO);
     }
 
     @Override
-    public Optional<Integer> modify(WarehouseDTO warehouseDTO) {
-        Warehouse warehouse = modelMapper.map(warehouseDTO, Warehouse.class);
-        int result = warehouseMapper.update(warehouse);
-        return Optional.of(result);
+    public Optional<String> get(String name) {
+        String result = warehouseMapper.selectName(name);
+        return Optional.ofNullable(result);
     }
 
     @Override
-    public boolean remove(Long warehouse_id) {
+    public boolean modify(WarehouseDTO warehouseDTO) {
+        Warehouse warehouse = changedVO(warehouseDTO);
+        return warehouseMapper.update(warehouse) > 0;
+    }
+
+    @Override
+    public boolean remove(Integer id) {
         return false;
+    }
+
+    @Override
+    public boolean save(WarehouseDTO warehouseDTO) {
+        Warehouse warehouse = changedVO(warehouseDTO);
+        return warehouseMapper.insert(warehouse) > 0;
+    }
+
+    @Override
+    public Warehouse changedVO(WarehouseDTO warehouseDTO) {
+        Member memberVO = modelMapper.map((warehouseDTO.getMemberDTO()), Member.class);
+
+        return new Warehouse(warehouseDTO.getId(),
+                memberVO,
+                warehouseDTO.getWarehouseType(),
+                warehouseDTO.getCode(),
+                warehouseDTO.getName(),
+                warehouseDTO.getPhone(),
+                warehouseDTO.getZipCode(),
+                warehouseDTO.getRoadName(),
+                warehouseDTO.getLotNumber(),
+                warehouseDTO.getDetailAddress(),
+                warehouseDTO.getWidth(),
+                warehouseDTO.getLength(),
+                warehouseDTO.getHeight(),
+                warehouseDTO.getCapacity(),
+                warehouseDTO.getLongitude(),
+                warehouseDTO.getLatitude(),
+                warehouseDTO.getRegDate(),
+                warehouseDTO.getModDate());
+    }
+
+    @Override
+    public WarehouseDTO changedDTO(Warehouse warehouse) {
+        MemberDTO memberDTO = modelMapper.map((warehouse.getMember()), MemberDTO.class);
+
+        return new WarehouseDTO(warehouse.getId(),
+                memberDTO,
+                warehouse.getWarehouseType(),
+                warehouse.getCode(),
+                warehouse.getName(),
+                warehouse.getPhone(),
+                warehouse.getZipCode(),
+                warehouse.getRoadName(),
+                warehouse.getLotNumber(),
+                warehouse.getDetailAddress(),
+                warehouse.getWidth(),
+                warehouse.getLength(),
+                warehouse.getHeight(),
+                warehouse.getCapacity(),
+                warehouse.getLongitude(),
+                warehouse.getLatitude(),
+                warehouse.getRegDate(),
+                warehouse.getModDate());
+    }
+
+    @Override
+    public List<WarehouseDTO> changedListDTO(List<Warehouse> warehouseList) {
+        List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
+
+        warehouseList.stream()
+                .forEach(warehouse -> {
+                    MemberDTO memberDTO = MemberDTO.from(warehouse.getMember());
+                    WarehouseDTO warehouseDTO = modelMapper.map(warehouse, WarehouseDTO.class);
+                    warehouseDTO.setMemberDTO(memberDTO);
+                    warehouseDTOList.add(warehouseDTO);
+                });
+
+        return warehouseDTOList;
+        }
+
+    @Override
+    public List<WarehouseTypeDTO> getTypeList() {
+        List<WarehouseType> typeList = warehouseMapper.selectAllType();
+        List<WarehouseTypeDTO> typeDTOList = typeList.
+                stream().
+                map(vo -> modelMapper.map(vo, WarehouseTypeDTO.class)).collect(Collectors.toList());
+        return typeDTOList;
     }
 }

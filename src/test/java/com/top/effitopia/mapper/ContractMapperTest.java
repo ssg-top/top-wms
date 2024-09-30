@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @Log4j2
@@ -27,8 +27,6 @@ public class ContractMapperTest {
     Warehouse warehouse;
     Member member;
     Address address;
-
-    ContractStatus contractStatus;
 
     @Test
     public void selectListAllTest(){
@@ -85,10 +83,14 @@ public class ContractMapperTest {
                 longitude(0.00002).
                 regDate(LocalDateTime.now()).build();
 
+        String dateString = "2024-09-28 15:30:45";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+
         Contract contract = Contract.builder().
                             warehouse(warehouse).
                             member(member).
-                            startDate(LocalDateTime.now()).
+                            startDate(dateTime).
                             status(ContractStatus.APPROVE).
                             date(10).
                             regDate(LocalDateTime.now()).build();
@@ -147,23 +149,21 @@ public class ContractMapperTest {
 
     @Test
     public void updateApprovalListTest(){
-        List<Contract> contractList = new ArrayList<>();
+        List<Integer> id =  Arrays.asList(4,5,6);
 
-        contractList.add(Contract.builder().id(3).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(4).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(5).status(ContractStatus.REQUEST).build());
-
-        contractMapper.updateApprovalList(contractList);
+        contractMapper.updateApprovalList(id);
     }
 
     @Test
     public void updateRejectListTest(){
-        List<Contract> contractList = new ArrayList<>();
+        List<Integer> id =  Arrays.asList(1,2,3);
 
-        contractList.add(Contract.builder().id(3).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(4).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(5).status(ContractStatus.REQUEST).build());
+        contractMapper.updateRejectList(id);
+    }
 
-        contractMapper.updateRejectList(contractList);
+    @Test
+    public void getOneTest(){
+        WarehouseCost warehouseCost = contractMapper.getOne(1);
+        log.info(warehouseCost);
     }
 }

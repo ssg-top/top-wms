@@ -1,20 +1,32 @@
 package com.top.effitopia.service;
 
-import com.top.effitopia.dto.CellDTO;
-import com.top.effitopia.dto.PageRequestDTO;
-import com.top.effitopia.dto.PageResponseDTO;
-import com.top.effitopia.dto.WarehouseDTO;
+import com.top.effitopia.domain.Cell;
+import com.top.effitopia.domain.Warehouse;
+import com.top.effitopia.dto.*;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface WarehouseService {
-    PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<WarehouseDTO> pageRequestDTO);
+    PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<Warehouse> pageRequestDTO);
 
-    PageResponseDTO<CellDTO> getCellList(PageRequestDTO<WarehouseDTO> pageRequestDTO);
+    PageResponseDTO<CellDTO> getCellList(PageRequestDTO<Cell> pageRequestDTO);
 
     Optional<WarehouseDTO> get(Integer id);
 
-    Optional<Integer> modify(WarehouseDTO warehouseDTO);
+    Optional<String> get(String name);
 
-    boolean remove(Long warehouse_id);
+    boolean modify(WarehouseDTO warehouseDTO);
+
+    boolean remove(Integer id);
+
+    boolean save(WarehouseDTO warehouseDTO);
+
+    Warehouse changedVO(WarehouseDTO warehouseDTO);
+
+    WarehouseDTO changedDTO(Warehouse warehouse);
+
+    List<WarehouseDTO> changedListDTO(List<Warehouse> warehouseList);
+
+    List<WarehouseTypeDTO> getTypeList();
 }
