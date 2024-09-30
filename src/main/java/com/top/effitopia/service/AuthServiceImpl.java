@@ -2,11 +2,9 @@ package com.top.effitopia.service;
 
 import com.top.effitopia.domain.Address;
 import com.top.effitopia.domain.Member;
-import com.top.effitopia.dto.MemberDTO;
-import com.top.effitopia.dto.PasswordUpdateDTO;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.enumeration.MemberRole;
 import com.top.effitopia.enumeration.MemberStatus;
-import com.top.effitopia.dto.JoinDTO;
 import com.top.effitopia.exception.BizException;
 import com.top.effitopia.exception.ErrorCode;
 import com.top.effitopia.mapper.MemberMapper;
@@ -76,10 +74,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<MemberDTO> getList() {
-        return memberMapper.selectAll().stream()
+    public PageResponseDTO<MemberDTO> getList(PageRequestDTO<MemberSearchCond> pageRequestDTO) {
+        List<MemberDTO> dtoList = memberMapper.selectAll(pageRequestDTO).stream()
                 .map(MemberDTO::from)
                 .toList();
+        int totalCount = memberMapper.selectCount(pageRequestDTO);
+        return new PageResponseDTO<>(pageRequestDTO, dtoList, totalCount);
     }
 
     @Override

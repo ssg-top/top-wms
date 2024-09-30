@@ -4,18 +4,127 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.RevenueMapper">
 
-    <insert id="insert" parameterType="Revenue">
-        INSERT INTO revenue(warehouse_id, member_id, revenue_category, amount, revenue_details, request_date, complete_date, payment_method, is_paid, del_flag)
-        VALUES (#{warehouse.id}, #{member.id}, #{category}, #{amount}, #{revenueDetails}, #{requestDate}, #{completeDate}, #{paymentMethod}, #{isPaid}, #{delFlag})
+    <resultMap id="Revenue" type="Revenue">
+        <id property="id" column="revenue_id"/>
+        <result property="category" column="revenue_category"/>
+        <result property="revenueDetails" column="revenue_details"/>
+        <result property="requestDate" column="request_date"/>
+        <result property="completeDate" column="complete_date"/>
+        <result property="amount" column="amount"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <result property="paid" column="paid"/>
+        <result property="deleted" column="deleted"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        <association property="member" javaType="Member">
+            <id property="id" column="member_id"/>
+            <result property="username" column="username"/>
+        </association>
+        <association property="warehouse" javaType="Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="code" column="warehouse_code"/>
+            <result property="name" column="warehouse_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="Revenue" useGeneratedKeys="true" keyProperty="id" keyColumn="revenue_id">
+        INSERT INTO revenue(warehouse_id, member_id, revenue_category, amount, revenue_details, request_date, complete_date, payment_method, paid, deleted)
+        VALUES (#{warehouse.id}, #{member.id}, #{category}, #{amount}, #{revenueDetails}, #{requestDate}, #{completeDate}, #{paymentMethod}, #{paid}, #{deleted})
     </insert>
 
-    <select id="selectOne" parameterType="int" resultType="Revenue">
-        SELECT * FROM revenue
-        WHERE revenue_id=#{id}
+    <select id="selectOne" parameterType="int" resultMap="Revenue">
+        SELECT *
+        FROM revenue r, member m, warehouse w
+        WHERE r.member_id=m.member_id AND r.warehouse_id=w.warehouse_id AND r.revenue_id=#{id}
     </select>
 
-    <select id="selectAll" resultType="Revenue">
-        SELECT * FROM revenue
+    <select id="selectAll" resultMap="Revenue" parameterType="com.top.effitopia.dto.PageRequestDTO">
+        SELECT *
+        FROM revenue r, member m, warehouse w
+        WHERE r.member_id=m.member_id AND r.warehouse_id=w.warehouse_id
+        <if test="searchCond.username != null">AND m.username=#{searchCond.username}</if>
+        <if test="searchCond.warehouseId != null">AND r.warehouse_id=#{searchCond.warehouseId}</if>
+        <if test="searchCond.revenueCategory != null">AND r.category=#{searchCond.revenueCategory}</if>
+        <if test="searchCond.paid != null">AND r.paid=#{searchCond.paid}</if>
+        <choose>
+            <when test="searchCond.fromDate != null and searchCond.toDate == null">
+                <![CDATA[
+                    AND r.request_date >= #{searchCond.fromDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate == null and searchCond.toDate != null">
+                <![CDATA[
+                    AND r.request_date <= #{searchCond.toDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate != null and searchCond.toDate != null">
+                <![CDATA[
+                    AND r.request_date BETWEEN #{searchCond.fromDate} AND #{searchCond.toDate}
+                    ]]>
+            </when>
+        </choose>
+        <choose>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount == null">
+                <![CDATA[
+                    AND r.amount >= #{searchCond.fromAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount == null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND r.amount <= #{searchCond.toAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND r.amount BETWEEN #{searchCond.fromAmount} AND #{searchCond.toAmount}
+                    ]]>
+            </when>
+        </choose>
+        ORDER BY r.reg_date DESC LIMIT #{skip}, #{size}
+    </select>
+
+    <select id="selectCount" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(r.revenue_id)
+        FROM revenue r, member m, warehouse w
+        WHERE r.member_id=m.member_id AND r.warehouse_id=w.warehouse_id
+        <if test="searchCond.username != null">AND m.username=#{searchCond.username}</if>
+        <if test="searchCond.warehouseId != null">AND r.warehouse_id=#{searchCond.warehouseId}</if>
+        <if test="searchCond.revenueCategory != null">AND r.category=#{searchCond.revenueCategory}</if>
+        <if test="searchCond.paid != null">AND r.paid=#{searchCond.paid}</if>
+        <choose>
+            <when test="searchCond.fromDate != null and searchCond.toDate == null">
+                <![CDATA[
+                    AND r.request_date >= #{searchCond.fromDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate == null and searchCond.toDate != null">
+                <![CDATA[
+                    AND r.request_date <= #{searchCond.toDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate != null and searchCond.toDate != null">
+                <![CDATA[
+                    AND r.request_date BETWEEN #{searchCond.fromDate} AND #{searchCond.toDate}
+                    ]]>
+            </when>
+        </choose>
+        <choose>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount == null">
+                <![CDATA[
+                    AND r.amount >= #{searchCond.fromAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount == null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND r.amount <= #{searchCond.toAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND r.amount BETWEEN #{searchCond.fromAmount} AND #{searchCond.toAmount}
+                    ]]>
+            </when>
+        </choose>
     </select>
 
     <update id="update" parameterType="Revenue">

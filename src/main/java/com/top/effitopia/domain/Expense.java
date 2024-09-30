@@ -20,8 +20,8 @@ public class Expense {
     private double amount;
     private String expenseDetails;
     private LocalDateTime expenseDate;
-    private boolean isPaid;
-    private boolean delFlag;
+    private boolean paid;
+    private boolean deleted;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 
