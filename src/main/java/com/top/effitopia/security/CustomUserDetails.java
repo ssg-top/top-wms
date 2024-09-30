@@ -1,6 +1,7 @@
 package com.top.effitopia.security;
 
 import com.top.effitopia.domain.Member;
+import com.top.effitopia.enumeration.MemberStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +21,7 @@ public class CustomUserDetails implements UserDetails {
         return List.of(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return member.getRole().name();
+                return "ROLE_" + member.getRole().name();
             }
         });
     }
@@ -52,6 +53,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !MemberStatus.LEAVED.equals(member.getStatus());
     }
 }
+
