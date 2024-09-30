@@ -1,6 +1,8 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Member;
+import com.top.effitopia.dto.MemberSearchCond;
+import com.top.effitopia.dto.PageRequestDTO;
 import com.top.effitopia.enumeration.MemberStatus;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,7 +18,9 @@ public interface MemberMapper {
     Optional<Member> selectOne(int id);
     Optional<Member> selectOneByUsername(String username);
 
-    List<Member> selectAll();
+    List<Member> selectAll(PageRequestDTO<MemberSearchCond> pageRequestDTO);
+
+    int selectCount(PageRequestDTO<MemberSearchCond> pageRequestDTO);
 
     boolean existsByUsername(String username);
 
@@ -27,6 +31,7 @@ public interface MemberMapper {
     int updateStatus(@Param("id") int id, @Param("status") MemberStatus status);
 
     boolean updatePassword(@Param("id")int id, @Param("status") String encodedPassword);
-
     List<Member> selectAssignableWarehouseManagerList();
+
+
 }

@@ -1,9 +1,7 @@
 package com.top.effitopia.service;
 
 import com.top.effitopia.domain.Member;
-import com.top.effitopia.dto.JoinDTO;
-import com.top.effitopia.dto.MemberDTO;
-import com.top.effitopia.dto.PasswordUpdateDTO;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.enumeration.MemberStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,7 @@ public interface AuthService {
 
     MemberDTO getOne(int id);
 
-    List<MemberDTO> getList();
+    PageResponseDTO<MemberDTO> getList(PageRequestDTO<MemberSearchCond> pageRequestDTO);
 
     boolean modify(MemberDTO memberDTO);
 

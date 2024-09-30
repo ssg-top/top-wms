@@ -35,8 +35,13 @@
         SELECT * FROM member WHERE username=#{username}
     </select>
 
-    <select id="selectAll" resultMap="Member">
+    <select id="selectAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="Member">
         SELECT * FROM member
+        <where>
+            <if test="searchCond.username != null">AND username='%#{searchCond.username}%'</if>
+            <if test="searchCond.role != null">AND role=#{searchCond.role} </if>
+        </where>
+        ORDER BY reg_date DESC LIMIT #{skip}, #{size}
     </select>
 
     <select id="existsByUsername" parameterType="String" resultType="boolean">
@@ -86,6 +91,14 @@
             FROM warehouse w
             WHERE m.member_id = w.member_id
         )
+    </select>
+
+    <select id="selectCount" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(member_id) FROM member
+        <where>
+            <if test="searchCond.username != null">AND username='%#{searchCond.username}%'</if>
+            <if test="searchCond.role != null">AND role=#{searchCond.role} </if>
+        </where>
     </select>
 
 </mapper>
