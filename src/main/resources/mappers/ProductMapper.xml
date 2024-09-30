@@ -20,20 +20,9 @@
 
     <association property="productSubclassCategory"
       javaType="com.top.effitopia.domain.ProductSubclassCategory">
-      <id property="subclassId" column="subclass_id"/>
-      <result property="subclassName" column="subclass_name"/>
-
-      <association property="productMiddleCategory"
-        javaType="com.top.effitopia.domain.ProductMiddleCategory">
-        <id property="middleId" column="middle_id"/>
-        <result property="middleName" column="middle_name"/>
-
-        <association property="productMajorCategory"
-          javaType="com.top.effitopia.domain.ProductMajorCategory">
-          <id property="majorId" column="major_id"/>
-          <result property="majorName" column="major_name"/>
-        </association>
-      </association>
+      <id property="id" column="subclass_id"/>
+      <result property="name" column="subclass_name"/>
+      <result property="middleId" column="middle_id"/>
     </association>
   </resultMap>
 
@@ -53,28 +42,25 @@
     p.product_img,
     c.subclass_id,
     c.subclass_name,
-    m.middle_id,
     m.middle_name,
-    j.major_id,
     j.major_name
-    FROM product p
-    LEFT JOIN product_subclass_category c ON p.subclass_id = c.subclass_id
-    LEFT JOIN product_middle_category m ON c.middle_id = m.middle_id
-    LEFT JOIN product_major_category j ON m.major_id = j.major_id
-    WHERE 1=1
-    <if test="searchCond.productName != null and searchCond.productName != ''">
+    FROM product p, product_subclass_category c, product_middle_category m, product_major_category j
+    WHERE p.subclass_id = c.subclass_id
+      AND c.middle_id = m.middle_id
+      AND m.major_id = j.major_id
+    <if test="searchCond != null and searchCond.productName != null and searchCond.productName != ''">
       AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
     </if>
-    <if test="searchCond.productBrand != null and searchCond.productBrand != ''">
+    <if test="searchCond != null and searchCond.productBrand != null and searchCond.productBrand != ''">
       AND p.product_brand LIKE CONCAT('%', #{searchCond.productBrand}, '%')
     </if>
-    <if test="searchCond.majorCategoryId != null">
+    <if test="searchCond != null and searchCond.majorCategoryId != null">
       AND j.major_id = #{searchCond.majorCategoryId}
     </if>
-    <if test="searchCond.middleCategoryId != null">
+    <if test="searchCond != null and searchCond.middleCategoryId != null">
       AND m.middle_id = #{searchCond.middleCategoryId}
     </if>
-    <if test="searchCond.subclassCategoryId != null">
+    <if test="searchCond != null and searchCond.subclassCategoryId != null">
       AND c.subclass_id = #{searchCond.subclassCategoryId}
     </if>
     LIMIT #{skip}, #{size}
