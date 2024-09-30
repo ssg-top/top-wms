@@ -10,13 +10,13 @@ import java.util.List;
 
 @Mapper
 public interface OutboundMapper {
-    void insertOutbound(Outbound outbound);
-
-    List<Outbound> selectList(PageRequestDTO pageRequestDTO);
-
-    int getTotalCount(PageRequestDTO pageRequestDTO);
-
-    Outbound selectDetail(Integer outboundId);
-
-    void updateStatus(@Param("outboundId") Integer outboundId, @Param("status") OutboundStatus status);
+//    void insertOutbound(Outbound outbound);
+//
+//    List<Outbound> selectList(PageRequestDTO pageRequestDTO);
+//
+//    int getTotalCount(PageRequestDTO pageRequestDTO);
+//
+//    Outbound selectDetail(Integer outboundId);
+//
+//    void updateStatus(@Param("outboundId") Integer outboundId, @Param("status") OutboundStatus status);
 }

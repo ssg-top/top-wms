@@ -2,5 +2,104 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.top.effitopia.mapper.DispatchMapper">
+
+    <!-- Dispatch 매핑 -->
+    <resultMap id="dispatchResultMap" type="Dispatch">
+        <id property="dispatchId" column="dispatch_id" />
+        <result property="regDate" column="reg_date" />
+        <result property="modDate" column="mod_date" />
+        <result property="dispatchStatus" column="dispatch_status" />
+
+        <association property="outbound" javaType="Outbound" resultMap="outboundResultMap" />
+        <association property="transportVehicle" javaType="TransportVehicle" resultMap="transportVehicleResultMap" />
+    </resultMap>
+
+    <!-- Outbound 매핑 -->
+    <resultMap id="outboundResultMap" type="Outbound">
+        <id property="outboundId" column="outbound_id" />
+        <result property="outboundStatus" column="outbound_status" />
+        <result property="regDate" column="reg_date" />
+        <result property="modDate" column="mod_date" />
+
+        <association property="order" javaType="Order" resultMap="orderResultMap" />
+    </resultMap>
+
+    <!-- Order 매핑 -->
+    <resultMap id="orderResultMap" type="Order">
+        <id property="orderId" column="order_id" />
+        <result property="buyerName" column="buyer_name" />
+        <result property="zipCode" column="zipcode" />
+        <result property="buyerRoadName" column="buyer_road_name" />
+        <result property="buyerLotNumber" column="buyer_lot_number" />
+        <result property="buyerDetailAddress" column="buyer_detail_address" />
+        <result property="buyerLatitude" column="buyer_latitude" />
+        <result property="buyerLongitude" column="buyer_longitude" />
+        <result property="buyerQuantity" column="buyer_quantity" />
+        <association property="stock" javaType="Stock" resultMap="stockResultMap" />
+    </resultMap>
+
+    <!-- Stock 및 Product 매핑 -->
+    <resultMap id="stockResultMap" type="Stock">
+        <id property="id" column="stock_id" />
+        <association property="product" javaType="Product" resultMap="productResultMap" />
+    </resultMap>
+
+    <resultMap id="productResultMap" type="Product">
+        <id property="id" column="product_id" />
+        <result property="productName" column="product_name" />
+        <result property="productBrand" column="product_brand" />
+        <result property="productWeight" column="product_weight" />
+        <result property="productStorageType" column="storage_type" />
+    </resultMap>
+
+    <!-- TransportVehicle 매핑 -->
+    <resultMap id="transportVehicleResultMap" type="TransportVehicle">
+        <id property="id" column="transport_vehicle_id" />
+        <result property="carNum" column="car_num" />
+        <association property="transportVehicleTemperatureType" javaType="TransportVehicleTemperatureType" resultMap="temperatureTypeResultMap" />
+    </resultMap>
+
+    <!-- TransportVehicleTemperatureType 매핑 -->
+    <resultMap id="temperatureTypeResultMap" type="TransportVehicleTemperatureType">
+        <id property="transportVehicleTemperatureTypeId" column="transport_vehicle_temperature_type_id" />
+        <result property="transportVehicleTemperatureTypeName" column="transport_vehicle_temperature_type_name" />
+    </resultMap>
+
+    <!-- Dispatch 등록 -->
+    <insert id="insertDispatch" parameterType="com.top.effitopia.domain.Dispatch" useGeneratedKeys="true" keyProperty="dispatchId" keyColumn="dispatch_id">
+        INSERT INTO dispatch (outbound_id, transport_vehicle_id, reg_date, dispatch_status)
+        VALUES (#{outbound.outboundId}, #{transportVehicle.id}, #{regDate}, #{dispatchStatus})
+    </insert>
+
+    <!-- Dispatch 수정 -->
+    <update id="updateDispatch" parameterType="com.top.effitopia.domain.Dispatch">
+        UPDATE dispatch
+        SET transport_vehicle_id = #{transportVehicle.id}, mod_date = #{modDate}, dispatch_status = #{dispatchStatus}
+        WHERE dispatch_id = #{dispatchId}
+    </update>
+
+    <!-- Dispatch 삭제 -->
+    <delete id="deleteDispatch" parameterType="int">
+        DELETE FROM dispatch WHERE dispatch_id = #{dispatchId}
+    </delete>
+
+    <!-- Dispatch ID로 조회 -->
+    <select id="findById" parameterType="int" resultMap="dispatchResultMap">
+        SELECT d.*, tv.*, tvtt.transport_vehicle_temperature_type_name
+        FROM dispatch d
+                 JOIN transport_vehicle tv ON d.transport_vehicle_id = tv.transport_vehicle_id
+                 JOIN transport_vehicle_temperature_type tvtt ON tv.transport_vehicle_temperature_type_id = tvtt.transport_vehicle_temperature_type_id
+        WHERE d.dispatch_id = #{dispatchId}
+    </select>
+
+    <!-- 차량 타입에 맞는 차량 목록 조회 -->
+    <select id="findAvailableVehiclesByStorageType" parameterType="String" resultMap="transportVehicleResultMap">
+        SELECT tv.*, tvtt.transport_vehicle_temperature_type_name
+        FROM transport_vehicle tv
+                 JOIN transport_vehicle_temperature_type tvtt ON tv.transport_vehicle_temperature_type_id = tvtt.transport_vehicle_temperature_type_id
+        WHERE tvtt.transport_vehicle_temperature_type_name = #{storageType}
+    </select>
+
 </mapper>

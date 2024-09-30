@@ -1,10 +1,8 @@
 package com.top.effitopia.controller;
 
-import com.top.effitopia.dto.OrderDTO;
-import com.top.effitopia.dto.OutboundDTO;
-import com.top.effitopia.dto.PageRequestDTO;
-import com.top.effitopia.dto.PageResponseDTO;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.enumeration.OutboundStatus;
+import com.top.effitopia.service.DispatchService;
 import com.top.effitopia.service.OutboundService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/outbounds")
 @Log4j2
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class OutboundController {
 
     private final OutboundService outboundService;
+    private final DispatchService dispatchService;
 
     @GetMapping("/register")
     public void showRegisterForm() {
@@ -29,54 +31,115 @@ public class OutboundController {
     }
 
     @PostMapping("/register")
-    public String registerForm(@ModelAttribute("orderDTO") @Valid OrderDTO orderDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String registerForm(@Valid @ModelAttribute OrderDTO orderDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("OutboundController registerForm PostMapping");
-
         if (bindingResult.hasErrors()) {
             log.info("OutboundController registerForm PostMapping has Errors");
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/outbounds/register";
         }
-
-        outboundService.registerOrderAndOutbound(orderDTO);
-        redirectAttributes.addFlashAttribute("registerSuccess", "주문과 출고 정보가 등록되었습니다.");
+        outboundService.registerOrder(orderDTO);
+        redirectAttributes.addFlashAttribute("message", "주문이 등록되었습니다.");
         return "redirect:/outbounds/list";
     }
 
     @GetMapping("/list")
-    public void showList(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model) {
+    public void showList(PageRequestDTO pageRequestDTO, Model model) {
         log.info("OutboundController showList GetMapping");
-        PageResponseDTO<OutboundDTO> responseDTO = outboundService.getList(pageRequestDTO);
-        model.addAttribute("responseDTO", responseDTO);
+        model.addAttribute("orders", outboundService.getOrders(pageRequestDTO));
     }
 
-    @GetMapping("/read")
-    public void read(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Integer outboundId, Model model) {
+    @GetMapping("/read/{id}")
+    public String read(@PathVariable("id") Integer id, Model model) {
         log.info("OutboundController read GetMapping");
-        OutboundDTO outboundDTO = outboundService.getOutboundDetail(outboundId);
-        model.addAttribute("outbound", outboundDTO);
+        Optional<DetailsDTO> detailsDTO = outboundService.getOrderDetails(id);
+        if (detailsDTO.isPresent()) {
+            log.info("OutboundController read GetMapping with id {}", id);
+            model.addAttribute("orderDetails", detailsDTO.get());
+            return "redirect:/outbounds/read/{id}";
+        } else {
+            model.addAttribute("message", "Order not found");
+            return "redirect:/outbounds/list";
+        }
     }
 
-    @PostMapping("/updateStatus")
-    public String updateStatus(@RequestParam("outboundId") Integer outboundId, @RequestParam("status") OutboundStatus status, RedirectAttributes redirectAttributes) {
-        log.info("OutboundController updateStatus PostMapping - outboundId: {}, status: {}", outboundId, status);
-        outboundService.updateOutboundStatus(outboundId, status);
-        redirectAttributes.addFlashAttribute("updateSuccess", "출고 상태가 변경되었습니다.");
-        return "redirect:/outbounds/list";
-    }
 
-    @PostMapping("/updateOrder")
-    public String updateOrder(@ModelAttribute("orderDTO") @Valid OrderDTO orderDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    @PostMapping("/read/{id}/updateOrder")
+    public String updateOrder(@PathVariable("id") Integer id, @Valid @ModelAttribute OrderDTO orderDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("OutboundController updateOrder PostMapping");
-
         if (bindingResult.hasErrors()) {
             log.info("OutboundController updateOrder PostMapping has Errors");
+            return "redirect:/outbounds/list";
+        }
+        log.info("OutboundController updateOrder PostMapping id {}", id);
+        outboundService.updateOrder(id, orderDTO);
+        redirectAttributes.addFlashAttribute("message", "주문 정보가 수정되었습니다.");
+        return "redirect:/outbounds/read/{id}";
+    }
+
+    @PostMapping("/read/{id}/updateOrderStatus")
+    public String updateOrderStatus(@PathVariable("id") Integer id, @RequestParam("status") OutboundStatus status, RedirectAttributes redirectAttributes) {
+        log.info("OutboundController rejectOrder PostMapping");
+        outboundService.updateOrderStatus(id, status);
+        redirectAttributes.addFlashAttribute("message", "Order status updated to " + status);
+        return "redirect:/outbounds/read/{id}";
+    }
+
+    @PostMapping("/read/{id}/registerDispatch")
+    public String registerDispatch(@Valid @ModelAttribute DispatchDTO dispatchDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("OutboundController registerDispatch PostMapping");
+        if (bindingResult.hasErrors()) {
+            log.info("OutboundController registerDispatch PostMapping BindingResult has Errors");
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/outbounds/read?outboundId=" + orderDTO.getOrderId();
+            return "redirect:/outbounds/read/{id}";
         }
 
-        outboundService.updateOrder(orderDTO);
-        redirectAttributes.addFlashAttribute("updateSuccess", "주문 정보가 수정되었습니다.");
-        return "redirect:/outbounds/list";
+        boolean result = dispatchService.registerDispatch(dispatchDTO);
+        if (!result) {
+            log.info("OutboundController registerDispatch PostMapping Result has Errors");
+            redirectAttributes.addFlashAttribute("errorMessage", "Dispatch 등록 실패");
+            return "redirect:/outbounds/read/{id}";
+        }
+
+        redirectAttributes.addFlashAttribute("message", "Dispatch 등록 성공");
+        return "redirect:/outbounds/read/{id}";
+    }
+
+    @PostMapping("/read/{id}/updateDispatch")
+    public String updateDispatch(@Valid @ModelAttribute DispatchDTO dispatchDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("OutboundController updateDispatch PostMapping BindingResult has Errors");
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/outbounds/read/{id}";
+        }
+
+        boolean result = dispatchService.updateDispatch(dispatchDTO);
+        if (!result) {
+            log.info("OutboundController updateDispatch PostMapping Result has Errors");
+            redirectAttributes.addFlashAttribute("errorMessage", "Dispatch 수정 실패");
+            return "redirect:/outbounds/read/{id}";
+        }
+
+        redirectAttributes.addFlashAttribute("message", "Dispatch 수정 성공");
+        return "redirect:/outbounds/read/{id}";
+    }
+
+    @PostMapping("/read/{id}/deleteDispatch")
+    public String deleteDispatch(@RequestParam Integer dispatchId, RedirectAttributes redirectAttributes) {
+        boolean result = dispatchService.deleteDispatch(dispatchId);
+        if (!result) {
+            log.info("OutboundController deleteDispatch PostMapping Result has Errors");
+            redirectAttributes.addFlashAttribute("errorMessage", "Dispatch 삭제 실패");
+            return "redirect:/outbounds/read/{id}";
+        }
+
+        redirectAttributes.addFlashAttribute("message", "Dispatch 삭제 성공");
+        return "redirect:/outbounds/read/{id}";
+    }
+
+    @PostMapping("/read/{id}/getAvailableVehicles")
+    @ResponseBody  // JSON 형태로 반환
+    public List<TransportVehicleDTO> getAvailableVehicles(@RequestParam Integer outboundId) {
+        return dispatchService.getAvailableVehicles(outboundId);
     }
 }

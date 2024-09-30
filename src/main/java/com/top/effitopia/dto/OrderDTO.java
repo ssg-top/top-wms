@@ -13,6 +13,7 @@ import lombok.*;
 public class OrderDTO {
     private Integer orderId;
     private StockDTO stockDTO;
+    private MemberDTO memberDTO;
     @NotEmpty
     private String buyerName;
     @NotEmpty
