@@ -15,16 +15,16 @@ import lombok.ToString;
 public class Product {
 
     private Integer id;
-    private String subclassCategoryId;
+    private ProductSubclassCategory productSubclassCategory; // 객체 전체를 받음
     private String name;
     private String productBrand;
     private ProductStorageType productStorageType;
-    private String productCost;
-    private String productSelling;
+    private Integer productCost;
+    private Integer productSelling;
     private String productInfo;
-    private String inboundBoxWidth;
-    private String inboundBoxLength;
-    private String InboundBoxHeight;
+    private Integer inboundBoxWidth;
+    private Integer inboundBoxLength;
+    private Integer inboundBoxHeight;
     private Long productWeight;
     private String productImg;
 

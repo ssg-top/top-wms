@@ -19,10 +19,14 @@ public class Inbound {
     private Member member;
     private Warehouse warehouse;
     private Vendor vendor;
+    private Product product;
+    private Integer productQuantity;
     private LocalDate inboundRequestDate;
     private LocalDate inboundApprovedDate;
     private LocalDate inboundExpectDate;
     private LocalDate inboundCompletedDate;
+    private LocalDate inboundCanceledDate;
     private InboundStatus inboundStatus;
+    private Integer delegateRequesterId;
 
 }

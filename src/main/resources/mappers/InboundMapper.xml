@@ -3,32 +3,156 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.InboundMapper">
-<!--  <resultMap id="Inbound" type="Inbound">
-    <id property="id" column="inbound_id"/>
-  </resultMap>-->
 
-  <select id="selectAllList" parameterType="Inbound">
-    SELECT * FROM inbound;
+  <resultMap id="Product" type="Product">
+    <id property="id" column="product_id"/>
+    <result property="name" column="product_name"/>
+    <result property="productBrand" column="product_brand"/>
+    <result property="productStorageType" column="storage_type"/>
+    <result property="productCost" column="product_cost"/>
+    <result property="productSelling" column="product_selling"/>
+    <result property="productInfo" column="product_info"/>
+    <result property="inboundBoxWidth" column="inbound_box_width"/>
+    <result property="inboundBoxLength" column="inbound_box_length"/>
+    <result property="inboundBoxHeight" column="inbound_box_height"/>
+    <result property="productWeight" column="product_weight"/>
+    <result property="productImg" column="product_img"/>
+
+    <association property="productSubclassCategory"
+      javaType="com.top.effitopia.domain.ProductSubclassCategory">
+      <id property="id" column="subclass_id"/>
+      <result property="name" column="subclass_name"/>
+      <result property="middle_id" column="middle_id"/>
+    </association>
+  </resultMap>
+
+
+  <resultMap id="Member" type="Member">
+    <id property="id" column="member_id"/>
+    <result property="username" column="username"/>
+    <result property="password" column="password"/>
+    <result property="name" column="name"/>
+    <result property="phone" column="phone"/>
+    <result property="email" column="email"/>
+    <result property="status" column="status"/>
+    <result property="role" column="role"/>
+    <result property="businessNumber" column="business_number"/>
+    <result property="regDate" column="reg_date"/>
+    <result property="modDate" column="mod_date"/>
+  </resultMap>
+
+  <resultMap id="Warehouse" type="Warehouse">
+    <id property="id" column="warehouse_id"/>
+    <result property="code" column="warehouse_code"/>
+    <result property="name" column="warehouse_name"/>
+    <result property="phone" column="warehouse_phone"/>
+    <result property="zipCode" column="warehouse_zip_code"/>
+    <result property="roadName" column="warehouse_road_name"/>
+    <result property="lotNumber" column="warehouse_lot_number"/>
+    <result property="detailAddress" column="warehouse_detail_address"/>
+    <result property="width" column="warehouse_width"/>
+    <result property="length" column="warehouse_length"/>
+    <result property="height" column="warehouse_height"/>
+    <result property="capacity" column="warehouse_capacity"/>
+    <result property="latitude" column="warehouse_latitude"/>
+    <result property="longitude" column="warehouse_longitude"/>
+    <result property="regDate" column="warehouse_reg_date"/>
+    <result property="modDate" column="warehouse_mod_date"/>
+  </resultMap>
+
+  <resultMap id="Vendor" type="Vendor">
+    <id property="id" column="vendor_id"/>
+    <result property="name" column="vendor_name"/>
+    <result property="deleted" column="deleted"/>
+  </resultMap>
+
+  <resultMap id="Inbound" type="Inbound">
+    <id property="id" column="inbound_id"/>
+    <result property="productQuantity" column="product_Quantity"/>
+    <result property="inboundRequestDate" column="inbound_request_date"/>
+    <result property="inboundApprovedDate" column="inbound_approved_date"/>
+    <result property="inboundExpectDate" column="inbound_expect_date"/>
+    <result property="inboundCompletedDate" column="inbound_completed_date"/>
+    <result property="inboundCanceledDate" column="inbound_canceled_date"/>
+    <result property="inboundStatus" column="inbound_status"/>
+    <result property="delegateRequesterId" column="delegateRequesterId"/>
+    <association property="member" resultMap="Member"/>
+    <association property="warehouse" resultMap="Warehouse"/>
+    <association property="vendor" resultMap="Vendor"/>
+    <association property="product" resultMap="Product"/>
+  </resultMap>
+
+
+  <select id="selectAllList" parameterType="Inbound" resultMap="Inbound">
+    SELECT
+    maj.major_name,
+    p.product_brand,
+    p.product_name,
+    i.product_quantity,
+    v.vendor_name,
+    w.warehouse_name,
+    m.username,
+    d.username,
+    i.inbound_request_date,
+    i.inbound_approved_date,
+    i.inbound_expect_date,
+    i.inbound_completed_date
+    FROM inbound i
+    JOIN member m ON i.member_id = m.member_id
+    LEFT JOIN member d ON i.delegate_requester_id = d.member_id
+    JOIN warehouse w ON i.warehouse_id = w.warehouse_id
+    JOIN vendor v ON i.vendor_id = v.vendor_id
+    JOIN product p ON i.product_id = p.product_id
+    JOIN product_subclass_category sub ON p.subclass_id = sub.subclass_id
+    JOIN product_middle_category mid ON sub.middle_id = mid.middle_id
+    JOIN product_major_category maj ON mid.major_id = maj.major_id
+    ORDER BY i.inbound_request_date DESC;
+  </select>
+
+  <select id="selectOne" parameterType="Inbound" resultMap="Inbound">
+    SELECT * FROM inbound
+    WHERE inbound_id = #{id};
   </select>
 
   <insert id="insert" parameterType="Inbound" useGeneratedKeys="true" keyProperty="id" keyColumn="inbound_id">
-    INSERT INTO inbound(member_id, warehouse_id, vendor_id, inbound_request_date, inbound_expect_date, inbound_status) VALUES (#{member.id}, #{warehouse.id}, #{vendor.id}, #{inboundRequestDate}, #{inboundExpectDate}, #{inboundStatus})
+    INSERT INTO inbound(member_id, warehouse_id, vendor_id, product_id, product_quantity, inbound_request_date, inbound_expect_date, inbound_status, delegate_requester_id) VALUES
+    (#{member.id}, #{warehouse.id}, #{vendor.id}, #{product.id}, #{productQuantity}, #{inboundRequestDate}, #{inboundExpectDate}, #{inboundStatus}, #{delegateRequesterId})
   </insert>
 
   <update id="update" parameterType="Inbound">
     UPDATE inbound
-    SET inbound_approved_date = #{inboundExpectDate}, inbound_status = #{inboundStatus}
+    SET product_quantity = #{productQuantity}, inbound_approved_date = #{inboundApprovedDate}
     WHERE inbound_id = #{id};
   </update>
 
-  <update id="approveList" parameterType="java.util.List">
+  <update id="approveList" parameterType="List">
     UPDATE inbound
     SET inbound_approved_date = now(), inbound_status = 'INBOUND_APPROVED'
     WHERE inbound_id IN
     <foreach collection="list" item="item" open="(" close=")" separator=",">
-      #{item.id}
+      #{item}
     </foreach>
   </update>
+
+  <update id="completeList" parameterType="List">
+    UPDATE inbound
+    SET inbound_completed_date = now(), inbound_status = 'INBOUND_COMPLETED'
+    WHERE inbound_id IN
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+  <update id="deleteList" parameterType="List">
+    UPDATE inbound
+    SET inbound_canceled_date = now(), inbound_status = 'INBOUND_CANCELLED'
+    WHERE inbound_id IN
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+
 
 </mapper>
 

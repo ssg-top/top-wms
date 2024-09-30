@@ -15,6 +15,8 @@ public class Vendor {
 
     private Integer id;
     private String name;
-    private boolean delFlag;
+    private String phone;
+    private String address;
+    private boolean deleted;
 
 }
