@@ -1,7 +1,8 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Expense;
-import com.top.effitopia.domain.Revenue;
+import com.top.effitopia.dto.BalanceSearchCond;
+import com.top.effitopia.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,7 +13,8 @@ public interface ExpenseMapper {
 
     int insert(Expense expense);
     Optional<Expense> selectOne(int id);
-    List<Expense> selectAll();
+    List<Expense> selectAll(PageRequestDTO<BalanceSearchCond> pageRequestDTO);
+    int selectCount(PageRequestDTO<BalanceSearchCond> pageRequestDTO);
     int update(Expense expense);
     int delete(int id);
 }

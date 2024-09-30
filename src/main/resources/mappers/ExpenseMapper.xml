@@ -4,27 +4,127 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.ExpenseMapper">
 
-    <insert id="insert" parameterType="Expense">
-        INSERT INTO expense(warehouse_id, expense_category, amount, expense_details, expense_date, is_paid, del_flag)
-        VALUES (#{warehouse.id}, #{category}, #{amount}, #{expenseDetails}, #{expenseDate}, #{isPaid}, #{delFlag})
+    <resultMap id="Expense" type="Expense">
+        <id property="id" column="expense_id"/>
+        <result property="category" column="expense_category"/>
+        <result property="expenseDetails" column="expense_details"/>
+        <result property="expenseDate" column="expense_date"/>
+        <result property="amount" column="amount"/>
+        <result property="paid" column="paid"/>
+        <result property="deleted" column="deleted"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        <association property="warehouse" javaType="Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="code" column="warehouse_code"/>
+            <result property="name" column="warehouse_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="Expense" useGeneratedKeys="true" keyProperty="id" keyColumn="expense_id">
+        INSERT INTO expense(warehouse_id, expense_category, amount, expense_details, expense_date, paid, deleted)
+        VALUES (#{warehouse.id}, #{category}, #{amount}, #{expenseDetails}, #{expenseDate}, #{paid}, #{deleted})
     </insert>
 
-    <select id="selectOne" parameterType="int" resultType="Expense">
-        SELECT * FROM expense
-        WHERE expense_id=#{id}
+    <select id="selectOne" parameterType="int" resultMap="Expense">
+        SELECT *
+        FROM expense e, warehouse w
+        WHERE e.warehouse_id=w.warehouse_id AND e.expense_id=#{id}
     </select>
 
-    <select id="selectAll" resultType="Expense">
-        SELECT * FROM expense
+    <select id="selectAll" resultMap="Expense" parameterType="com.top.effitopia.dto.PageRequestDTO">
+        SELECT * 
+        FROM expense e, warehouse w
+        WHERE e.warehouse_id=w.warehouse_id
+        <if test="searchCond.warehouseId != null">AND e.warehouse_id=#{searchCond.warehouseId}</if>
+        <if test="searchCond.expenseCategory != null">AND e.category=#{searchCond.expenseCategory}</if>
+        <if test="searchCond.paid != null">AND e.paid=#{searchCond.paid}</if>
+        <choose>
+            <when test="searchCond.fromDate != null and searchCond.toDate == null">
+                <![CDATA[
+                    AND e.expense_date >= #{searchCond.fromDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate == null and searchCond.toDate != null">
+                <![CDATA[
+                    AND e.expense_date <= #{searchCond.toDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate != null and searchCond.toDate != null">
+                <![CDATA[
+                    AND e.expense_date BETWEEN #{searchCond.fromDate} AND #{searchCond.toDate}
+                    ]]>
+            </when>
+        </choose>
+        <choose>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount == null">
+                <![CDATA[
+                    AND e.amount >= #{searchCond.fromAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount == null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND e.amount <= #{searchCond.toAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND e.amount BETWEEN #{searchCond.fromAmount} AND #{searchCond.toAmount}
+                    ]]>
+            </when>
+        </choose>
+        ORDER BY e.reg_date DESC LIMIT #{skip}, #{size}
     </select>
 
+    <select id="selectCount" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(expense_id) FROM expense e
+        <if test="searchCond.warehouseId != null">AND e.warehouse_id=#{searchCond.warehouseId}</if>
+        <if test="searchCond.expenseCategory != null">AND e.category=#{searchCond.expenseCategory}</if>
+        <if test="searchCond.paid != null">AND e.paid=#{searchCond.paid}</if>
+        <choose>
+            <when test="searchCond.fromDate != null and searchCond.toDate == null">
+                <![CDATA[
+                    AND e.expense_date >= #{searchCond.fromDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate == null and searchCond.toDate != null">
+                <![CDATA[
+                    AND e.expense_date <= #{searchCond.toDate}
+                    ]]>
+            </when>
+            <when test="searchCond.fromDate != null and searchCond.toDate != null">
+                <![CDATA[
+                    AND e.expense_date BETWEEN #{searchCond.fromDate} AND #{searchCond.toDate}
+                    ]]>
+            </when>
+        </choose>
+        <choose>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount == null">
+                <![CDATA[
+                    AND e.amount >= #{searchCond.fromAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount == null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND e.amount <= #{searchCond.toAmount}
+                    ]]>
+            </when>
+            <when test="searchCond.fromAmount != null and searchCond.toAmount != null">
+                <![CDATA[
+                    AND e.amount BETWEEN #{searchCond.fromAmount} AND #{searchCond.toAmount}
+                    ]]>
+            </when>
+        </choose>
+    </select>
+    
     <update id="update" parameterType="Expense">
-        UPDATE expense SET expense_category=#{category}, amount=#{amount}, expense_details=#{expenseDetails}, expense_date=#{expenseDate}, is_paid=#{isPaid})
+        UPDATE expense SET expense_category=#{category}, amount=#{amount}, expense_details=#{expenseDetails}, expense_date=#{expenseDate}, paid=#{paid})
         WHERE expense_id=#{id}
     </update>
 
     <update id="delete" parameterType="int">
-        UPDATE expense SET del_flag=true, mod_date=now()
+        UPDATE expense SET deleted=true, mod_date=now()
         WHERE expense_id=#{id}
     </update>
+
 </mapper>

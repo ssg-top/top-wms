@@ -22,7 +22,7 @@ public class ExpenseDTO {
     private double amount;
     private String expenseDetails;
     private LocalDateTime expenseDate;
-    private boolean isPaid;
+    private boolean paid;
 
     public static ExpenseDTO from(Expense expense) {
         return ExpenseDTO.builder()
@@ -33,7 +33,8 @@ public class ExpenseDTO {
                 .amount(expense.getAmount())
                 .expenseDetails(expense.getExpenseDetails())
                 .expenseDate(expense.getExpenseDate())
-                .isPaid(expense.isPaid())
+                .paid(expense.isPaid())
                 .build();
     }
+
 }
