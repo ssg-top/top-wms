@@ -25,7 +25,7 @@ public class RevenueDTO {
     private LocalDateTime requestDate;
     private LocalDateTime completeDate;
     private String paymentMethod;
-    private boolean isPaid;
+    private boolean paid;
 
     public static RevenueDTO from(Revenue vo) {
         return RevenueDTO.builder()
@@ -39,7 +39,15 @@ public class RevenueDTO {
                 .requestDate(vo.getRequestDate())
                 .completeDate(vo.getCompleteDate())
                 .paymentMethod(vo.getPaymentMethod())
-                .isPaid(vo.isPaid())
+                .paid(vo.isPaid())
+                .build();
+    }
+
+    public Revenue getPaymentInfo() {
+        return Revenue.builder()
+                .paid(this.paid)
+                .completeDate(this.completeDate)
+                .paymentMethod(this.paymentMethod)
                 .build();
     }
 }

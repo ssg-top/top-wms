@@ -23,8 +23,8 @@ public class Revenue {
     private LocalDateTime requestDate;
     private LocalDateTime completeDate;
     private String paymentMethod;
-    private boolean isPaid;
-    private boolean delFlag;
+    private boolean paid;
+    private boolean deleted;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 }
