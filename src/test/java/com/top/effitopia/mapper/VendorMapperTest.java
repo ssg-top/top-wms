@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @Log4j2
+@Transactional
 @SpringBootTest
 class VendorMapperTest {
 
@@ -23,6 +24,7 @@ class VendorMapperTest {
         // Given
         Vendor vendor = Vendor.builder()
             .name("파하")
+            .phone("01093533534")
             .build();
 
         // When
@@ -60,7 +62,7 @@ class VendorMapperTest {
         // Given
         Vendor vendor =Vendor.builder()
             .id(2)
-            .delFlag(false)
+            .deleted(true)
             .build();
 
         // When
