@@ -10,7 +10,9 @@ public interface InboundService {
 
     boolean modify(InboundDTO inboundDTO);
 
-    boolean approveInboundRequests(List<InboundDTO> inboundDTOList);
+    boolean approveInboundRequests(List<Integer> inboundIds);
+
+    boolean completeInboundRequests(List<Integer> inboundIds);
 
     boolean remove(int inboundId);
 
@@ -18,7 +20,5 @@ public interface InboundService {
 
     List<InboundDTO> getList();
 
-    void saveList(List<InboundDTO> inboundDTOList);
-
-    void removeList(List<Integer> inboundIdList);
+    void removeList(List<Integer> inboundIds);
 }

@@ -20,13 +20,13 @@ public interface InboundMapper {
 
     List<Inbound> selectAllList();
 
-    int insertList(List<Inbound> inboundList);
+    int approveList(List<Integer> inboundList);
 
-    int approveList(List<Inbound> inboundList);
+    int completeList(List<Integer> inboundList);
 
-    int updateList(List<Inbound> inboundList);
-
-    int deleteList(List<Integer> inboundIds);
+    int deleteList(List<Integer> inboundList);
 
     boolean existsByXxx(InboundSearchCond inboundSearchCond);
+
+    List<Inbound> selectFilteredList(InboundSearchCond inboundSearchCond);
 }

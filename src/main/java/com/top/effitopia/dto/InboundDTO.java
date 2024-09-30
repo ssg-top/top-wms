@@ -5,6 +5,10 @@ import com.top.effitopia.domain.Member;
 import com.top.effitopia.domain.Product;
 import com.top.effitopia.domain.Warehouse;
 import com.top.effitopia.enumeration.InboundStatus;
+import com.top.effitopia.exception.FutureDate;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +25,24 @@ public class InboundDTO {
     private MemberDTO memberDTO;
     private WarehouseDTO warehouseDTO;
     private VendorDTO vendorDTO;
+    private ProductDTO productDTO;
+
+    @NotNull(message = "상품수량은 필수 입력 항목입니다.")
+    @Pattern(regexp = "\\d+",message = "숫자만 입력해주세요.")
+    @Positive(message = "0 이상의 수를 입력해주세요.")
+    private Integer productQuantity;
     private LocalDate inboundRequestDate;
     private LocalDate inboundApprovedDate;
-    private LocalDate inboundExpectDate;
-    private LocalDate inboundCompletedDate;
-    private InboundStatus inboundStatus;
 
-    private Inbound toEntity(int memberId,int warehouseId) {
+    @FutureDate
+    private LocalDate inboundExpectDate;
+
+    private LocalDate inboundCompletedDate;
+    private LocalDate inboundCanceledDate;
+    private InboundStatus inboundStatus;
+    private Integer delegateRequesterId;
+
+    public Inbound toEntity(int memberId, int warehouseId) {
         return Inbound.builder()
             .id(this.id)
             .member(Member.builder()
@@ -36,31 +51,36 @@ public class InboundDTO {
             .warehouse(Warehouse.builder()
                 .id(warehouseId)
                 .build())
+            .vendor(this.vendorDTO.toEntity())
+            .product(this.productDTO.toEntity())
+            .productQuantity(this.productQuantity)
             .inboundRequestDate(this.inboundRequestDate)
             .inboundApprovedDate(this.inboundApprovedDate)
             .inboundExpectDate(this.inboundExpectDate)
             .inboundCompletedDate(this.inboundCompletedDate)
+            .inboundCanceledDate(this.inboundCanceledDate)
             .inboundStatus(this.inboundStatus)
+            .delegateRequesterId(this.delegateRequesterId)
             .build();
     }
 
-
-    private InboundDTO toDTO(Inbound inbound) {
+    public static InboundDTO fromEntity(Inbound inbound) {
         return InboundDTO.builder()
             .id(inbound.getId())
-            .memberDTO(MemberDTO.builder()
-                .id(inbound.getMember().getId())
-                .username(inbound.getMember().getUsername())
-                .build())
+            .memberDTO(MemberDTO.from(inbound.getMember()))
             .warehouseDTO(WarehouseDTO.builder()
                 .id(inbound.getWarehouse().getId())
                 .build())
+            .vendorDTO(VendorDTO.fromEntity(inbound.getVendor()))
+            .productDTO(ProductDTO.fromEntity(inbound.getProduct()))
+            .productQuantity(inbound.getProductQuantity())
             .inboundRequestDate(inbound.getInboundRequestDate())
             .inboundApprovedDate(inbound.getInboundApprovedDate())
             .inboundExpectDate(inbound.getInboundExpectDate())
             .inboundCompletedDate(inbound.getInboundCompletedDate())
+            .inboundCanceledDate(inbound.getInboundCanceledDate())
             .inboundStatus(inbound.getInboundStatus())
+            .delegateRequesterId(inbound.getDelegateRequesterId())
             .build();
     }
-
 }
