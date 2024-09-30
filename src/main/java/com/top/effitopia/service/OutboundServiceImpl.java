@@ -44,11 +44,11 @@ public class OutboundServiceImpl implements OutboundService {
         Order order = modelMapper.map(orderDTO, Order.class);
         orderMapper.updateOrder(order);
 
-        Outbound outbound = orderMapper.findOutboundByOrderId(id);
         OutboundDTO outboundDTO = OutboundDTO.builder()
+                .orderDTO(modelMapper.map(orderMapper.findById(id), OrderDTO.class))
                 .modDate(LocalDateTime.now())
                 .build();
-        outbound = modelMapper.map(outboundDTO, Outbound.class);
+        Outbound outbound = modelMapper.map(outboundDTO, Outbound.class);
         orderMapper.updateOutbound(outbound);
     }
 
