@@ -40,8 +40,8 @@ public class StockController {
                 throw new RuntimeException("페이지 응답 데이터가 null입니다.");
             }
 
-           pageResponseDTO.getDtoList().forEach(stockDTO -> log.info("result : " + stockDTO.getMemberDTO()) );
-
+           //pageResponseDTO.getDtoList().forEach(stockDTO -> log.info("result : " + stockDTO.getMemberDTO()) );
+            log.info("Controller pageRequest : " + pageRequestDTO);
             model.addAttribute("pageResponseDTO", pageResponseDTO);
             return "stock/list";
         } catch (Exception e) {

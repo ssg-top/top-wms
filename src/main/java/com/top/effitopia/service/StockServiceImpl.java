@@ -27,9 +27,10 @@ public class StockServiceImpl implements StockService{
     @Override
     public PageResponseDTO<StockDTO> getListStock(PageRequestDTO pageRequestDTO) {
         log.info("getListStock StockService................");
+        log.info("Service pageRequest : " + pageRequestDTO);
         List<Stock> stockList = stockMapper.selectListStock(pageRequestDTO);
         //List<StockDTO> stockDTOList = stockList.stream().map(stock -> modelMapper.map(stock, StockDTO.class)).collect(Collectors.toList());
-        stockList.forEach(stock -> log.info("stock : " + stock.getMember().getName()));
+        //stockList.forEach(stock -> log.info("stock : " + stock.getMember().getName()));
         List<StockDTO> stockDTOList = new ArrayList<>();
         stockList.forEach(stock -> {
             MemberDTO memberDTO = MemberDTO.builder()
@@ -65,7 +66,7 @@ public class StockServiceImpl implements StockService{
                     .modDate(stock.getModDate()).build();
 
         stockDTOList.add(stockDTO);});
-        stockDTOList.forEach(stockDTO -> log.info("dto : " + stockDTO.getMemberDTO().getName()));
+        //stockDTOList.forEach(stockDTO -> log.info("dto : " + stockDTO.getMemberDTO().getName()));
 
         int total = stockMapper.getStockCount(pageRequestDTO);
         return new PageResponseDTO<>(pageRequestDTO, stockDTOList, total);
