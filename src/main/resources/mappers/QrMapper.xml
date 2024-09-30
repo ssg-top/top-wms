@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.top.effitopia.mapper.QrMapper">
+
+  <resultMap id="Product" type="com.top.effitopia.domain.Product">
+    <id property="id" column="product_id"/>
+    <result property="name" column="product_name"/>
+    <result property="productBrand" column="product_brand"/>
+    <result property="productStorageType" column="storage_type"/>
+    <result property="productCost" column="product_cost"/>
+    <result property="productSelling" column="product_selling"/>
+    <result property="productInfo" column="product_info"/>
+    <result property="inboundBoxWidth" column="inbound_box_width"/>
+    <result property="inboundBoxLength" column="inbound_box_length"/>
+    <result property="inboundBoxHeight" column="inbound_box_height"/>
+    <result property="productWeight" column="product_weight"/>
+
+    <association property="productSubclassCategory" javaType="com.top.effitopia.domain.ProductSubclassCategory">
+      <id property="subclassId" column="subclass_id"/>
+      <result property="subclassName" column="subclass_name"/>
+      <association property="productMiddleCategory" javaType="com.top.effitopia.domain.ProductMiddleCategory">
+        <id property="middleId" column="middle_id"/>
+        <result property="middleName" column="middle_name"/>
+        <association property="productMajorCategory" javaType="com.top.effitopia.domain.ProductMajorCategory">
+          <id property="majorId" column="major_id"/>
+          <result property="majorName" column="major_name"/>
+        </association>
+      </association>
+    </association>
+  </resultMap>
+
+  <resultMap id="Member" type="com.top.effitopia.domain.Member">
+    <id property="id" column="member_id"/>
+    <result property="username" column="username"/>
+    <result property="role" column="role"/>
+  </resultMap>
+
+  <resultMap id="Warehouse" type="com.top.effitopia.domain.Warehouse">
+    <id property="id" column="warehouse_id"/>
+    <result property="code" column="warehouse_code"/>
+    <result property="name" column="warehouse_name"/>
+    <result property="phone" column="warehouse_phone"/>
+    <result property="zipCode" column="warehouse_zip_code"/>
+    <result property="roadName" column="warehouse_road_name"/>
+    <result property="lotNumber" column="warehouse_lot_number"/>
+    <result property="detailAddress" column="warehouse_detail_address"/>
+    <result property="width" column="warehouse_width"/>
+    <result property="length" column="warehouse_length"/>
+    <result property="height" column="warehouse_height"/>
+    <result property="capacity" column="warehouse_capacity"/>
+    <result property="latitude" column="warehouse_latitude"/>
+    <result property="longitude" column="warehouse_longitude"/>
+  </resultMap>
+
+  <resultMap id="Vendor" type="com.top.effitopia.domain.Vendor">
+    <id property="id" column="vendor_id"/>
+    <result property="name" column="vendor_name"/>
+  </resultMap>
+
+  <resultMap id="Inbound" type="com.top.effitopia.domain.Inbound">
+    <id property="id" column="inbound_id"/>
+    <result property="productQuantity" column="product_quantity"/>
+    <result property="inboundRequestDate" column="inbound_request_date"/>
+    <result property="inboundApprovedDate" column="inbound_approved_date"/>
+    <result property="inboundExpectDate" column="inbound_expect_date"/>
+    <result property="inboundCompletedDate" column="inbound_completed_date"/>
+    <result property="inboundCanceledDate" column="inbound_canceled_date"/>
+    <result property="inboundStatus" column="inbound_status"/>
+    <result property="delegateRequesterId" column="delegate_requester_id"/>
+
+    <association property="member" resultMap="Member"/>
+    <association property="warehouse" resultMap="Warehouse"/>
+    <association property="vendor" resultMap="Vendor"/>
+    <association property="product" resultMap="Product"/>
+  </resultMap>
+
+  <resultMap id="Qr" type="com.top.effitopia.domain.Qr">
+    <id property="qrId" column="qr_id"/>
+    <result property="qrImg" column="qr_img"/>
+    <association property="inbound" resultMap="Inbound"/>
+  </resultMap>
+
+
+  <insert id="insert" parameterType="com.top.effitopia.domain.Qr" useGeneratedKeys="true" keyProperty="qrId" keyColumn="qr_id">
+    INSERT INTO qr (inbound_id, qr_img)
+    VALUES (#{inbound.id}, #{qrImg})
+  </insert>
+
+  <select id="selectOne" parameterType="int" resultMap="Qr">
+    SELECT * FROM qr WHERE qr_id = #{qrId}
+  </select>
+
+</mapper>
