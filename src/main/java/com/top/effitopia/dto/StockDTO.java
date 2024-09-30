@@ -20,6 +20,7 @@ public class StockDTO {
     private LocalDate manufacturingDate;//제조일자
     private LocalDate expirationDate;	//유통기한
     private LocalDate regDate;	        //재고생성일
+    private LocalDate modDate;          //재고변동일
     private MemberDTO memberDTO;	    //회원Dto
     private CellDTO	cellDTO;	        //창고세부구역Dto
     private ProductDTO	productDTO;	    //상품Dto

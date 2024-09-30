@@ -4,10 +4,12 @@ package com.top.effitopia.mapper;
 import com.top.effitopia.domain.Stock;
 import com.top.effitopia.domain.StockCheck;
 import com.top.effitopia.domain.TempStock;
+import com.top.effitopia.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 재고 Mapper
@@ -19,14 +21,14 @@ public interface StockMapper {
      * 재고 테이블의 상품 리스트 조회
      * @return 재고 리스트
      */
-    List<Stock> selectListStock();
+    List<Stock> selectListStock(PageRequestDTO pageRequestDTO);
 
     /**
      * 재고 테이블의 상품 하나 조회
      * @param id
      * @return
      */
-    Stock selectOneStock(@Param("id")int id);
+    Optional<Stock> selectOneStock(@Param("id")int id);
 
     /**
      * 임시재고를 재고 테이블에 반영
@@ -35,11 +37,8 @@ public interface StockMapper {
     void updateList();
 
 
-    /**
-     * 재고실사테이블을 재고테이블에 반영
-     * @param stockCheckList
-     */
-    void applyList(List<StockCheck> stockCheckList);
+    int getStockCount(PageRequestDTO pageRequestDTO);
+
     
     
     
@@ -68,7 +67,11 @@ public interface StockMapper {
      * 임시재고 테이블의 상품 리스트 조회
      * @return : 임시재고 리스트
      */
-    List<TempStock>	selectListTempStock();			
+    List<TempStock>	selectListTempStock(PageRequestDTO pageRequestDTO);
+
+    int getTempStockCount(PageRequestDTO pageRequestDTO);
+
+
 
     
 }

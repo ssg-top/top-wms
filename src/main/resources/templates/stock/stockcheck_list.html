@@ -236,7 +236,7 @@
                   
                     <div class="col-sm-12">
                         <div class="bg-light align-items-center rounded p-4">
-                            <h6 class="mb-3">재고 실사</h6>
+                            <h6 class="mb-3">재고 실사 조회</h6>
                           <form>
                             <div class="row mb-2">
                                 <label for="membername" class="col-sm-2 align-self-center col-form-label">사업자 이름</label>
@@ -286,12 +286,13 @@
                                 <tr class="text-dark">
                                     <th scope="col"><input type="checkbox" class="form-check-input" id="selectAll"></th>
                                     <th scope="col">분류</th>
-                                    <th scope="col">상품 이름</th>
-                                    <th scope="col">상품 수량</th>
+                                    <th scope="col">상품이름</th>
+                                    <th scope="col">상품수량</th>
+                                    <th scope="col">실사수량</th>
                                     <th scope="col">사업자</th>
                                     <th scope="col">창고명</th>
-                                    <th scope="col">창고위치</th>
-                                    <th scope="col">유통기한</th>
+                                    <th scope="col">반영상태</th>
+                                    <th scope="col">반영일자</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -300,9 +301,10 @@
                                     <td>식품/냉동</td>
                                     <td>물만두</td>
                                     <td>50</td>
+                                    <td>100</td>
                                     <td>네이버</td>
                                     <td>창고1</td>
-                                    <td>경기도 성남시</td>
+                                    <td>반영완료</td>
                                     <td>2024-09-10</td>
                                 </tr>
                                 <tr>
@@ -310,9 +312,21 @@
                                     <td>식품/냉동</td>
                                     <td>물만두</td>
                                     <td>50</td>
+                                    <td>70</td>
                                     <td>네이버</td>
                                     <td>창고1</td>
-                                    <td>경기도 성남시</td>
+                                    <td>반영대기</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input row-checkbox"></td>
+                                    <td>식품/냉동</td>
+                                    <td>물만두</td>
+                                    <td>50</td>
+                                    <td>100</td>
+                                    <td>네이버</td>
+                                    <td>창고1</td>
+                                    <td>반영완료</td>
                                     <td>2024-09-10</td>
                                 </tr>
                                 <tr>
@@ -320,19 +334,10 @@
                                     <td>식품/냉동</td>
                                     <td>물만두</td>
                                     <td>50</td>
+                                    <td>100</td>
                                     <td>네이버</td>
                                     <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="form-check-input row-checkbox"></td>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
+                                    <td>반영완료</td>
                                     <td>2024-09-10</td>
         
                                 </tr>
@@ -341,10 +346,11 @@
                                     <td>식품/냉동</td>
                                     <td>물만두</td>
                                     <td>50</td>
+                                    <td>100</td>
                                     <td>네이버</td>
                                     <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
+                                    <td>반영대기</td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -374,7 +380,7 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">실사 등록</h6>
+                        <h6 class="mb-0">실사 반영</h6>
                     </div>
                     <form id="stockCheckForm>
                         <div class="row mb-2">
@@ -398,7 +404,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="submit" class="btn btn-primary">실사 등록</button>
+                            <button type="submit" class="btn btn-primary">실사 수정</button>
+                            <button type="submit" class="btn btn-primary">실사 삭제</button>
+                            <button type="submit" class="btn btn-primary">실사 반영</button>
                         </div>
                     </form>
                 </div>

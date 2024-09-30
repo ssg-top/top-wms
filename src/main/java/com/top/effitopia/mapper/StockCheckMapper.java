@@ -1,6 +1,7 @@
 package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.StockCheck;
+import com.top.effitopia.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,7 +36,7 @@ public interface StockCheckMapper {
      * 재고실사 리스트 조회
      * @return
      */
-    List<StockCheck> selectListStockCheck();
+    List<StockCheck> selectListStockCheck(PageRequestDTO pageRequestDTO);
 
     /**
      * 재고실사 하나 조회
@@ -60,5 +61,13 @@ public interface StockCheckMapper {
      * @param longList
      */
     void	deleteListStockCheck(List<Integer> longList);
+
+    /**
+     * 재고실사테이블을 재고테이블에 반영
+     * @param stockCheckList
+     */
+    void applyList(List<StockCheck> stockCheckList);
+
+    int getStockCheckCount(PageRequestDTO pageRequestDTO);
 
 }

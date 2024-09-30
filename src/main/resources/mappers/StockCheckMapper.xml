@@ -3,6 +3,50 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.StockCheckMapper">
+
+    <resultMap id="StockCheck" type="StockCheck">
+        <id property="id" column="stock_check_id"/>
+        <result property="checkStatus" column="check_state"/>
+        <result property="checkComment" column="check_comment"/>
+        <result property="checkAmount" column="check_amount"/>
+        <result property="checkDate" column="check_date"/>
+        <result property="applyDate" column="apply_date"/>
+
+
+        <association property="stock" javaType="Stock">
+            <id property="id" column="stock_id"/>
+            <result property="stockAmount" column="amount"/>
+            <result property="manufacturingDate" column="manufacturing_date"/>
+            <result property="expirationDate" column="expiration_date"/>
+            <association property="member" javaType="Member">
+                <id property="id" column="member_id"/>
+                <result property="name" column="name"/>
+                <result property="phone" column="phone"/>
+                <result property="email" column="email"/>
+                <result property="businessNumber" column="business_number"/>
+            </association>
+            <association property="product" column="product_id" resultMap="Product"/>
+        </association>
+
+
+        <association property="cell" javaType="Cell">
+            <id property="id" column="cell_id"/>
+            <result property="capacity" column="cell_capacity"/>
+            <association property="warehouse" javaType="Warehouse">
+                <id property="id" column="warehouse_id"/>
+                <result property="code" column="warehouse_code"/>
+                <result property="name" column="warehouse_name"/>
+                <result property="phone" column="warehouse_phone"/>
+                <result property="zipCode" column="warehouse_zip_code"/>
+                <result property="roadName" column="warehouse_road_name"/>
+                <result property="lotNumber" column="warehouse_lot_number"/>
+                <result property="detailAddress" column="warehouse_detail_address"/>
+            </association>
+        </association>
+
+    </resultMap>
+
+
     <insert id="insertStockCheck">
         insert into stock_check (check_comment, check_amount, stock_id, cell_id )
         values (#{checkComment}, #{checkAmount}, #{stock.id}, #{cell.id})
@@ -16,13 +60,31 @@
         delete from stock_check where stock_check_id = #{id}
     </delete>
 
-    <select id="selectListStockCheck">
+    <select id="selectListStockCheck" resultMap="StockCheck">
         select * from stock_check sc
-            join stock s on sc.stock_id = s.stock_id
-            join cell c on sc.cell_id = c.cell_id
+        join stock s on sc.stock_id = s.stock_id
+        join member m on s.member_id = m.member_id
+        join cell c on sc.cell_id = c.cell_id
+        join product p on s.product_id = p.product_id
+        <where>
+            <if test="searchCond != null">
+                <if test="searchCond.memberName != null">
+                    AND m.name LIKE CONCAT('%', #{searchCond.memberName}, '%')
+                </if>
+                <if test="searchCond.wareHouseName != null">
+                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouseName}, '%')
+                </if>
+                <if test="searchCond.productName != null">
+                    AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+                </if>
+                <if test="searchCond.startDate != null  and searchCond.endDate != null">
+                    AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+                </if>
+            </if>
+        </where>
     </select>
 
-    <select id="selectOneStockCheck">
+    <select id="selectOneStockCheck" resultMap="StockCheck">
         select * from stock_check sc
             join stock s on sc.stock_id = s.stock_id
             join cell c on sc.cell_id = c.cell_id
@@ -41,5 +103,34 @@
         </foreach>
     </delete>
 
+    <update id="applyList">
+        <foreach collection="stockCheckList" item="item">
+            call update_stockcheck_to_stock(item.id, item.stock.id, item.checkAmount)
+        </foreach>
 
+    </update>
+
+    <select id="getStockCheckCount">
+        select count(stock_check_id) from stock_check sc
+        join stock s on sc.stock_id = s.stock_id
+        join member m on s.member_id = m.member_id
+        join cell c on sc.cell_id = c.cell_id
+        join product p on s.product_id = p.product_id
+        <where>
+            <if test="searchCond != null">
+                <if test="searchCond.memberName != null">
+                    AND m.name LIKE CONCAT('%', #{searchCond.memberName}, '%')
+                </if>
+                <if test="searchCond.wareHouseName != null">
+                    AND w.warehouse_name LIKE CONCAT('%', #{searchCond.wareHouseName}, '%')
+                </if>
+                <if test="searchCond.productName != null">
+                    AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
+                </if>
+                <if test="searchCond.startDate != null  and searchCond.endDate != null">
+                    AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+                </if>
+            </if>
+        </where>
+    </select>
 </mapper>
