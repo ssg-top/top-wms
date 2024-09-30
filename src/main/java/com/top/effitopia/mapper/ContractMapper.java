@@ -15,8 +15,8 @@ public interface ContractMapper {
     List<Contract> selectListAll(PageRequestDTO pageRequestDTO);
     List<Contract> selectListByStatus(PageRequestDTO pageRequestDTO);
     int update(Contract contract);
-    void updateApprovalList(List<Contract> contractList);
-    void updateRejectList(List<Contract> contractList);
+    void updateApprovalList(List<Integer> id);
+    void updateRejectList(List<Integer> id);
     int getCount(PageRequestDTO pageRequestDTO);
     WarehouseCost getOne(Integer id);
 }

@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -149,24 +149,16 @@ public class ContractMapperTest {
 
     @Test
     public void updateApprovalListTest(){
-        List<Contract> contractList = new ArrayList<>();
+        List<Integer> id =  Arrays.asList(4,5,6);
 
-        contractList.add(Contract.builder().id(3).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(4).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(5).status(ContractStatus.REQUEST).build());
-
-        contractMapper.updateApprovalList(contractList);
+        contractMapper.updateApprovalList(id);
     }
 
     @Test
     public void updateRejectListTest(){
-        List<Contract> contractList = new ArrayList<>();
+        List<Integer> id =  Arrays.asList(1,2,3);
 
-        contractList.add(Contract.builder().id(3).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(4).status(ContractStatus.REQUEST).build());
-        contractList.add(Contract.builder().id(5).status(ContractStatus.REQUEST).build());
-
-        contractMapper.updateRejectList(contractList);
+        contractMapper.updateRejectList(id);
     }
 
     @Test

@@ -53,19 +53,19 @@
 
     <update id="updateApprovalList" parameterType="java.util.List">
         UPDATE contract
-        SET contract_status='APPROVAL'
+        SET contract_status='APPROVAL', mod_date = now()
         WHERE contract_id IN
         <foreach item="contract" collection="list" open="("  close=")" separator=",">
-            #{contract.id}
+            #{contract}
         </foreach>
     </update>
 
     <update id="updateRejectList" parameterType="java.util.List">
         UPDATE contract
-        SET contract_status='REJECT'
+        SET contract_status='REJECT', mod_date = now()
         WHERE contract_id IN
         <foreach item="contract" collection="list" open="("  close=")" separator=",">
-            #{contract.id}
+            #{contract}
         </foreach>
     </update>
 
