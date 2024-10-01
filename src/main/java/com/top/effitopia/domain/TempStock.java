@@ -19,8 +19,9 @@ public class TempStock {
     private LocalDate manufacturingDate;//제조일자
     private LocalDate expirationDate;   //유통기한
     private LocalDate regDate;          //재고생성일
+    private boolean tempStockState;     //임시재고 상태
     private Member member;              //회원정보
     private Cell	cell;               //창고세부구역
     private Product	product;            //상품정보
-    private boolean tempStockState;     //임시재고 상태
+
 }
