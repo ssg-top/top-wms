@@ -29,8 +29,8 @@ public class QrServiceImpl implements QrService {
     }
 
     @Override
-    public Optional<QrDTO> get(int qrId) {
-        Optional<Qr> getQr = qrMapper.selectOne(qrId);
+    public Optional<QrDTO> get(int inboundId) {
+        Optional<Qr> getQr = qrMapper.selectOne(inboundId);
         return getQr.map(QrDTO::fromEntity);
     }
 
@@ -43,7 +43,6 @@ public class QrServiceImpl implements QrService {
             .append("Product: ").append(inboundDTO.getProductDTO().getName()).append("\n")
             .append("Quantity: ").append(inboundDTO.getProductQuantity()).append("\n")
             .append("Member: ").append(inboundDTO.getMemberDTO().getUsername()).append("\n")
-            .append("Warehouse Location: ").append(inboundDTO.getWarehouseDTO().getRoadName()).append("\n")
             .append("Vendor: ").append(inboundDTO.getVendorDTO().getName()).append("\n")
             .append("Inbound Request Date: ").append(inboundDTO.getInboundRequestDate()).append("\n")
             .append("Inbound Approved Date: ").append(inboundDTO.getInboundApprovedDate()).append("\n")
@@ -55,8 +54,9 @@ public class QrServiceImpl implements QrService {
             BitMatrix bitMatrix = new QRCodeWriter().encode(qrData, BarcodeFormat.QR_CODE, 300, 300);
             BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
 
-            String qrImgPath = "/img/qr/inbound_" + inboundDTO.getId() + ".png";
+            String qrImgPath = "/Users/parktaehwan/Desktop/study/spring/top-wms/src/main/resources/static/img/qr/inbound_" + inboundDTO.getId() + ".png";
             ImageIO.write(qrImage, "png", new File(qrImgPath));
+            // 이미지 경로는 본인 경로에 맞춰서 수정해야함
 
             return qrImgPath;
         } catch (Exception e) {

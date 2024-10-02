@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.InboundMapper">
 
   <resultMap id="Product" type="Product">
@@ -82,21 +82,40 @@
     <association property="product" resultMap="Product"/>
   </resultMap>
 
+  <select id="selectOne" parameterType="Inbound" resultMap="Inbound">
+    SELECT * FROM inbound
+    WHERE inbound_id = #{id};
+  </select>
 
-  <select id="selectAllList" parameterType="Inbound" resultMap="Inbound">
+  <insert id="insert" parameterType="Inbound" useGeneratedKeys="true" keyProperty="id"
+    keyColumn="inbound_id">
+    INSERT INTO inbound(member_id, warehouse_id, vendor_id, product_id, product_quantity,
+    inbound_request_date, inbound_expect_date, inbound_status, delegate_requester_id) VALUES
+    (#{member.id}, #{warehouse.id}, #{vendor.id}, #{product.id}, #{productQuantity},
+    #{inboundRequestDate}, #{inboundExpectDate}, #{inboundStatus}, #{delegateRequesterId})
+  </insert>
+
+  <update id="update" parameterType="Inbound">
+    UPDATE inbound
+    SET product_quantity = #{productQuantity}, inbound_approved_date = #{inboundApprovedDate}
+    WHERE inbound_id = #{id};
+  </update>
+
+  <select id="selectAllList" parameterType="com.top.effitopia.dto.PageRequestDTO"
+    resultMap="Inbound">
     SELECT
-    maj.major_name,
-    p.product_brand,
-    p.product_name,
-    i.product_quantity,
-    v.vendor_name,
-    w.warehouse_name,
-    m.username,
-    d.username,
-    i.inbound_request_date,
-    i.inbound_approved_date,
-    i.inbound_expect_date,
-    i.inbound_completed_date
+    maj.major_name AS major_name,
+    p.product_brand AS product_name,
+    p.product_name AS product_name,
+    i.product_quantity AS product_quantity,
+    v.vendor_name AS vendor_name,
+    w.warehouse_name AS warehouse_name,
+    m.username AS username,
+    i.delegate_requester_id AS delegate_requester_id,
+    i.inbound_request_date AS inbound_request_date,
+    i.inbound_approved_date AS inbound_approved_date,
+    i.inbound_expect_date AS inbound_expect_date,
+    i.inbound_completed_date AS inbound_completed_date
     FROM inbound i
     JOIN member m ON i.member_id = m.member_id
     LEFT JOIN member d ON i.delegate_requester_id = d.member_id
@@ -106,30 +125,56 @@
     JOIN product_subclass_category sub ON p.subclass_id = sub.subclass_id
     JOIN product_middle_category mid ON sub.middle_id = mid.middle_id
     JOIN product_major_category maj ON mid.major_id = maj.major_id
-    ORDER BY i.inbound_request_date DESC;
+    <where>
+      <if test="searchCond != null">
+        <if test="searchCond.memberDTO != null and searchCond.memberDTO.id != null">
+          AND m.member_id = #{searchCond.memberDTO.id}
+        </if>
+        <if test="searchCond.warehouseDTO != null and searchCond.warehouseDTO.id != null">
+          AND w.warehouse_id = #{searchCond.warehouseDTO.id}
+        </if>
+        <if test="searchCond.productDTO != null and searchCond.productDTO.id != null">
+          AND p.product_id = #{searchCond.productDTO.id}
+        </if>
+        <if test="searchCond.vendorDTO != null and searchCond.vendorDTO.id != null">
+          AND v.vendor_id = #{searchCond.vendorDTO.id}
+        </if>
+        <if test="searchCond.inboundRequestDate != null">
+          AND i.inbound_request_date = #{searchCond.inboundRequestDate}
+        </if>
+        <if test="searchCond.inboundApprovedDate != null">
+          AND i.inbound_approved_date = #{searchCond.inboundApprovedDate}
+        </if>
+        <if test="searchCond.inboundExpectDate != null">
+          AND i.inbound_expect_date = #{searchCond.inboundExpectDate}
+        </if>
+        <if test="searchCond.inboundCompletedDate != null">
+          AND i.inbound_completed_date = #{searchCond.inboundCompletedDate}
+        </if>
+        <if test="searchCond.inboundStatus != null">
+          AND i.inbound_status = #{searchCond.inboundStatus}
+        </if>
+        <if test="searchCond.productMajorCategory != null and searchCond.productMajorCategory.id != null">
+          AND maj.major_id = #{searchCond.productMajorCategory.id}
+        </if>
+        <if test="searchCond.productMiddleCategory != null and searchCond.productMiddleCategory.id != null">
+          AND mid.middle_id = #{searchCond.productMiddleCategory.id}
+        </if>
+        <if test="searchCond.productSubclassCategory != null and searchCond.productSubclassCategory.id != null">
+          AND sub.subclass_id = #{searchCond.productSubclassCategory.id}
+        </if>
+      </if>
+    </where>
+
+    ORDER BY i.inbound_request_date DESC
+    LIMIT #{skip}, #{size}
   </select>
-
-  <select id="selectOne" parameterType="Inbound" resultMap="Inbound">
-    SELECT * FROM inbound
-    WHERE inbound_id = #{id};
-  </select>
-
-  <insert id="insert" parameterType="Inbound" useGeneratedKeys="true" keyProperty="id" keyColumn="inbound_id">
-    INSERT INTO inbound(member_id, warehouse_id, vendor_id, product_id, product_quantity, inbound_request_date, inbound_expect_date, inbound_status, delegate_requester_id) VALUES
-    (#{member.id}, #{warehouse.id}, #{vendor.id}, #{product.id}, #{productQuantity}, #{inboundRequestDate}, #{inboundExpectDate}, #{inboundStatus}, #{delegateRequesterId})
-  </insert>
-
-  <update id="update" parameterType="Inbound">
-    UPDATE inbound
-    SET product_quantity = #{productQuantity}, inbound_approved_date = #{inboundApprovedDate}
-    WHERE inbound_id = #{id};
-  </update>
 
   <update id="approveList" parameterType="List">
     UPDATE inbound
-    SET inbound_approved_date = now(), inbound_status = 'INBOUND_APPROVED'
+    SET inbound_approved_date = NOW(), inbound_status = 'INBOUND_APPROVED'
     WHERE inbound_id IN
-    <foreach collection="list" item="item" open="(" close=")" separator=",">
+    <foreach collection="list" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
   </update>
@@ -152,6 +197,56 @@
     </foreach>
   </update>
 
+  <select id="getCount" parameterType="com.top.effitopia.dto.InboundSearchCond">
+    SELECT COUNT(*)
+    FROM inbound i
+    JOIN member m ON i.member_id = m.member_id
+    LEFT JOIN member d ON i.delegate_requester_id = d.member_id
+    JOIN warehouse w ON i.warehouse_id = w.warehouse_id
+    JOIN vendor v ON i.vendor_id = v.vendor_id
+    JOIN product p ON i.product_id = p.product_id
+    JOIN product_subclass_category sub ON p.subclass_id = sub.subclass_id
+    JOIN product_middle_category mid ON sub.middle_id = mid.middle_id
+    JOIN product_major_category maj ON mid.major_id = maj.major_id
+    <where>
+      <if test="memberDTO != null and memberDTO.id != null">
+        AND m.member_id = #{memberDTO.id}
+      </if>
+      <if test="warehouseDTO != null and warehouseDTO.id != null">
+        AND w.warehouse_id = #{warehouseDTO.id}
+      </if>
+      <if test="productDTO != null and productDTO.id != null">
+        AND p.product_id = #{productDTO.id}
+      </if>
+      <if test="vendorDTO != null and vendorDTO.id != null">
+        AND v.vendor_id = #{vendorDTO.id}
+      </if>
+      <if test="inboundRequestDate != null">
+        AND i.inbound_request_date = #{inboundRequestDate}
+      </if>
+      <if test="inboundApprovedDate != null">
+        AND i.inbound_approved_date = #{inboundApprovedDate}
+      </if>
+      <if test="inboundExpectDate != null">
+        AND i.inbound_expect_date = #{inboundExpectDate}
+      </if>
+      <if test="inboundCompletedDate != null">
+        AND i.inbound_completed_date = #{inboundCompletedDate}
+      </if>
+      <if test="inboundStatus != null">
+        AND i.inbound_status = #{inboundStatus}
+      </if>
+      <if test="productMajorCategory != null and productMajorCategory.id != null">
+        AND maj.major_id = #{productMajorCategory.id}
+      </if>
+      <if test="productMiddleCategory != null and productMiddleCategory.id != null">
+        AND mid.middle_id = #{productMiddleCategory.id}
+      </if>
+      <if test="productSubclassCategory != null and productSubclassCategory.id != null">
+        AND sub.subclass_id = #{productSubclassCategory.id}
+      </if>
+    </where>
+  </select>
 
 
 </mapper>

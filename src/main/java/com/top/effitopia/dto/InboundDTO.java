@@ -28,7 +28,7 @@ public class InboundDTO {
     private ProductDTO productDTO;
 
     @NotNull(message = "상품수량은 필수 입력 항목입니다.")
-    @Pattern(regexp = "\\d+",message = "숫자만 입력해주세요.")
+    //@Pattern(regexp = "\\d+",message = "숫자만 입력해주세요.")
     @Positive(message = "0 이상의 수를 입력해주세요.")
     private Integer productQuantity;
     private LocalDate inboundRequestDate;
@@ -51,8 +51,8 @@ public class InboundDTO {
             .warehouse(Warehouse.builder()
                 .id(warehouseId)
                 .build())
-            .vendor(this.vendorDTO.toEntity())
-            .product(this.productDTO.toEntity())
+            .vendor(this.vendorDTO != null ? this.vendorDTO.toEntity() : null)  // Null 처리
+            .product(this.productDTO != null ? this.productDTO.toEntity() : null)  // Null 처리
             .productQuantity(this.productQuantity)
             .inboundRequestDate(this.inboundRequestDate)
             .inboundApprovedDate(this.inboundApprovedDate)
@@ -67,12 +67,16 @@ public class InboundDTO {
     public static InboundDTO fromEntity(Inbound inbound) {
         return InboundDTO.builder()
             .id(inbound.getId())
-            .memberDTO(MemberDTO.from(inbound.getMember()))
-            .warehouseDTO(WarehouseDTO.builder()
+            .memberDTO(inbound.getMember() != null ? MemberDTO.builder()
+                .id(inbound.getMember().getId())
+                .name(inbound.getMember().getName())
+                .zipCode(inbound.getMember().getAddress() != null ? inbound.getMember().getAddress().getZipCode() : null)
+                .build() : null)
+            .warehouseDTO(inbound.getWarehouse() != null ? WarehouseDTO.builder()
                 .id(inbound.getWarehouse().getId())
-                .build())
-            .vendorDTO(VendorDTO.fromEntity(inbound.getVendor()))
-            .productDTO(ProductDTO.fromEntity(inbound.getProduct()))
+                .build() : null)
+            .vendorDTO(inbound.getVendor() != null ? VendorDTO.fromEntity(inbound.getVendor()) : null)  // Null 처리
+            .productDTO(inbound.getProduct() != null ? ProductDTO.fromEntity(inbound.getProduct()) : null)  // Null 처리
             .productQuantity(inbound.getProductQuantity())
             .inboundRequestDate(inbound.getInboundRequestDate())
             .inboundApprovedDate(inbound.getInboundApprovedDate())

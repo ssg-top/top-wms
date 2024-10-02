@@ -1,0 +1,61 @@
+.btn-white {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #ccc !important;
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa !important;
+}
+
+.btn-group > button {
+  margin-right: 10px;
+}
+
+.form-select-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.table-hover {
+}
+
+.table td, .table th {
+  border-right: 1px dotted #ccc;
+}
+
+.table td:last-child, .table th:last-child {
+  border-right: none;
+}
+
+.table th{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.th, td {
+  min-width: 50px;
+  white-space: nowrap;
+}
+
+/*
+.modal-dialog {
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+.modal-content {
+  padding: 30px; !* 모달 창 안의 패딩 *!
+  border-radius: 20px; !* 모서리 둥글게 *!
+}
+
+.modal-body {
+  margin: 20px; !* 모달 창 안의 내용과 경계 사이의 마진 *!
+}*/

@@ -33,10 +33,11 @@ public class ProductDTO {
     public Product toEntity() {
         return Product.builder()
             .id(this.id)
-            .productSubclassCategory(ProductSubclassCategory.builder()
-                .id(this.productSubclassCategory.getId())
-                .name(this.productSubclassCategory.getName())
-                .build())
+            .productSubclassCategory(this.productSubclassCategory != null ?
+                ProductSubclassCategory.builder()
+                    .id(this.productSubclassCategory.getId())
+                    .name(this.productSubclassCategory.getName())
+                    .build() : null)
             .name(this.name)
             .productBrand(this.productBrand)
             .productStorageType(this.productStorageType)
