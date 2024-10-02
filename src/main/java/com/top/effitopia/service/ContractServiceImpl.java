@@ -4,18 +4,15 @@ import com.top.effitopia.domain.Contract;
 import com.top.effitopia.domain.Member;
 import com.top.effitopia.domain.Warehouse;
 import com.top.effitopia.domain.WarehouseCost;
-import com.top.effitopia.dto.ContractDTO;
-import com.top.effitopia.dto.PageRequestDTO;
-import com.top.effitopia.dto.PageResponseDTO;
-import com.top.effitopia.dto.WarehouseCostDTO;
+import com.top.effitopia.dto.*;
 import com.top.effitopia.mapper.ContractMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,9 +31,9 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
-    public PageResponseDTO getListAll(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<ContractDTO> getListAll(PageRequestDTO<ContractDTO> pageRequestDTO) {
         List<Contract> contractList = contractMapper.selectListAll(pageRequestDTO);
-        List<ContractDTO> contractDTOList = contractList.stream().map(vo->modelMapper.map(vo, ContractDTO.class)).collect(Collectors.toList());
+        List<ContractDTO> contractDTOList = changedListDTO(contractList);
         int total = contractMapper.getCount(pageRequestDTO);
         PageResponseDTO pageResponseDTO = PageResponseDTO
                 .<ContractDTO>withAll()
@@ -94,9 +91,58 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
-    public Optional<WarehouseCostDTO> get(Integer id) {
+    public WarehouseCostDTO get(Integer id) {
         WarehouseCost warehouseCost = contractMapper.getOne(id);
-        WarehouseCostDTO warehouseCostDTO = modelMapper.map(warehouseCost, WarehouseCostDTO.class);
-        return Optional.ofNullable(warehouseCostDTO);
+        log.info(warehouseCost);
+        Warehouse warehouse = warehouseCost.getWarehouse();
+        log.info(warehouse);
+        Member member = warehouse.getMember();
+        log.info(member);
+
+        MemberDTO memberDTO = MemberDTO.from(member);
+        log.info(memberDTO);
+
+        WarehouseDTO warehouseDTO = modelMapper.map(warehouse, WarehouseDTO.class);
+
+        warehouseDTO.setMemberDTO(memberDTO);
+
+        WarehouseCostDTO warehouseCostDTO = modelMapper.map(warehouseCost,WarehouseCostDTO.class);
+        warehouseCostDTO.setWarehouseDTO(warehouseDTO);
+
+        return warehouseCostDTO;
+    }
+
+    @Override
+    public Integer check(String name) {
+        Integer id = contractMapper.checkMember(name);
+        return id;
+    }
+
+    @Override
+    public Integer getUserId(String name){
+        Integer id = contractMapper.selectUserId(name);
+        return id;
+    }
+
+    public List<ContractDTO> changedListDTO(List<Contract> contractList) {
+        List<ContractDTO> contractDTOList = new ArrayList<>();
+        contractList.stream()
+                .forEach(contract -> {
+                    Warehouse warehouse = contract.getWarehouse();
+                    log.info(warehouse);
+                    WarehouseDTO warehouseDTO = modelMapper.map(warehouse, WarehouseDTO.class);
+                    log.info(warehouseDTO);
+                    Member member = contract.getMember();
+                    MemberDTO memberDTO =  modelMapper.map(member, MemberDTO.class);
+                    log.info(memberDTO);
+                    ContractDTO contractDTO = modelMapper.map(contract, ContractDTO.class);
+                    log.info(contractDTO    );
+                    contractDTO.setWarehouseDTO(warehouseDTO);
+                    contractDTO.setMemberDTO(memberDTO);
+
+                    contractDTOList.add(contractDTO);
+                });
+
+        return contractDTOList;
     }
 }
