@@ -36,7 +36,9 @@ public class WarehouseServiceTest {
 
     @Test
     public void getWarehouseListTest(){
-
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(5).build();
+        PageResponseDTO<WarehouseDTO> responseDTO = warehouseService.getWarehouseList(pageRequestDTO);
+        responseDTO.getDtoList().forEach(log::info);
     }
 
     @Test
@@ -60,7 +62,7 @@ public class WarehouseServiceTest {
 
     @Test
     public void getModifyTest(){
-        warehouseType = WarehouseType.builder().id(1).type("냉동").build();
+        WarehouseTypeDTO  warehouseTypeDTO= WarehouseTypeDTO.builder().id(1).type("냉동").build();
 
         memberDTO = memberDTO.builder()
                 .id(2)
@@ -81,7 +83,7 @@ public class WarehouseServiceTest {
         warehouseDTO = WarehouseDTO.builder().
                 id(35).
                 memberDTO(memberDTO).
-                warehouseType(warehouseType).
+                warehouseType(warehouseTypeDTO).
                 code("ccccccc").
                 name("nnnnnn").
                 phone("437249327437294").
@@ -103,7 +105,7 @@ public class WarehouseServiceTest {
 
     @Test
     public void saveTest(){
-        warehouseType = WarehouseType.builder().id(1).type("냉동").build();
+        WarehouseTypeDTO warehouseTypeDTO = WarehouseTypeDTO.builder().id(1).type("냉동").build();
 
         memberDTO = memberDTO.builder()
                 .id(2)
@@ -123,7 +125,7 @@ public class WarehouseServiceTest {
 
         warehouseDTO = WarehouseDTO.builder().
                 memberDTO(memberDTO).
-                warehouseType(warehouseType).
+                warehouseType(warehouseTypeDTO).
                 code("ccccccc").
                 name("nnnnnn").
                 phone("437249327437294").
@@ -146,5 +148,11 @@ public class WarehouseServiceTest {
     public void getTypeListTest(){
         List<WarehouseTypeDTO> dtoList = warehouseService.getTypeList();
         log.info(dtoList);
+    }
+
+    @Test
+    public void getAssignableWarehouseManagerListTest(){
+        List<MemberDTO> memberDTOList = warehouseService.getAssignableWarehouseManagerList();
+        log.info(memberDTOList);
     }
 }

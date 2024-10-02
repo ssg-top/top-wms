@@ -3,10 +3,9 @@ package com.top.effitopia.dto;
 import lombok.*;
 
 @Data
-@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class WarehouseTypeDTO {
     private Integer id;
     private String type;
