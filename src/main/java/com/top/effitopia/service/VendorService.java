@@ -1,6 +1,8 @@
 package com.top.effitopia.service;
 
 import com.top.effitopia.dto.InboundDTO;
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.PageResponseDTO;
 import com.top.effitopia.dto.VendorDTO;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +17,7 @@ public interface VendorService {
 
     Optional<VendorDTO> get(int vendorId);
 
-    List<VendorDTO> getList();
+    PageResponseDTO<VendorDTO> getList(PageRequestDTO<VendorDTO> pageRequestDTO);
 
     void saveList(List<VendorDTO> vendorDTOList);
 

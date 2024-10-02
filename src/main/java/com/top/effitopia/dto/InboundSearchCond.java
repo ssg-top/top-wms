@@ -1,5 +1,8 @@
 package com.top.effitopia.dto;
 
+import com.top.effitopia.domain.ProductMajorCategory;
+import com.top.effitopia.domain.ProductMiddleCategory;
+import com.top.effitopia.domain.ProductSubclassCategory;
 import com.top.effitopia.enumeration.InboundStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +26,8 @@ public class InboundSearchCond {
     private LocalDate inboundExpectDate;
     private LocalDate inboundCompletedDate;
     private InboundStatus inboundStatus;
+    private ProductMajorCategory productMajorCategory;
+    private ProductMiddleCategory productMiddleCategory;
+    private ProductSubclassCategory productSubclassCategory;
+
 }

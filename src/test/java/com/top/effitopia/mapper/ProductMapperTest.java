@@ -25,7 +25,7 @@ class ProductMapperTest {
     void 상품조회() {
         // Given
         ProductSearchCond searchCond = ProductSearchCond.builder()
-            .productName("고기")
+            .name("고기")
             .productBrand(null)
             .majorCategoryId(1)
             .middleCategoryId(null)
@@ -51,7 +51,7 @@ class ProductMapperTest {
     void 검색조건_상품개수() {
         // Given
         ProductSearchCond searchCond = ProductSearchCond.builder()
-            //.productName("과일")
+            .name("과일")
             .build();
 
         // When

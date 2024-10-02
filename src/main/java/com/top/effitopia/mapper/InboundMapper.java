@@ -2,7 +2,7 @@ package com.top.effitopia.mapper;
 
 import com.top.effitopia.domain.Inbound;
 import com.top.effitopia.dto.InboundSearchCond;
-import java.awt.print.Pageable;
+import com.top.effitopia.dto.PageRequestDTO;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,7 +18,9 @@ public interface InboundMapper {
 
     Optional<Inbound> selectOne(int inboundId);
 
-    List<Inbound> selectAllList();
+    List<Inbound> selectAllList(PageRequestDTO<InboundSearchCond> pageRequestDTO);
+
+    int getCount(InboundSearchCond searchCond);
 
     int approveList(List<Integer> inboundList);
 
@@ -26,7 +28,4 @@ public interface InboundMapper {
 
     int deleteList(List<Integer> inboundList);
 
-    boolean existsByXxx(InboundSearchCond inboundSearchCond);
-
-    List<Inbound> selectFilteredList(InboundSearchCond inboundSearchCond);
 }
