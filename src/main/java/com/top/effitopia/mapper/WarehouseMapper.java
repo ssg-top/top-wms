@@ -6,6 +6,7 @@ import com.top.effitopia.domain.Warehouse;
 import com.top.effitopia.domain.WarehouseType;
 import com.top.effitopia.dto.CellDTO;
 import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.WarehouseUtilizationDTO;
 import com.top.effitopia.dto.WarehouseDTO;
 import com.top.effitopia.enumeration.MemberStatus;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,5 +24,7 @@ public interface WarehouseMapper {
     int insert(Warehouse warehouse);
     int getCount(PageRequestDTO pageRequestDTO);
     List<WarehouseType> selectAllType();
+    List<WarehouseUtilizationDTO> getWarehouseUtilizationList();
+    double getTotalUtilizationAverage();
     List<Member> selectAssignableWarehouseManagerList();
 }

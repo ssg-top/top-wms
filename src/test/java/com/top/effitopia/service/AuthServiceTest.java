@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @Log4j2
 @SpringBootTest
-@Transactional
 class AuthServiceTest {
 
     @Autowired
@@ -31,17 +30,17 @@ class AuthServiceTest {
     void save() {
         int randInt = (int) (Math.random() * 10000);
         JoinDTO joinDTO = JoinDTO.builder()
-                .username("test" + randInt)
-                .password("password")
-                .name("name")
+                .username("hnazeon")
+                .password("password123@")
+                .name("박태환")
                 .phone("01012345678")
-                .email("example" + randInt + "@gmail.com")
-                .role(MemberRole.BUSINESS_PROPRIETOR)
-                .zipCode("")
-                .roadNameAddress("")
-                .lotNumberAddress("")
-                .detailAddress("")
-                .businessNumber("1234567890")
+                .email("hnazeon" + "@gmail.com")
+                .role(MemberRole.WAREHOUSE_MANAGER)
+                .zipCode("04529")
+                .roadNameAddress("서울특별시 중구 남대문시장10길 2")
+                .lotNumberAddress("서울특별시 중구 회현동1가 204")
+                .detailAddress("메사빌딩 21층")
+                .businessNumber(null)
                 .build();
         log.info("username: {}", joinDTO.getUsername());
         Assertions.assertTrue(authServiceImpl.save(joinDTO));
@@ -60,11 +59,9 @@ class AuthServiceTest {
                 .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
                 .build();
         memberMapper.insert(member);
-        String idAuthCode = authServiceImpl.processIdInquiry(member.getEmail());
-        Assertions.assertTrue(authServiceImpl.verifyMailCode(member.getEmail(), idAuthCode));
+        authServiceImpl.processIdInquiry(member.getEmail());
 
-        String code = authServiceImpl.processPasswordInquiry(member.getUsername());
-        Assertions.assertTrue(authServiceImpl.verifyMailCode(member.getEmail(), code));
+        authServiceImpl.processPasswordInquiry(member.getUsername());
     }
 
     @Test

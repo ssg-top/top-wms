@@ -1,16 +1,17 @@
 package com.top.effitopia.dto;
 
 import com.top.effitopia.enumeration.MemberRole;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.top.effitopia.enumeration.MemberStatus;
+import lombok.*;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class MemberSearchCond {
 
     private String username;
     private MemberRole role;
+    private MemberStatus status;
 
 }

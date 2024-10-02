@@ -71,12 +71,36 @@ class BalanceServiceTest {
     void saveExpense() {
         ExpenseDTO expenseDTO = ExpenseDTO.builder()
                 .warehouseId(1)
-                .category(ExpenseCategory.MAINTENANCE_COST)
-                .amount(20000)
-                .expenseDate(LocalDateTime.now())
+                .category(ExpenseCategory.PERSONAL_COST)
+                .amount(111031500)
+                .expenseDate(LocalDateTime.of(2023, 4, 1, 0,0,0))
                 .expenseDetails("")
                 .paid(false)
                 .build();
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
+        balanceService.saveExpense(expenseDTO);
         balanceService.saveExpense(expenseDTO);
     }
 
@@ -85,11 +109,34 @@ class BalanceServiceTest {
         RevenueDTO revenueDTO = RevenueDTO.builder()
                 .warehouseId(1)
                 .memberId(1)
-                .category(RevenueCategory.CONTRACT_COST)
-                .amount(10000)
+                .category(RevenueCategory.FREIGHT_CHARGE)
+                .amount(142266500)
                 .revenueDetails("")
-                .requestDate(LocalDateTime.now())
+                .requestDate(LocalDateTime.of(2023, 4, 1, 0,0,0))
                 .build();
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
+        balanceService.saveRevenue(revenueDTO);
         balanceService.saveRevenue(revenueDTO);
 
     }

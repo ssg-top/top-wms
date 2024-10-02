@@ -2,6 +2,11 @@ package com.top.effitopia.enumeration;
 
 import lombok.Getter;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Getter
 public enum RevenueCategory {
     CONTRACT_COST("창고 계약비"),
@@ -10,6 +15,8 @@ public enum RevenueCategory {
     OUTBOUND_CHARGE("출고 수수료"),
     FREIGHT_CHARGE("운임료");
 
+    public static final Map<String, String> CATEGORY_MAP = Collections.unmodifiableMap(
+            Stream.of(values()).collect(Collectors.toMap(RevenueCategory::getValue, RevenueCategory::name)));
     private final String value;
 
     RevenueCategory(String value) {

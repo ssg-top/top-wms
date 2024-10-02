@@ -17,10 +17,11 @@ public interface MemberMapper {
 
     Optional<Member> selectOne(int id);
     Optional<Member> selectOneByUsername(String username);
+    Optional<Member> selectOneByEmail(String email);
 
     List<Member> selectAll(PageRequestDTO<MemberSearchCond> pageRequestDTO);
 
-    int selectCount(PageRequestDTO<MemberSearchCond> pageRequestDTO);
+    int selectCount(MemberSearchCond searchCond);
 
     boolean existsByUsername(String username);
 

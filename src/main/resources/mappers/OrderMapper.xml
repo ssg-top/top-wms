@@ -5,8 +5,8 @@
 
 <mapper namespace="com.top.effitopia.mapper.OrderMapper">
 
-    <!--     Outbound와 관련된 매핑 -->
-    <resultMap id="outboundResultMap" type="Outbound">
+    <!-- Outbound와 관련된 매핑 -->
+    <resultMap id="outboundResultMap" type="com.top.effitopia.domain.Outbound">
         <id property="outboundId" column="outbound_id" />
         <result property="outboundStatus" column="outbound_status" />
         <result property="regDate" column="reg_date" />
@@ -15,7 +15,7 @@
     </resultMap>
 
     <!-- OrderDTO와 VO에 매핑 -->
-    <resultMap id="orderResultMap" type="Order">
+    <resultMap id="orderResultMap" type="com.top.effitopia.domain.Order">
         <id property="orderId" column="order_id" />
         <result property="buyerName" column="buyer_name" />
         <result property="zipCode" column="zipcode" />
@@ -27,24 +27,17 @@
         <result property="buyerQuantity" column="buyer_quantity" />
         <association property="stock" javaType="Stock">
             <id property="id" column="stock_id" />
-            <association property="product" resultMap="productResultMap"/>
+            <association property="product" javaType="Product">
+                <id property="id" column="product_id" />
+                <result property="productName" column="product_name" />
+                <result property="productBrand" column="product_brand" />
+                <result property="productWeight" column="product_weight" />
+                <result property="productStorageType" column="storage_type" />
+            </association>
         </association>
         <association property="member" javaType="Member">
             <id property="id" column="member_id"/>
-            <result property="name" column="name"/>
-            <result property="phone" column="phone"/>
-            <result property="email" column="email"/>
-            <result property="businessNumber" column="business_number"/>
         </association>
-    </resultMap>
-
-    <!-- Product 관련 매핑 -->
-    <resultMap id="productResultMap" type="Product">
-        <id property="id" column="product_id" />
-        <result property="productName" column="product_name" />
-        <result property="productBrand" column="product_brand" />
-        <result property="productWeight" column="product_weight" />
-        <result property="productStorageType" column="storage_type" />
     </resultMap>
 
     <!-- 주문 등록 -->
@@ -57,7 +50,7 @@
     <update id="updateOrder" parameterType="com.top.effitopia.domain.Order">
         UPDATE orders
         SET buyer_name = #{buyerName}, zipcode = #{zipCode}, buyer_road_name = #{buyerRoadName}, buyer_lot_number = #{buyerLotNumber}, buyer_detail_address = #{buyerDetailAddress},
-            buyer_latitude = #{buyerLatitude}, buyer_longitude = #{buyerLongitude}, buyer_quantity = #{buyerQuantity}
+        buyer_latitude = #{buyerLatitude}, buyer_longitude = #{buyerLongitude}, buyer_quantity = #{buyerQuantity}
         WHERE order_id = #{orderId}
     </update>
 
@@ -86,10 +79,10 @@
     </select>
 
     <!-- Stock ID로 Product 조회 -->
-    <select id="findProductByStockId" parameterType="int" resultMap="productResultMap">
+    <select id="findProductByStockId" parameterType="int" resultType="com.top.effitopia.domain.Product">
         SELECT p.*
         FROM product p
-                 JOIN stock s ON s.product_id = p.product_id
+        JOIN stock s ON s.product_id = p.product_id
         WHERE s.stock_id = #{stockId}
     </select>
 
@@ -106,17 +99,7 @@
         VALUES (#{outbound.outboundId}, #{waybillNum}, #{waybillPrice}, #{regDate}, #{estimatedArrivalDate}, #{waybillStatus})
     </insert>
 
-    <!-- 모든 주문을 조회하는 findAll 메서드 -->
-    <select id="findAll" resultMap="orderResultMap">
-        SELECT o.*, s.stock_id, p.product_id, m.member_id
-        FROM orders o
-                 JOIN stock s ON o.stock_id = s.stock_id
-                 JOIN product p ON s.product_id = p.product_id
-                 JOIN member m ON o.member_id = m.member_id
+    <select id="findStockById" parameterType="int" resultType="com.top.effitopia.domain.Stock">
+        SELECT * FROM stock WHERE stock_id = #{id}
     </select>
-
-    <insert id="insertTempStock" parameterType="com.top.effitopia.domain.TempStock" useGeneratedKeys="true" keyProperty="id" keyColumn="temp_stock_id">
-        INSERT INTO temp_stock (member_id, cell_id, product_id, change_amount, manufacturing_date, expiration_date)
-        VALUES (#{member.id}, #{cell.id}, #{product.id}, #{changeAmount}, #{manufacturingDate}, #{expirationDate})
-    </insert>
 </mapper>

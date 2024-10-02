@@ -80,7 +80,7 @@
                     ]]>
             </when>
         </choose>
-        ORDER BY r.reg_date DESC LIMIT #{skip}, #{size}
+        ORDER BY r.request_date DESC LIMIT #{skip}, #{size}
     </select>
 
     <select id="selectCount" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="int">

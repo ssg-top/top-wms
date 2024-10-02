@@ -4,6 +4,38 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.BalanceMapper">
 
+    <select id="getAnnualBalance" resultType="AnnualBalance">
+        WITH YearlyData AS (
+            SELECT
+                YEAR(r.request_date) AS year,
+                SUM(r.amount) AS total_revenue,
+                SUM(e.amount) AS total_expense,
+                (SUM(r.amount) - SUM(e.amount)) AS net_profit
+            FROM revenue r
+            LEFT JOIN expense e ON YEAR(r.request_date) = YEAR(e.expense_date)
+            WHERE YEAR(r.request_date)=#{year}
+            GROUP BY YEAR(r.request_date)
+        ),
+        ProfitChange AS (
+            SELECT
+                year,
+                total_revenue,
+                total_expense,
+                net_profit,
+                LAG(net_profit, 1) OVER (ORDER BY year) AS previous_net_profit
+            FROM YearlyData
+        )
+        SELECT
+            year,
+            total_revenue,
+            total_expense,
+            net_profit,
+            IF(previous_net_profit IS NOT NULL,
+            ROUND((net_profit - previous_net_profit) / previous_net_profit * 100, 2),
+            NULL) AS profit_growth_rate
+        FROM ProfitChange
+    </select>
+
     <select id="getAnnualBalances" resultType="AnnualBalance">
         WITH YearlyData AS (
             SELECT

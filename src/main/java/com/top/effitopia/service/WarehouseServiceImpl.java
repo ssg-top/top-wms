@@ -173,6 +173,14 @@ public class WarehouseServiceImpl implements WarehouseService{
     }
 
     @Override
+    public double getTotalUtilizationAverage() {
+        return warehouseMapper.getTotalUtilizationAverage();
+    }
+
+    @Override
+    public List<WarehouseUtilizationDTO> getWarehouseUtilizationList() {
+        return warehouseMapper.getWarehouseUtilizationList();
+
     public List<MemberDTO> getAssignableWarehouseManagerList() {
         List<Member> memberList = warehouseMapper.selectAssignableWarehouseManagerList();
         List<MemberDTO> memberDTOList = memberList.stream().map(MemberDTO::from).collect(Collectors.toList());
@@ -184,5 +192,6 @@ public class WarehouseServiceImpl implements WarehouseService{
         String changedCoordinate = df.format(coordinates);
 
         return Double.parseDouble(changedCoordinate);
+
     }
 }

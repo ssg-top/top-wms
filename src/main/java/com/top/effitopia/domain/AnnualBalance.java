@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AnnualBalance {
 
-    int year;
+    private int year;
     private double totalExpense;
     private double totalRevenue;
     private double netProfit;

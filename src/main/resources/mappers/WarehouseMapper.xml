@@ -117,7 +117,26 @@
         select count(warehouse_id) from warehouse
     </select>
 
-    <select id = "selectAllType" resultMap="warehouseType">
+
+    <select id="getTotalUtilizationAverage" resultType="double">
+        SELECT avg(u.utilization)
+        FROM (
+            SELECT sum(p.inbound_box_width * p.inbound_box_height * p.inbound_box_length * s.amount) / (w.warehouse_capacity * 1000000) * 100.0 AS utilization
+            FROM stock s, product p, warehouse w, cell c
+            WHERE s.product_id=p.product_id AND c.cell_id=s.cell_id AND c.warehouse_id=w.warehouse_id
+            GROUP BY w.warehouse_id
+        ) u
+    </select>
+
+    <select id="getWarehouseUtilizationList" resultType="com.top.effitopia.dto.WarehouseUtilizationDTO">
+        SELECT w.warehouse_id AS id, w.warehouse_name AS name, w.warehouse_code AS code, w.warehouse_road_name AS roadNameAddress, w.warehouse_lot_number AS lotNumberAddress,
+        w.warehouse_latitude AS latitude, w.warehouse_longitude AS longitude, sum(p.inbound_box_width * p.inbound_box_height * p.inbound_box_length * s.amount) / (w.warehouse_capacity * 1000000) * 100.0 AS utilization
+        FROM stock s, product p, warehouse w, cell c
+        WHERE s.product_id=p.product_id AND c.cell_id=s.cell_id AND c.warehouse_id=w.warehouse_id
+        GROUP BY w.warehouse_id
+    </select>
+
+    <select id="selectAllType" resultMap="warehouseType">
         select * from warehouse_category
     </select>
 
@@ -131,3 +150,4 @@
         )
     </select>
 </mapper>
+
