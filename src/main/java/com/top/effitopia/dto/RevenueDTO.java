@@ -19,6 +19,7 @@ public class RevenueDTO {
     private int warehouseId;
     private String warehouseCode;
     private int memberId;
+    private String username;
     private RevenueCategory category;
     private double amount;
     private String revenueDetails;
@@ -33,6 +34,7 @@ public class RevenueDTO {
                 .warehouseId(vo.getWarehouse().getId())
                 .warehouseCode(vo.getWarehouse().getCode())
                 .memberId(vo.getMember().getId())
+                .username(vo.getMember().getUsername())
                 .category(vo.getCategory())
                 .amount(vo.getAmount())
                 .revenueDetails(vo.getRevenueDetails())

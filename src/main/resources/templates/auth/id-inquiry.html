@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Effitofia - 아이디 찾기</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<script>
+    function verify() {
+        alert("인증에 성공했습니다. 회원님의 아이디는 admin 입니다.");
+        window.location = "/auth/login";
+    }
+</script>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+    <div class="container-fluid">
+        <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <a href="/" class="">
+                            <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>EFFITOPIA</h3>
+                        </a>
+                        <h3>아이디 찾기</h3>
+                    </div>
+                    <form action="/auth/id-inquiry" th:object="${emailParam}" method="post">
+                        <div class="form-floating mb-0">
+                            <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="이메일">
+                            <label for="email">가입시 입력한 이메일</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-3">인증 번호 전송</button>
+                        <div class="d-flex form-floating mb-0">
+                            <input type="text" id="code" name="code" class="form-control" placeholder="인증 번호">
+                            <label for="code">인증 번호</label>
+                            <button type="button" onclick="verify()" class="btn btn-primary py-3 w-50 mb-3">인증</button>
+                        </div>
+                        <div class="" th:if="${success}">
+                            <p>가입 이메일로 전송된 인증 번호 6자리를 입력해주세요.</p>
+                        </div>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}">
+                            <p th:errors="*{email}"></p>
+                        </div>
+                        <div class="alert alert-danger" th:if="${errorMessage}">
+                            <p th:text="${errorMessage}"></p>
+                        </div>
+                    </form>
+                    <div class="justify-content-end mb-3">
+                        <a href="/auth/password-inquiry">비밀번호 재설정</a> |
+                        <a href="/auth/login">로그인</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/main.js">
+    let authMailForm = new FormData();
+    authMailForm.append("email", document.getElementById("email").value);
+    authMailForm.append("code", document.getElementById("code").value);
+    let submitAuthMailForm = fetch('/auth/id-inquiry/verify', {
+        method: 'POST',
+        cache: 'no-cache',
+        body: authMailForm
+    }).then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+        });
+
+    // const verifyBtn = document.getElementById('verifyBtn');
+    // verifyBtn.addEventListener('click', verify);
+
+</script>
+</body>
+</html>

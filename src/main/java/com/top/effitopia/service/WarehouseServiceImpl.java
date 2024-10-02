@@ -156,4 +156,14 @@ public class WarehouseServiceImpl implements WarehouseService{
                 map(vo -> modelMapper.map(vo, WarehouseTypeDTO.class)).collect(Collectors.toList());
         return typeDTOList;
     }
+
+    @Override
+    public double getTotalUtilizationAverage() {
+        return warehouseMapper.getTotalUtilizationAverage();
+    }
+
+    @Override
+    public List<WarehouseUtilizationDTO> getWarehouseUtilizationList() {
+        return warehouseMapper.getWarehouseUtilizationList();
+    }
 }

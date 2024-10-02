@@ -2,6 +2,8 @@ package com.top.effitopia.service;
 
 import com.top.effitopia.domain.*;
 import com.top.effitopia.dto.*;
+import com.top.effitopia.enumeration.ExpenseCategory;
+import com.top.effitopia.enumeration.RevenueCategory;
 import com.top.effitopia.exception.BizException;
 import com.top.effitopia.exception.ErrorCode;
 import com.top.effitopia.mapper.BalanceMapper;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -121,6 +125,21 @@ public class BalanceServiceImpl implements BalanceService {
     @Override
     public boolean removeRevenue(int id) {
         return revenueMapper.delete(id) == 1;
+    }
+
+    @Override
+    public Map<String, String> getRevenueCategoryList() {
+        return RevenueCategory.CATEGORY_MAP;
+    }
+
+    @Override
+    public Map<String, String> getExpenseCategoryList() {
+        return ExpenseCategory.CATEGORY_MAP;
+    }
+
+    @Override
+    public Optional<AnnualBalance> getAnnualBalance(int year) {
+        return balanceMapper.getAnnualBalance(year);
     }
 
     @Override

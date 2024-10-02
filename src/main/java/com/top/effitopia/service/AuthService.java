@@ -5,14 +5,14 @@ import com.top.effitopia.dto.*;
 import com.top.effitopia.enumeration.MemberStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public interface AuthService {
 
     MemberDTO getOne(int id);
+    MemberDTO getOneByEmail(String email);
 
     PageResponseDTO<MemberDTO> getList(PageRequestDTO<MemberSearchCond> pageRequestDTO);
+    int getCount(MemberSearchCond pageRequestDTO);
 
     boolean modify(MemberDTO memberDTO);
 
@@ -26,9 +26,10 @@ public interface AuthService {
 
     boolean checkDuplicateEmail(String email);
 
-    String processIdInquiry(String email);
+    void processIdInquiry(String email);
 
-    String processPasswordInquiry(String username);
+    void processPasswordInquiry(String username);
 
     boolean verifyMailCode(String email, String code);
+
 }

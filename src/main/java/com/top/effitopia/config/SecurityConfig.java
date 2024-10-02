@@ -1,7 +1,7 @@
 package com.top.effitopia.config;
 
 import com.top.effitopia.security.CustomExceptionDeniedHandler;
-import com.top.effitopia.security.LoginFilter;
+import com.top.effitopia.security.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +11,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,19 +26,18 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf((auth) -> auth.disable())
                 .formLogin((auth) -> auth.loginPage("/auth/login")
-                        .successForwardUrl("/")
+                        .loginProcessingUrl("/auth/login")
+                        .defaultSuccessUrl("/")
+                        .successHandler(new LoginSuccessHandler())
                 )
-                .logout(logoutConfigurer -> logoutConfigurer.logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/"))
-                //.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class)
+                .logout(logoutConfigurer -> logoutConfigurer.logoutUrl("/auth/logout"))
                 .csrf(csrfConfigurer -> csrfConfigurer.disable())
                 .httpBasic((auth) -> auth.disable())
                 .authorizeHttpRequests((auth) -> auth
-                        .anyRequest().permitAll());
-//                        .requestMatchers("/auth/**", "/").permitAll()
-//                        .requestMatchers("/admin").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
-//                .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler()));
+                        .requestMatchers("/auth/**", "/").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler()));
         return http.build();
 
     }
@@ -67,6 +64,8 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
+        return (web -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources()
+                        .atCommonLocations()));
     }
 }

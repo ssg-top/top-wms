@@ -2,6 +2,7 @@ package com.top.effitopia.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 @Service
@@ -29,7 +31,11 @@ public class MailService {
     public void sendMail(String title, String to, String templateName, Map<String, String> values) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setSubject(title);
+        try {
+            helper.setSubject(MimeUtility.encodeText(title, "UTF-8", "B"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         helper.setTo(to);
         Context context = new Context();
         values.forEach(context::setVariable);
