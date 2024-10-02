@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>EFFITOPIA</title>
@@ -9,7 +8,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="../../static/img/favicon.ico" rel="icon">
+    <link href="/static/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,14 +20,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="../../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="../../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+<!--    ../../static/css/bootstrap.min.css-->
 
     <!-- Template Stylesheet -->
-    <link href="../../static/css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+<!--    ../../static/css/style.css-->
 </head>
 
 <body>
@@ -50,7 +51,7 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="../../static/img/profile/img/admin.jpg" alt="" style="width: 50px; height: 50px;">
+                        <img class="rounded-circle" src="/img/profile/admin.jpg" alt="" style="width: 50px; height: 50px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -90,9 +91,10 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>재고관리</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="stock.html" class="dropdown-item">재고현황</a>
-                            <a href="stockcheck_register.html" class="dropdown-item">재고실사</a>
-                            <a href="stockcheck_list.html" class="dropdown-item">재고실사조회</a>
+                            <a href="/stock/list-tempstock" class="dropdown-item">임시재고현황</a>
+                            <a href="/stock/list" class="dropdown-item">재고현황</a>
+                            <a href="/stockcheck/list" class="dropdown-item">재고실사</a>
+                            <a href="/stockcheck/list-stockcheck" class="dropdown-item">재고실사조회</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -108,9 +110,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>고객센터</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="" class="dropdown-item">공지사항</a>
                             <a href="" class="dropdown-item">문의 게시판</a>
-                            <a href="" class="dropdown-item">찾아오시는 길</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -160,7 +160,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="../../static/img/profile/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle" src="/img/profile/img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -236,57 +236,42 @@
                   
                     <div class="col-sm-12">
                         <div class="bg-light align-items-center rounded p-4">
-                            <h6 class="mb-3">재고 현황</h6>
-                          <form>
+                            <h6 class="mb-3">임시 재고 현황</h6>
+                          <form id="tempStocksearchForm" action="/stock/list-tempstock" method="get" th:object="${pageRequestDTO}">
                             <div class="row mb-2">
-                                <label for="membername" class="col-sm-2 align-self-center col-form-label">사업자 이름</label>
+                                <label  class="col-sm-2 align-self-center col-form-label">사업자 이름</label>
                                 <div class="col-sm-8 ps-0">
-                                    <input type="text" class="form-control" name="membername">
+                                    <input type="text" class="form-control"  th:field="${searchCond.memberName}">
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="warehouse" class="col-sm-2 align-self-center col-form-label">창고 이름</label>
+                                <label  class="col-sm-2 align-self-center col-form-label">창고 이름</label>
                                 <div class="col-sm-8 ps-0">
-                                    <input type="text" class="form-control" name="warehouse">
+                                    <input type="text" class="form-control" th:field="${searchCond.wareHouseName}">
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="productname" class="col-sm-2 align-self-center col-form-label">상품 이름</label>
+                                <label  class="col-sm-2 align-self-center col-form-label">상품 이름</label>
                                 <div class="col-sm-8 ps-0">
-                                    <input type="text" class="form-control" name="productname">
+                                    <input type="text" class="form-control" th:field="${searchCond.productName}">
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="productname" class="col-sm-2 align-self-center col-form-label">유통 기한</label>
+                                <label  class="col-sm-2 align-self-center col-form-label">임시 재고 상태</label>
                                 <div class="d-lg-inline-flex md-2 col-sm-8 ps-0">
-                                    <input name="startdate" type="date" class="form-control"><span class="mx-4">~</span><input name="enddate" type="date" class="form-control">
+                                    <select class="form-select" th:field="${searchCond.state}">
+                                        <option value="0">전체</option>
+                                        <option value="1">미반영</option>
+                                        <option value="2">반영완료</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center mb-2">   
-                                <select class="form-select mx-2" name="bigcategory">
-                                <option selected>대분류</option>
-                                <option value="1">식품</option>
-                                <option value="2">전자제품</option>
-                                <option value="3">가구</option>
-                            </select>
-                            <select class="form-select mx-2" name="midcategory">
-                                <option selected>중분류</option>
-                                <option value="1">상온</option>
-                                <option value="2">냉장</option>
-                                <option value="3">냉동</option>
-                            </select>  
-                            <select class="form-select mx-2" name="smallcategory">
-                                <option selected>소분류</option>
-                                <option value="1">만두</option>
-                                <option value="2">튀김</option>
-                                <option value="3">통조림</option>
-                            </select></div>
                             <br>
                       
 
-                            <div class="text-center"><button type="submit" class=" btn btn-primary btn-lg rounded-pill m-2 " style="width: 25%;">조회</button></div>
-                            
-    
+                            <div class="text-center">
+                                <button type="submit" class=" btn btn-primary btn-lg rounded-pill m-2 " style="width: 25%;">조회</button>
+                            </div>
                           </form>
                         </div>
                     </div>
@@ -295,23 +280,25 @@
    
 
 
-            <!-- Recent Sales Start -->
+            <!-- 조회 목록 -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <select id="rowPerPage" class="form-select me-2" style="width: auto;">
+                        <!-- <select id="rowPerPage" class="form-select me-2" style="width: auto;">
                             <option value="10">10개씩 보기</option>
                             <option value="15">15개씩 보기</option>
                             <option value="20">20개씩 보기</option>
-                        </select>
-                        <h6 class="mb-0">재고 조회 목록</h6>
-                        <button type="button" class="btn btn-primary rounded-pill m-2">출력</button>
+                        </select> -->
+                        <h6 class="mb-0">임시 재고 조회 목록</h6>
+                        <button type="button" id="closeButton" class="btn btn-primary rounded-pill m-2">마감</button>
+                        
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" th:if="${pageResponseDTO != null and not #lists.isEmpty(pageResponseDTO.dtoList)}">
                         <table class="table table-striped">
                             <thead>
                                 <tr class="text-dark">
-                                    <th scope="col">분류</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">보관방법</th>
                                     <th scope="col">상품 이름</th>
                                     <th scope="col">상품 수량</th>
                                     <th scope="col">사업자</th>
@@ -322,72 +309,36 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-        
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
+                                <tr th:each ="TempStockDTO : ${pageResponseDTO.dtoList}">
+                                    <td th:text="${TempStockDTO.id}"/>
+                                    <td th:text="${TempStockDTO?.productDTO?.getProductStorageType().name()}"></td>
+                                    <td th:text="${TempStockDTO?.productDTO?.name}"></td>
+                                    <td th:text="${TempStockDTO?.changeAmount}"></td>
+                                    <td th:text="${TempStockDTO?.memberDTO?.name}"></td>
+                                    <td th:text="${TempStockDTO?.cellDTO?.warehouseDTO?.name}"></td>
+                                    <td th:text="${TempStockDTO?.cellDTO?.warehouseDTO?.roadName}"></td>
+                                    <td th:text="${#temporals.format(TempStockDTO.expirationDate, 'yyyy-MM-dd')}">2024-09-10</td>
+                                    <td th:text="${TempStockDTO?.tempStockState}? '반영완료' : '미반영'"></td>
+                                </tr>                      
                             </tbody>
                         </table>
                     </div>
-                    <nav aria-label="Page navigation">
+                    <div th:if="${pageResponseDTO == null or #lists.isEmpty(pageResponseDTO.dtoList)}">
+                        <p>표시할 재고 데이터가 없습니다.</p>
+                    </div>
+                    <nav aria-label="Page navigation" th:if="${pageResponseDTO != null and pageResponseDTO.total > 0}">
                         <ul class="pagination justify-content-center mt-4">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
+                            <li class="page-item" th:classappend="${pageResponseDTO.start == 1}? 'disabled'">
+                                <a class="page-link" th:href="@{/stock/list(page=${pageResponseDTO.start - 1})}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo; Back</span>
                                 </a>
                             </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
+                            <li class="page-item" th:each="page: ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"
+                                th:classappend="${page == pageResponseDTO.page}? 'active'">
+                                <a class="page-link" th:href="@{/stock/list(page=${page})}" th:text="${page}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${pageResponseDTO.end == pageResponseDTO.total}? 'disabled'">
+                                <a class="page-link" th:href="@{/stock/list(page=${pageResponseDTO.end + 1})}" aria-label="Next">
                                     <span aria-hidden="true">Next &raquo;</span>
                                 </a>
                             </li>
@@ -428,16 +379,16 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../static/lib/chart/chart.min.js"></script>
-    <script src="../../static/lib/easing/easing.min.js"></script>
-    <script src="../../static/lib/waypoints/waypoints.min.js"></script>
-    <script src="../../static/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="../../static/lib/tempusdominus/js/moment.min.js"></script>
-    <script src="../../static/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="../../static/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/lib/chart/chart.min.js"></script>
+    <script src="/lib/easing/easing.min.js"></script>
+    <script src="/lib/waypoints/waypoints.min.js"></script>
+    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../../static/js/main.js"></script>
+    <script src="/js/stockJS.js"></script>
 </body>
 
 </html>

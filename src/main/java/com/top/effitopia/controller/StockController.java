@@ -25,51 +25,55 @@ public class StockController {
     private final StockService stockService;
 
 
-
+//, @ModelAttribute("searchCond") StockSearchCond stockSearchCond,
     @GetMapping("/list")
-    public String listStock(@ModelAttribute("pageRequestDTO") PageRequestDTO<StockSearchCond> pageRequestDTO, BindingResult bindingResult, Model model) {
+    public String listStock(@Valid @ModelAttribute("pageRequestDTO") PageRequestDTO<StockSearchCond> pageRequestDTO, @ModelAttribute("searchCond") StockSearchCond stockSearchCond, BindingResult bindingResult, Model model) {
         log.info("listStock controller........");
-        if (pageRequestDTO.getSearchCond() == null) {
-            pageRequestDTO.setSearchCond(new StockSearchCond());
-        }
 
-        try {
-            PageResponseDTO<StockDTO> pageResponseDTO = stockService.getListStock(pageRequestDTO);
-            log.info("pageResponseDTO : " + pageResponseDTO);
-            if (pageResponseDTO == null || pageResponseDTO.getDtoList() == null) {
-                throw new RuntimeException("페이지 응답 데이터가 null입니다.");
-            }
-
-           //pageResponseDTO.getDtoList().forEach(stockDTO -> log.info("result : " + stockDTO.getMemberDTO()) );
-            log.info("Controller pageRequest : " + pageRequestDTO);
-            model.addAttribute("pageResponseDTO", pageResponseDTO);
-            return "stock/list";
-        } catch (Exception e) {
-            log.error("Error in listStock: ", e);
-            model.addAttribute("errorMessage", "재고 목록을 불러오는 중 오류가 발생했습니다: " + e.getMessage());
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
             return "redirect:/";
         }
 
-//        PageResponseDTO<StockDTO> pageResponseDTO = stockService.getListStock(pageRequestDTO);
-//        log.info("pageResponseDTO : " + pageResponseDTO);
-//        model.addAttribute("pageResponseDTO", pageResponseDTO);
-//        return "stock/list";
+        pageRequestDTO.setSearchCond(stockSearchCond);
+        PageResponseDTO<StockDTO> pageResponseDTO = stockService.getListStock(pageRequestDTO);
+        log.info("pageResponseDTO : " + pageResponseDTO);
+        log.info("Controller pageRequest : " + pageRequestDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+        log.info("searcon : " + stockSearchCond);
+        return "stock/list";
     }
 
 
-    @PostMapping("/update")
-    public String updateStock(){
+    @GetMapping("/update")
+    public String updateStock(Model model){
         log.info("updateStock controller........");
-        stockService.modifyListStock();
-        return "redirect:/stock/list";
+        try {
+            stockService.modifyListStock();
+            model.addAttribute("message", "마감이 성공적으로 처리되었습니다.");
+        } catch (Exception e) {
+            log.error("Error in updateStock: ", e);
+            model.addAttribute("error", "마감 처리 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return "stock/list-tempstock";
     }
 
     @GetMapping("/list-tempstock")
-    public void listTempStock(PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model){
+    public String listTempStock(@Valid @ModelAttribute("pageRequestDTO") PageRequestDTO<StockSearchCond> pageRequestDTO, @ModelAttribute("searchCond") StockSearchCond stockSearchCond, BindingResult bindingResult, Model model){
         log.info("listTempStock controller........");
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
+            return "redirect:/";
+        }
+
+        pageRequestDTO.setSearchCond(stockSearchCond);
         PageResponseDTO<TempStockDTO> pageResponseDTO = stockService.getListTempStock(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
+        log.info("Controller pageRequest : " + pageRequestDTO);
+        log.info("searcon : " + stockSearchCond);
+        pageResponseDTO.getDtoList().forEach(tempStockDTO -> log.info("tempstockDTO : " + tempStockDTO.isTempStockState()));
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        return "stock/list-tempstock";
     }
 
 

@@ -7,7 +7,6 @@
 <!-- 상품 매핑    -->
     <resultMap id="Product" type="Product">
         <id property="id" column="product_id"/>
-        <result property="subclassCategoryId" column="subclass_id"/>
         <result property="name" column="product_name"/>
         <result property="productBrand" column="product_brand"/>
         <result property="productCost" column="product_cost"/>
@@ -15,10 +14,11 @@
         <result property="productInfo" column="product_info"/>
         <result property="inboundBoxWidth" column="inbound_box_width"/>
         <result property="inboundBoxLength" column="inbound_box_length"/>
-        <result property="InboundBoxHeight" column="inbound_box_height"/>
+        <result property="inboundBoxHeight" column="inbound_box_height"/>
         <result property="productWeight" column="product_weight"/>
         <result property="productImg" column="product_img"/>
         <result property="productStorageType" column="storage_type"/>
+        <association property="productSubclassCategory" column="subclass_id" javaType="ProductSubclassCategory"/>
     </resultMap>
 
     
@@ -67,10 +67,11 @@
 <!--    임시재고 매핑-->
     <resultMap id="TempStock" type="TempStock">
         <id property="id" column="temp_stock_id"/>
-        <result property="changeAmount" column="amount"/>
+        <result property="changeAmount" column="change_amount"/>
         <result property="manufacturingDate" column="manufacturing_date"/>
         <result property="expirationDate" column="expiration_date"/>
         <result property="regDate" column="reg_date"/>
+        <result property="tempStockState" column="temp_stock_state"/>
 
         <association property="member" javaType="Member">
             <id property="id" column="member_id"/>
@@ -127,7 +128,7 @@
                     AND p.product_name LIKE CONCAT('%', #{searchCond.productName}, '%')
                 </if>
                 <if test="searchCond.startDate != null  and searchCond.endDate != null">
-                    AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
+                    AND date(expiration_date) between #{searchCond.startDate} and #{searchCond.endDate}
                 </if>
             </if>
         </where>
@@ -178,7 +179,7 @@
 
 
 <!--임시재고 여러개 조회-->
-    <select id="selectListTempStock" resultMap="TempStock">
+    <select id="selectListTempStock" resultMap="TempStock" resultType="List">
         select * from temp_stock ts
         join member m on ts.member_id = m.member_id
         join cell c on ts.cell_id = c.cell_id
@@ -198,9 +199,15 @@
                 <if test="searchCond.startDate != null  and searchCond.endDate != null">
                     AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
                 </if>
+                <if test="searchCond.state != null and searchCond.state == 1">
+                    and temp_stock_state = 0
+                </if>
+                <if test="searchCond.state != null and searchCond.state == 2">
+                    and temp_stock_state = 1
+                </if>
             </if>
         </where>
-        order by stock_id
+        order by temp_stock_id
         limit #{skip}, #{size}
     </select>
 

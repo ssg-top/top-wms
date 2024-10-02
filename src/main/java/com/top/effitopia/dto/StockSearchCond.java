@@ -21,5 +21,5 @@ public class StockSearchCond {
     private String bigCategory;
     private String midCategory;
     private String smallCategory;
-    private boolean state;
+    private int state =0;
 }
