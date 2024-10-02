@@ -306,47 +306,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
 
-        // 페이지네이션 업데이트
-        function updatePagination(pageData) {
-            const pagination = document.querySelector('.pagination');
-            if (!pagination) return;
+      
 
-            pagination.innerHTML = '';
 
-            // 이전 페이지 버튼
-            const prevButton = `
-            <li class="page-item ${pageData.prev ? '' : 'disabled'}">
-                <a class="page-link" href="#" onclick="loadPage(${pageData.start - 1}); return false;">이전</a>
-            </li>
-        `;
-            pagination.insertAdjacentHTML('beforeend', prevButton);
 
-            // 페이지 번호 버튼
-            for (let i = pageData.start; i <= pageData.end; i++) {
-                const pageButton = `
-                <li class="page-item ${pageData.page === i ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="loadPage(${i}); return false;">${i}</a>
-                </li>
-            `;
-                pagination.insertAdjacentHTML('beforeend', pageButton);
-            }
 
-            // 다음 페이지 버튼
-            const nextButton = `
-            <li class="page-item ${pageData.next ? '' : 'disabled'}">
-                <a class="page-link" href="#" onclick="loadPage(${pageData.end + 1}); return false;">다음</a>
-            </li>
-        `;
-            pagination.insertAdjacentHTML('beforeend', nextButton);
-        }
-
-        // 페이지 로드 함수
-        function loadPage(page) {
-            fetchStockList(`/stockcheck/list?page=${page}`);
-        }
-
-        // 전역 스코프에 loadPage 함수 추가
-        window.loadPage = loadPage;
 
 
         // 전체 선택 체크박스 이벤트
@@ -362,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (stockTableBody) {
             stockTableBody.addEventListener('change', function (e) {
                 if (e.target.classList.contains('stock-checkbox')) {
+                    console.log("checkBox!!!");
                     updateSelectedItems();
                 }
             });
@@ -394,6 +359,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
+
+
+
+
 
         // 실사 등록에서 버튼
         if (selectedItemsTableBody) {
@@ -473,22 +442,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
 
-        // 실사 수정, 삭제, 반영 버튼 이벤트
-        const actionButtons = document.querySelectorAll('#stockCheckForm button[type="submit"]');
-        actionButtons.forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const action = this.textContent.trim();
-                switch (action) {
-                    case '실사 수정':
-                        // 실사 수정 로직
-                        break;
-                    case '실사 삭제':
-                        // 실사 삭제 로직
-                        break;
-                }
-            });
-        });
+        // // 실사 수정, 삭제, 반영 버튼 이벤트
+        // const actionButtons = document.querySelectorAll('#stockCheckForm button[type="submit"]');
+        // actionButtons.forEach(button => {
+        //     button.addEventListener('click', function (e) {
+        //         e.preventDefault();
+        //         const action = this.textContent.trim();
+        //         switch (action) {
+        //             case '실사 수정':
+        //                 // 실사 수정 로직
+        //                 break;
+        //             case '실사 삭제':
+        //                 // 실사 삭제 로직
+        //                 break;
+        //         }
+        //     });
+        // });
 
         // 임시재고 마감 버튼 이벤트
         const closeButton = document.getElementById('closeButton');
@@ -517,6 +486,53 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+
+
+
+
+
+      // 페이지네이션 업데이트
+      function updatePagination(pageData) {
+        const pagination = document.querySelector('.pagination');
+        if (!pagination) return;
+
+        pagination.innerHTML = '';
+
+        // 이전 페이지 버튼
+        const prevButton = `
+        <li class="page-item ${pageData.prev ? '' : 'disabled'}">
+            <a class="page-link" href="#" onclick="loadPage(${pageData.start - 1}); return false;">이전</a>
+        </li>
+    `;
+        pagination.insertAdjacentHTML('beforeend', prevButton);
+
+        // 페이지 번호 버튼
+        for (let i = pageData.start; i <= pageData.end; i++) {
+            const pageButton = `
+            <li class="page-item ${pageData.page === i ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="loadPage(${i}); return false;">${i}</a>
+            </li>
+        `;
+            pagination.insertAdjacentHTML('beforeend', pageButton);
+        }
+
+        // 다음 페이지 버튼
+        const nextButton = `
+        <li class="page-item ${pageData.next ? '' : 'disabled'}">
+            <a class="page-link" href="#" onclick="loadPage(${pageData.end + 1}); return false;">다음</a>
+        </li>
+    `;
+        pagination.insertAdjacentHTML('beforeend', nextButton);
+    }
+
+    // 페이지 로드 함수
+    function loadPage(page) {
+        fetchStockList(`/stockcheck/list?page=${page}`);
+    }
+
+    // 전역 스코프에 loadPage 함수 추가
+    window.loadPage = loadPage;
+
 
 
 });
