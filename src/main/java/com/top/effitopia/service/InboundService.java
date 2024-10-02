@@ -1,6 +1,9 @@
 package com.top.effitopia.service;
 
 import com.top.effitopia.dto.InboundDTO;
+import com.top.effitopia.dto.InboundSearchCond;
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.PageResponseDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +21,7 @@ public interface InboundService {
 
     Optional<InboundDTO> get(int inboundId);
 
-    List<InboundDTO> getList();
+    PageResponseDTO<InboundDTO> getList(PageRequestDTO<InboundSearchCond> pageRequestDTO);
 
     void removeList(List<Integer> inboundIds);
 }

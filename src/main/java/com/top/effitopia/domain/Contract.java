@@ -3,6 +3,7 @@ package com.top.effitopia.domain;
 import com.top.effitopia.enumeration.ContractStatus;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,11 +21,11 @@ public class Contract {
 
     private ContractStatus status;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     private int date;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     private LocalDateTime regDate;
 

@@ -22,7 +22,7 @@ public class WarehouseDTO {
     private MemberDTO memberDTO;
 
     @NotEmpty
-    private WarehouseType warehouseType;
+    private WarehouseTypeDTO warehouseType;
 
     private String code;
 

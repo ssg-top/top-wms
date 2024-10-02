@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductSearchCond {
 
-    private String productName;
+    private String name;
     private String productBrand;
     private Integer majorCategoryId;
     private Integer middleCategoryId;

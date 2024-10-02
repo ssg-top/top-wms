@@ -24,7 +24,7 @@ public class PageRequestDTO<T> {
     @Builder.Default
     @Min(value = 10)
     @Max(value = 100)
-    private int size = 15;
+    private int size = 10;
 
     private String link;
 

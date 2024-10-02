@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>EFFITOPIA</title>
@@ -9,7 +8,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="../../static/img/favicon.ico" rel="icon">
+    <link href="img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,14 +20,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="../../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="../../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../../static/css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        .title{
+            padding-top: 40px;
+            padding-bottom: 32px;
+        }
+
+        .background-margin{
+            margin-right: 10px;
+        }
+
+        .background-margin-2{
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .table{
+            Text-Align :center;
+        }
+
+        .map-search{
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .list-page{
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+        .container-contract{
+            display: block;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,12 +82,12 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                <a href="register.html" class="navbar-brand mx-4 mb-3">
                     <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>EFFITOPIA</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="../../static/img/profile/img/admin.jpg" alt="" style="width: 50px; height: 50px;">
+                        <img class="rounded-circle" src="img/admin.jpg" alt="" style="width: 50px; height: 50px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -59,7 +96,7 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="register.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>회원관리</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -88,21 +125,36 @@
                         </div>
                     </div>
                     <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>거래처관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">거래처등록</a>
+                            <a href="" class="dropdown-item">거래처현황</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>재고관리</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="stock.html" class="dropdown-item">재고현황</a>
-                            <a href="stockcheck_register.html" class="dropdown-item">재고실사</a>
-                            <a href="stockcheck_list.html" class="dropdown-item">재고실사조회</a>
+                            <a href="" class="dropdown-item">재고현황</a>
+                            <a href="" class="dropdown-item">재고실사</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>창고관리</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="" class="dropdown-item">창고등록</a>
-                            <a href="" class="dropdown-item">창고현황</a>
-                            <a href="" class="dropdown-item">창고계약</a>
-                            <a href="" class="dropdown-item">창고계약현황</a>
+                            <a href="/warehouses/register" class="dropdown-item">창고등록</a>
+                            <a href="/warehouses/list" class="dropdown-item">창고현황</a>
+                            <a href="/contract/list" class="dropdown-item">창고계약</a>
+                            <a href="/contract/contract" class="dropdown-item">창고계약현황</a>
                             <a href="" class="dropdown-item">안전점검</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>재무관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">지출내역</a>
+                            <a href="" class="dropdown-item">매출내역</a>
+                            <a href="" class="dropdown-item">총 정산내역</a>
+                            <a href="" class="dropdown-item">지출관리</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -110,14 +162,6 @@
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="" class="dropdown-item">공지사항</a>
                             <a href="" class="dropdown-item">문의 게시판</a>
-                            <a href="" class="dropdown-item">찾아오시는 길</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>거래처관리</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="" class="dropdown-item">거래처등록</a>
-                            <a href="" class="dropdown-item">거래처현황</a>
                         </div>
                     </div>
                     <a href="" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
@@ -142,7 +186,7 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a href="register.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -160,7 +204,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="../../static/img/profile/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -229,176 +273,109 @@
                 </div>
             </nav>
             <!-- Navbar End -->
-
-            <!-- 검색어 필터 -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                  
-                    <div class="col-sm-12">
-                        <div class="bg-light align-items-center rounded p-4">
-                            <h6 class="mb-3">재고 현황</h6>
-                          <form>
-                            <div class="row mb-2">
-                                <label for="membername" class="col-sm-2 align-self-center col-form-label">사업자 이름</label>
-                                <div class="col-sm-8 ps-0">
-                                    <input type="text" class="form-control" name="membername">
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <label for="warehouse" class="col-sm-2 align-self-center col-form-label">창고 이름</label>
-                                <div class="col-sm-8 ps-0">
-                                    <input type="text" class="form-control" name="warehouse">
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <label for="productname" class="col-sm-2 align-self-center col-form-label">상품 이름</label>
-                                <div class="col-sm-8 ps-0">
-                                    <input type="text" class="form-control" name="productname">
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <label for="productname" class="col-sm-2 align-self-center col-form-label">유통 기한</label>
-                                <div class="d-lg-inline-flex md-2 col-sm-8 ps-0">
-                                    <input name="startdate" type="date" class="form-control"><span class="mx-4">~</span><input name="enddate" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center mb-2">   
-                                <select class="form-select mx-2" name="bigcategory">
-                                <option selected>대분류</option>
-                                <option value="1">식품</option>
-                                <option value="2">전자제품</option>
-                                <option value="3">가구</option>
-                            </select>
-                            <select class="form-select mx-2" name="midcategory">
-                                <option selected>중분류</option>
-                                <option value="1">상온</option>
-                                <option value="2">냉장</option>
-                                <option value="3">냉동</option>
-                            </select>  
-                            <select class="form-select mx-2" name="smallcategory">
-                                <option selected>소분류</option>
-                                <option value="1">만두</option>
-                                <option value="2">튀김</option>
-                                <option value="3">통조림</option>
-                            </select></div>
-                            <br>
-                      
-
-                            <div class="text-center"><button type="submit" class=" btn btn-primary btn-lg rounded-pill m-2 " style="width: 25%;">조회</button></div>
-                            
-    
-                          </form>
-                        </div>
+            <div class="title">
+                <h1>창고 조회</h1>
+            </div>
+            <div class="background-margin-2">
+                <div class="bg-light rounded p-2">
+                    <div style="width: 100%; margin-bottom: 10px">
+                            <span style="margin-left: 1rem">창고 지역</span>
+                            <form action="/warehouses/list" method="get" style="display: flex; width: 100%">
+                                <select class="form-select ms-3" style="width:20%" th:field ="${pageRequestDTO.keyword}">
+                                    <option value="" th:selected="${pageRequestDTO.keyword == ''}">선택</option>
+                                    <option value="경기" th:selected="${pageRequestDTO.keyword == '경기'}">경기도</option>
+                                    <option value="서울" th:selected="${pageRequestDTO.keyword == '서울'}">서울특별시</option>
+                                    <option value="충남" th:selected="${pageRequestDTO.keyword == '충남'}">충청남도</option>
+                                    <option value="충북" th:selected="${pageRequestDTO.keyword == '충북'}">충청북도</option>
+                                    <option value="강원" th:selected="${pageRequestDTO.keyword == '강원'}">강원도</option>
+                                    <option value="전남" th:selected="${pageRequestDTO.keyword == '전남'}">전라남도</option>
+                                    <option value="전북" th:selected="${pageRequestDTO.keyword == '전북'}">전라북도</option>
+                                    <option value="경남" th:selected="${pageRequestDTO.keyword == '경남'}">경상남도</option>
+                                    <option value="경북" th:selected="${pageRequestDTO.keyword == '경북'}">경상북도</option>
+                                    <option value="광주" th:selected="${pageRequestDTO.keyword == '광주'}">광주광역시</option>
+                                    <option value="부산" th:selected="${pageRequestDTO.keyword == '부산'}">부산광역시</option>
+                                    <option value="울산" th:selected="${pageRequestDTO.keyword == '울산'}">울산광역시</option>
+                                    <option value="인천" th:selected="${pageRequestDTO.keyword == '인천'}">인천광역시</option>
+                                    <option value="대전" th:selected="${pageRequestDTO.keyword == '대전'}">대전광역시</option>
+                                    <option value="대구" th:selected="${pageRequestDTO.keyword == '대구'}">대구광역시</option>
+                                    <option value="세종" th:selected="${pageRequestDTO.keyword == '세종특별자치시'}">세종특별자치시</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm ms-3">입력</button>
+                            </form>
                     </div>
+                    <!-- Map Start -->
+                    <div id="map" style="width:1045px;height:500px;"></div>
                 </div>
             </div>
-   
+            <!-- Map End -->
 
-
-            <!-- Recent Sales Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-light text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <select id="rowPerPage" class="form-select me-2" style="width: auto;">
-                            <option value="10">10개씩 보기</option>
-                            <option value="15">15개씩 보기</option>
-                            <option value="20">20개씩 보기</option>
+            <!-- Table Start -->
+            <div class="background-margin">
+                <div class="bg-light rounded h-100 p-4">
+                    <div class="list-page">
+                        <h>페이지 당</h>
+                        <select class="form-select ms-3" style="width:7%;height:5%">
+                            <option selected>10</option>
+                            <option value="1">5</option>
+                            <option value="2">15</option>
                         </select>
-                        <h6 class="mb-0">재고 조회 목록</h6>
-                        <button type="button" class="btn btn-primary rounded-pill m-2">출력</button>
+                        <h class="ms-3">개 씩</h>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="text-dark">
-                                    <th scope="col">분류</th>
-                                    <th scope="col">상품 이름</th>
-                                    <th scope="col">상품 수량</th>
-                                    <th scope="col">사업자</th>
-                                    <th scope="col">창고명</th>
-                                    <th scope="col">창고위치</th>
-                                    <th scope="col">제조일자</th>
-                                    <th scope="col">유통기한</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-        
-                                </tr>
-                                <tr>
-                                    <td>식품/냉동</td>
-                                    <td>물만두</td>
-                                    <td>50</td>
-                                    <td>네이버</td>
-                                    <td>창고1</td>
-                                    <td>경기도 성남시</td>
-                                    <td>2024-09-10</td>
-                                    <td>2024-09-10</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">창고 코드</th>
+                            <th scope="col">창고 관리자</th>
+                            <th scope="col">창고 이름</th>
+                            <th scope="col">창고 주소</th>
+                            <th scope="col">창고 종류</th>
+                            <th scope="col">평 수</th>
+                            <th scope="col">높이</th>
+                            <th scope="col">수용량</th>
+                            <th scope="col">세부구역</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item:${responseDTO.dtoList}">
+                                <td th:text="${item.code}"></td>
+                                <td th:text="${item.memberDTO.username}"></td>
+                                <td th:text="${item.name}"></td>
+                                <td th:text="${item.roadName}"></td>
+                                <td th:text="${item.warehouseType.type}"></td>
+                                <td th:text="${#numbers.formatInteger(item.width * item.length * 3.3, 0, 'COMMA') + '평'}"></td>
+                                <td th:text="${item.height}"></td>
+                                <td th:text="${item.capacity}"></td>
+                                <td>
+                                    <form th:action="@{/warehouses/cell}" th:object="${item.id}" th:method="get">
+                                        <input type="hidden" name="id" th:value="${item.id}"/>
+                                        <button type="submit" class="btn btn-primary btn-sm ms-3" style="display: flex; justify-items: center">조회</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center mt-4">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo; Back</span>
+                        <ul class="pagination justify-content-center mt-4 flex-wrap">
+                            <li class="page-item mx-1" th:classappend="${responseDTO.prev ? '' : 'disabled'}">
+                                <a class="page-link" th:href="@{/warehouses/list(page=${responseDTO.start - 1}, size=${responseDTO.size})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">Next &raquo;</span>
+                            <li class="page-item mx-1" th:each="i : ${#numbers.sequence(responseDTO.start, responseDTO.end)}"
+                                th:classappend="${i == responseDTO.page ? 'active' : ''}">
+                                <a class="page-link" th:href="@{/warehouses/list(page=${i}, size=${responseDTO.size})}" th:text="${i}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${responseDTO.next ? '' : 'disabled'}">
+                                <a class="page-link" th:href="@{/warehouses/list(page=${responseDTO.end + 1}, size=${responseDTO.size})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
                 </div>
             </div>
-            <!-- Recent Sales End -->
+            <!-- Table End -->
 
-    
-        
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
@@ -428,16 +405,69 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../static/lib/chart/chart.min.js"></script>
-    <script src="../../static/lib/easing/easing.min.js"></script>
-    <script src="../../static/lib/waypoints/waypoints.min.js"></script>
-    <script src="../../static/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="../../static/lib/tempusdominus/js/moment.min.js"></script>
-    <script src="../../static/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="../../static/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../../static/js/main.js"></script>
-</body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5dd5ef04cbba5202b3410c0e76f2f8c5"></script>
+    <script>
+        let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+        let options = { //지도를 생성할 때 필요한 기본 옵션
+            center: new kakao.maps.LatLng(36.515691, 128.029746), // 지도의 중심좌표
+            level: 13 // 지도의 확대 레벨
+        };
+        let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
+        let jsonString = "[[${jsonUtilizationList}]]";
+        let list = JSON.parse(jsonString.replace(/&quot;/g,'"'));
+
+        let positions = list.map(item => {
+            return {
+                content: '<div>창고명: ' + item.name + '</div>' + '</div>',
+                latlng: new kakao.maps.LatLng(item.longitude,item.latitude)
+            }
+        })
+
+        for (var i = 0; i < positions.length; i ++) {
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                position: positions[i].latlng // 마커의 위치
+            });
+
+
+
+            // 마커에 표시할 인포윈도우를 생성합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: positions[i].content // 인포윈도우에 표시할 내용
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+
+        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+        function makeOverListener(map, marker, infowindow) {
+            return function() {
+                infowindow.open(map, marker);
+            };
+        }
+
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+        function makeOutListener(infowindow) {
+            return function() {
+                infowindow.close();
+            };
+        }
+    </script>
+</body>
 </html>

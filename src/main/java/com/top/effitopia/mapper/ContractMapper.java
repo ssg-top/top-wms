@@ -19,4 +19,8 @@ public interface ContractMapper {
     void updateRejectList(List<Integer> id);
     int getCount(PageRequestDTO pageRequestDTO);
     WarehouseCost getOne(Integer id);
+
+    Integer checkMember(String name);
+
+    Integer selectUserId(String name);
 }

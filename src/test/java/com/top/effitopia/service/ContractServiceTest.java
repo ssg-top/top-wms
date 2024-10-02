@@ -31,7 +31,7 @@ public class ContractServiceTest {
 
     @Test
     public void modifyTest(){
-        warehouseType = WarehouseType.builder().id(1).type("냉동").build();
+        WarehouseTypeDTO warehouseTypeDTO = WarehouseTypeDTO.builder().id(1).type("냉동").build();
         address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
 
         memberDTO = memberDTO.builder()
@@ -53,7 +53,7 @@ public class ContractServiceTest {
         WarehouseDTO = WarehouseDTO.builder().
                 id(1).
                 memberDTO(memberDTO).
-                warehouseType(warehouseType).
+                warehouseType(warehouseTypeDTO).
                 code("ccccccc").
                 name("nnnnnn").
                 phone("437249327437294").
@@ -90,7 +90,7 @@ public class ContractServiceTest {
 
     @Test
     public void saveTest(){
-        warehouseType = WarehouseType.builder().id(1).type("냉동").build();
+        WarehouseTypeDTO warehouseType = WarehouseTypeDTO.builder().id(1).type("냉동").build();
         address = Address.builder().zipCode("a").roadNameAddress("b").lotNumberAddress("c").detailAddress("d").build();
 
         memberDTO = memberDTO.builder()
@@ -147,7 +147,7 @@ public class ContractServiceTest {
 
     @Test
     public void getOneTest(){
-        Optional<WarehouseCostDTO> warehouseCostDTO = contractService.get(1);
+        WarehouseCostDTO warehouseCostDTO = contractService.get(10);
         log.info(warehouseCostDTO);
     }
 }

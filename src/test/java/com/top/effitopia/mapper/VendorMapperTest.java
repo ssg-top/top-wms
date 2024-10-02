@@ -4,6 +4,8 @@ package com.top.effitopia.mapper;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.top.effitopia.domain.Vendor;
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.VendorDTO;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -36,7 +38,8 @@ class VendorMapperTest {
 
     @Test
     void 모든_거래처_조회() {
-        List<Vendor> vendors = vendorMapper.selectAllList();
+        PageRequestDTO<VendorDTO> pageRequestDTO = new PageRequestDTO<>();
+        List<Vendor> vendors = vendorMapper.selectAllList(pageRequestDTO);
         log.info("Vendor Test:  " + vendors.size());
     }
 

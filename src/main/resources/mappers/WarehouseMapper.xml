@@ -27,6 +27,8 @@
         <association property="member" javaType="Member">
             <id property="id" column="member_id"/>
             <result property="username" column="username"/>
+            <result property="status" column="status"/>
+            <result property="role" column="role"/>
         </association>
     </resultMap>
 
@@ -45,6 +47,25 @@
     <resultMap id ="warehouseType" type ="WarehouseType">
         <id property="id" column="category_id"/>
         <result property="type" column="warehouse_type"/>
+    </resultMap>
+
+    <resultMap id="member123" type="Member">
+        <id property="id" column="member_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="status" column="status"/>
+        <result property="role" column="role"/>
+        <result property="businessNumber" column="business_number"/>
+        <result property="regDate" column="reg_date"/>
+        <association property="address" javaType="Address">
+            <result property="zipCode" column="zip_code"/>
+            <result property="roadNameAddress" column="road_name_address"/>
+            <result property="lotNumberAddress" column="lot_number_address"/>
+            <result property="detailAddress" column="detail_address"/>
+        </association>
     </resultMap>
 
     <select id="selectId" parameterType="Integer" resultMap="warehouse">
@@ -72,11 +93,18 @@
         select * from Cell where warehouse_id = #{searchCond} ORDER BY cell_id  DESC LIMIT #{skip}, #{size}
     </select>
 
+
     <select id="selectWarehouseList" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="warehouse">
         select * from warehouse w
         join warehouse_category wc on w.category_id = wc.category_id
-        ORDER BY warehouse_id
-        DESC LIMIT #{skip}, #{size}
+        join member m on w.member_id = m.member_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                w.warehouse_road_name LIKE CONCAT(#{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY warehouse_code
+        LIMIT #{skip}, #{size}
     </select>
 
     <update id="update" parameterType="warehouse">
@@ -88,6 +116,7 @@
     <select id="getCount" resultType="int">
         select count(warehouse_id) from warehouse
     </select>
+
 
     <select id="getTotalUtilizationAverage" resultType="double">
         SELECT avg(u.utilization)
@@ -110,4 +139,15 @@
     <select id="selectAllType" resultMap="warehouseType">
         select * from warehouse_category
     </select>
+
+    <select id="selectAssignableWarehouseManagerList" resultMap="member123">
+        SELECT *
+        FROM member m
+        WHERE m.role='WAREHOUSE_MANAGER' AND m.status='REGISTERED' AND NOT EXISTS (
+            SELECT 1
+            FROM warehouse w
+            WHERE m.member_id = w.member_id
+        )
+    </select>
 </mapper>
+

@@ -4,9 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.top.effitopia.mapper.StockCheckMapper">
 
+    <!-- 상품 매핑    -->
+    <resultMap id="Product" type="Product">
+        <id property="id" column="product_id"/>
+        <result property="name" column="product_name"/>
+        <result property="productBrand" column="product_brand"/>
+        <result property="productCost" column="product_cost"/>
+        <result property="productSelling" column="product_selling"/>
+        <result property="productInfo" column="product_info"/>
+        <result property="inboundBoxWidth" column="inbound_box_width"/>
+        <result property="inboundBoxLength" column="inbound_box_length"/>
+        <result property="inboundBoxHeight" column="inbound_box_height"/>
+        <result property="productWeight" column="product_weight"/>
+        <result property="productImg" column="product_img"/>
+        <result property="productStorageType" column="storage_type"/>
+        <association property="productSubclassCategory" column="subclass_id" javaType="ProductSubclassCategory"/>
+    </resultMap>
+
     <resultMap id="StockCheck" type="StockCheck">
         <id property="id" column="stock_check_id"/>
-        <result property="checkStatus" column="check_state"/>
+        <result property="checkState" column="check_state"/>
         <result property="checkComment" column="check_comment"/>
         <result property="checkAmount" column="check_amount"/>
         <result property="checkDate" column="check_date"/>
@@ -66,6 +83,7 @@
         join member m on s.member_id = m.member_id
         join cell c on sc.cell_id = c.cell_id
         join product p on s.product_id = p.product_id
+        join warehouse w on c.warehouse_id = w.warehouse_id
         <where>
             <if test="searchCond != null">
                 <if test="searchCond.memberName != null">
@@ -80,6 +98,12 @@
                 <if test="searchCond.startDate != null  and searchCond.endDate != null">
                     AND expiration_date between #{searchCond.startDate} and #{searchCond.endDate}
                 </if>
+                <if test="searchCond.state != null and searchCond.state == 1">
+                    and check_state = 0
+                </if>
+                <if test="searchCond.state != null and searchCond.state == 2">
+                    and check_state = 1
+                </if>
             </if>
         </where>
     </select>
@@ -87,10 +111,29 @@
     <select id="selectOneStockCheck" resultMap="StockCheck">
         select * from stock_check sc
             join stock s on sc.stock_id = s.stock_id
+            join member m on s.member_id = m.member_id
             join cell c on sc.cell_id = c.cell_id
+            join product p on s.product_id = p.product_id
+            join warehouse w on c.warehouse_id = w.warehouse_id
             where stock_check_id = #{id}
     </select>
-    
+
+    <insert id="insertListStockCheck" >
+        INSERT INTO stock_check (stock_id, cell_id, check_amount)
+        VALUES
+        <foreach collection="stockCheckList" item="item" separator=",">
+            (#{item.stock.id}, #{item.cell.id}, #{item.checkAmount})
+        </foreach>
+    </insert>
+
+
+<!--    <insert id="insertListStockCheck" statementType="CALLABLE">-->
+<!--        <foreach collection="stockCheckList" item="item">-->
+<!--         call insert_stockcheck(${item.stock.id}, ${item.cell.id}, ${item.checkAmount});-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+
     <update id="updateListStockCheck">
         <foreach collection="stockCheckList" item="item">
             update  stock_check set check_amount = #{item.checkAmount} where stock_check_id = #{item.id}
@@ -105,7 +148,7 @@
 
     <update id="applyList">
         <foreach collection="stockCheckList" item="item">
-            call update_stockcheck_to_stock(item.id, item.stock.id, item.checkAmount)
+            call update_stockcheck_to_stock(#{item.id}, #{item.stock.id}, #{item.checkAmount})
         </foreach>
 
     </update>
@@ -116,6 +159,7 @@
         join member m on s.member_id = m.member_id
         join cell c on sc.cell_id = c.cell_id
         join product p on s.product_id = p.product_id
+        join warehouse w on c.warehouse_id = w.warehouse_id
         <where>
             <if test="searchCond != null">
                 <if test="searchCond.memberName != null">

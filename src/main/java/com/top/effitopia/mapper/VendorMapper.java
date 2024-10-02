@@ -2,6 +2,8 @@ package com.top.effitopia.mapper;
 
 
 import com.top.effitopia.domain.Vendor;
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.VendorDTO;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,9 +17,10 @@ public interface VendorMapper {
 
     int delete(int id);
 
-    List<Vendor> selectAllList();
+    List<Vendor> selectAllList(PageRequestDTO<VendorDTO> pageRequestDTO);
 
     void deleteList(@Param("ids") List<Integer> ids);
 
 
+    int getTotalCount(PageRequestDTO<VendorDTO> pageRequestDTO);
 }

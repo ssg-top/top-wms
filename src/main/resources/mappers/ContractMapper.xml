@@ -13,21 +13,69 @@
         <result property="modDate" column="mod_date"/>
         <association property="warehouse" javaType="Warehouse">
             <id property="id" column="warehouse_id"/>
+            <result property="code" column="warehouse_code"/>
+            <result property="name" column="warehouse_name"/>
+            <result property="phone" column="warehouse_phone"/>
+            <result property="zipCode" column="warehouse_zip_code"/>
+            <result property="roadName" column="warehouse_road_name"/>
+            <result property="lotNumber" column="warehouse_lot_number"/>
+            <result property="detailAddress" column="warehouse_detail_address"/>
+            <result property="width" column="warehouse_width"/>
+            <result property="length" column="warehouse_length"/>
+            <result property="height" column="warehouse_height"/>
+            <result property="capacity" column="warehouse_capacity"/>
+            <result property="latitude" column="warehouse_latitude"/>
+            <result property="longitude" column="warehouse_longitude"/>
+            <result property="regDate" column="reg_date"/>
+            <result property="modDate" column="mod_date"/>
         </association>
         <association property="member" javaType="Member">
             <id property="id" column="member_id"/>
+            <result property="username" column="username"/>
+            <result property="password" column="password"/>
+            <result property="name" column="name"/>
+            <result property="phone" column="phone"/>
+            <result property="email" column="email"/>
+            <result property="status" column="status"/>
+            <result property="role" column="role"/>
+            <result property="businessNumber" column="business_number"/>
+            <result property="regDate" column="reg_date"/>
+            <association property="address" javaType="Address">
+                <result property="zipCode" column="zip_code"/>
+                <result property="roadNameAddress" column="road_name_address"/>
+                <result property="lotNumberAddress" column="lot_number_address"/>
+                <result property="detailAddress" column="detail_address"/>
+            </association>
         </association>
     </resultMap>
     <resultMap id = "warehouseCost" type="WarehouseCost">
-        <id property="id" column="warehouse_cost_id"></id>
+        <id property="id" column="warehouse_cost_id"/>
         <result property="contractCost" column="warehouse_contract_cost"/>
         <result property="storageCostPerArea" column="storage_cost_per_area"/>
         <result property="inboundBasicFee" column="inbound_basic_fee"/>
         <result property="outboundBasicFee" column="outbound_basic_fee"/>
         <association property="warehouse" javaType="Warehouse">
             <id property="id" column="warehouse_id"/>
+            <result property="roadName" column="warehouse_road_name"/>
+            <association property="member" javaType="Member">
+                <id property="id" column="member_id"></id>
+                <result property="name" column="name"></result>
+                <result property="username" column="username"></result>
+                <association property="address" javaType="Address">
+                    <result property="zipCode" column="zip_code"/>
+                    <result property="roadNameAddress" column="road_name_address"/>
+                    <result property="lotNumberAddress" column="lot_number_address"/>
+                    <result property="detailAddress" column="detail_address"/>
+                </association>
+            </association>
         </association>
     </resultMap>
+
+    <resultMap id="member" type="Member">
+        <id property="id" column="member_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
     <select id="selectListAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="contract">
         select * from contract c
         JOIN warehouse w ON c.warehouse_id = w.warehouse_id
@@ -48,7 +96,7 @@
 
     <insert id="insert" parameterType="contract" >
         INSERT INTO contract (warehouse_id, member_id, contract_start_date, contract_num_of_months, contract_end_date, contract_status, reg_date)
-        VALUES (#{warehouse.id}, #{member.id}, #{startDate}, #{date}, DATE_ADD(#{startDate}, INTERVAL #{date} MONTH), #{status}, NOW())
+        VALUES (#{warehouse.id}, #{member.id}, #{startDate}, #{date}, DATE_ADD(#{startDate}, INTERVAL #{date} MONTH), 'REQUEST', NOW())
     </insert>
 
     <update id="updateApprovalList" parameterType="java.util.List">
@@ -74,6 +122,19 @@
     </select>
 
     <select id="getOne" parameterType="Integer" resultMap="warehouseCost">
-        select * from warehouse_cost where warehouse_id = #{id}
+        select * from warehouse_cost wc
+        join warehouse w on wc.warehouse_id = w.warehouse_id
+        join member m on w.member_id = m.member_id
+        where w.warehouse_id = #{id}
+    </select>
+
+    <select id="checkMember" parameterType="String" resultType="java.lang.Integer">
+        SELECT m.member_id FROM member m
+        join warehouse w on w.member_id = m.member_id
+        WHERE name=#{name}
+    </select>
+
+    <select id="selectUserId" parameterType="String" resultType="java.lang.Integer">
+        select member_id from member where name=#{name}
     </select>
 </mapper>

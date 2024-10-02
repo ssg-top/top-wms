@@ -1,0 +1,21 @@
+.cost-selling-container .cost-label {
+  width: 100px; /* 회색 박스 크기 조정 */
+  background-color: #f0f0f0;
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.cost-selling-container .cost-input {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.cost-input input {
+  background-color: #ffffff; /* 흰색 박스 */
+}
+
+.form-control-sm {
+  margin-bottom: 10px;
+}
