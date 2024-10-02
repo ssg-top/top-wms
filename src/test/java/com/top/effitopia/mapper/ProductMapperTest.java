@@ -25,15 +25,15 @@ class ProductMapperTest {
     void 상품조회() {
         // Given
         ProductSearchCond searchCond = ProductSearchCond.builder()
-            .productName(null)
+            .name("고기")
             .productBrand(null)
-            .majorCategoryId(2)
+            .majorCategoryId(1)
             .middleCategoryId(null)
             .subclassCategoryId(null)
             .build();
 
         PageRequestDTO<ProductSearchCond> pageRequestDTO = PageRequestDTO.<ProductSearchCond>builder()
-            .page(2)
+            .page(1)
             .size(15)
             .searchCond(searchCond)
             .build();
@@ -51,7 +51,7 @@ class ProductMapperTest {
     void 검색조건_상품개수() {
         // Given
         ProductSearchCond searchCond = ProductSearchCond.builder()
-            //.productName("과일")
+            .name("과일")
             .build();
 
         // When

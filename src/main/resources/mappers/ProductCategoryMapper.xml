@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.top.effitopia.mapper.ProductCategoryMapper">
+
+  <resultMap id="ProductMajorCategoryResultMap"
+    type="com.top.effitopia.domain.ProductMajorCategory">
+    <id property="id" column="major_id"/>
+    <result property="name" column="major_name"/>
+  </resultMap>
+
+  <resultMap id="ProductMiddleCategoryResultMap"
+    type="com.top.effitopia.domain.ProductMiddleCategory">
+    <id property="id" column="middle_id"/>
+    <result property="name" column="middle_name"/>
+    <result property="majorId" column="major_id"/>
+  </resultMap>
+
+  <resultMap id="ProductSubclassCategoryResultMap"
+    type="com.top.effitopia.domain.ProductSubclassCategory">
+    <id property="id" column="subclass_id"/>
+    <result property="name" column="subclass_name"/>
+    <result property="middleId" column="middle_id"/>
+  </resultMap>
+
+
+  <select id="selectAllMajorCategories" resultMap="ProductMajorCategoryResultMap">
+    SELECT
+      major_id AS id,
+      major_name AS name
+    FROM product_major_category
+  </select>
+
+  <select id="selectAllMiddleCategories" resultMap="ProductMiddleCategoryResultMap">
+    SELECT
+      middle_id AS id,
+      middle_name AS name,
+      major_id AS majorId
+    FROM product_middle_category
+  </select>
+
+  <select id="selectAllSubclassCategories" resultMap="ProductSubclassCategoryResultMap">
+    SELECT
+      subclass_id AS id,
+      subclass_name AS name,
+      middle_id AS middleId
+    FROM product_subclass_category
+  </select>
+
+</mapper>

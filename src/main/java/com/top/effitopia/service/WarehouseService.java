@@ -1,6 +1,5 @@
 package com.top.effitopia.service;
 
-import com.top.effitopia.domain.Cell;
 import com.top.effitopia.domain.Warehouse;
 import com.top.effitopia.dto.*;
 
@@ -8,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WarehouseService {
-    PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<Warehouse> pageRequestDTO);
+    PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<WarehouseDTO> pageRequestDTO);
 
-    PageResponseDTO<CellDTO> getCellList(PageRequestDTO<Cell> pageRequestDTO);
+    PageResponseDTO<CellDTO> getCellList(PageRequestDTO<CellDTO> pageRequestDTO);
 
     Optional<WarehouseDTO> get(Integer id);
 
@@ -29,4 +28,9 @@ public interface WarehouseService {
     List<WarehouseDTO> changedListDTO(List<Warehouse> warehouseList);
 
     List<WarehouseTypeDTO> getTypeList();
+    double getTotalUtilizationAverage();
+    List<WarehouseUtilizationDTO> getWarehouseUtilizationList();
+
+    List<MemberDTO> getAssignableWarehouseManagerList();
+
 }

@@ -13,8 +13,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Qr {
 
-    private Integer qrId;   //QR 아이디
-    private Inbound inbound;    //입고 도메인
-    private String qrImg;   //QR 이미지(주소)
+    private Integer qrId;
+    private Inbound inbound;
+    private String qrImg;
 
 }

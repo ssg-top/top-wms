@@ -17,7 +17,8 @@ public enum ErrorCode {
     NOT_MATCHES_PASSWORD("비밀번호가 일치하지 않습니다."),
     NOT_MATCHES_NEW_PASSWORD_CONFIRM("새 비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     DUPLICATE_PASSWORD("현재 비밀번호와 동일합니다."),
-    FAIL_TO_SEND_MAIL("메일 전송을 실패했습니다.");
+    FAIL_TO_SEND_MAIL("메일 전송을 실패했습니다."),
+    NOT_MATCHES_AUTH_CODE("인증 코드가 일치하지 않습니다.");
 
     private final String message;
 

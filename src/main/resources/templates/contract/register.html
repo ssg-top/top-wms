@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>EFFITOPIA</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        .title{
+            padding-top: 40px;
+            padding-bottom: 32px;
+        }
+
+        .background-margin{
+            margin-right: 10px;
+        }
+
+        .background-margin-2{
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .table{
+            Text-Align :center;
+        }
+
+        .map-search{
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .list-page{
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+        .container-contract{
+            display: block;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="register.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>EFFITOPIA</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/admin.jpg" alt="" style="width: 50px; height: 50px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">박태환</h6>
+                        <span>회원권한</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="register.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>회원관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">전체 회원 조회</a>
+                            <a href="" class="dropdown-item">창고별 계약 회원 조회</a>
+                            <a href="" class="dropdown-item">회원 가입 승인</a>
+                            <a href="" class="dropdown-item">회원 탈퇴 승인</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>입고관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">입고요청</a>
+                            <a href="" class="dropdown-item">입고현황</a>
+                            <a href="" class="dropdown-item">입고</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>출고관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">출고요청</a>
+                            <a href="" class="dropdown-item">출고현황</a>
+                            <a href="" class="dropdown-item">배차현황</a>
+                            <a href="" class="dropdown-item">운송장현황</a>
+                            <a href="" class="dropdown-item">차량현황</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>거래처관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">거래처등록</a>
+                            <a href="" class="dropdown-item">거래처현황</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>재고관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">재고현황</a>
+                            <a href="" class="dropdown-item">재고실사</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>창고관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/warehouses/register" class="dropdown-item">창고등록</a>
+                            <a href="/warehouses/list" class="dropdown-item">창고현황</a>
+                            <a href="/contract/list" class="dropdown-item">창고계약</a>
+                            <a href="/contract/contract" class="dropdown-item">창고계약현황</a>
+                            <a href="" class="dropdown-item">안전점검</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>재무관리</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">지출내역</a>
+                            <a href="" class="dropdown-item">매출내역</a>
+                            <a href="" class="dropdown-item">총 정산내역</a>
+                            <a href="" class="dropdown-item">지출관리</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>고객센터</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">공지사항</a>
+                            <a href="" class="dropdown-item">문의 게시판</a>
+                        </div>
+                    </div>
+                    <a href="" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
+                    <a href="" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
+                    <a href="" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="../../../../../../../../Downloads/dashmin-1.0.0/signin.html" class="dropdown-item">Sign In</a>
+                            <a href="../../../../../../../../Downloads/dashmin-1.0.0/signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="../../../../../../../../Downloads/dashmin-1.0.0/404.html" class="dropdown-item">404 Error</a>
+                            <a href="../../../../../../../../Downloads/dashmin-1.0.0/blank.html" class="dropdown-item">Blank Page</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="register.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" type="search" placeholder="Search">
+                </form>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-envelope me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Message</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all message</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notification</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Profile updated</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">New user added</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Password changed</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/admin.jpg" alt="" style="width: 50px; height: 50px;">
+                            <span class="d-none d-lg-inline-flex">박태환</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="#" class="dropdown-item">Settings</a>
+                            <a href="#" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+
+            <div class="title">
+                <h1>창고 계약서</h1>
+            </div>
+
+            <div style="display: inline;">
+                <form action="/contract/contract" method="post">
+                    <div style="display: flex;">
+                        <div style="text-align: left; align-items: center; margin-left: 10px; width: 400px;">
+                            <label>"갑" 주소 :</label>
+                            <input type="text" placeholder="입력" style="width: 70%">
+                        </div>
+                        <div class="col" style="text-align: left; align-items: center; width: 350px;">
+                            <label>"을" 주소 :</label>
+                            <input th:field="${warehouseCostDTO.warehouseDTO.roadName}" style="width: 40%" readonly>
+                        </div>
+                    </div>
+
+                    <div style="display: flex;">
+                        <div style="text-align: left; align-items: center; margin-left: 38px; width: 400px;">
+                            <label>상호 :</label>
+                            <input type="text" placeholder="입력"/>
+                        </div>
+                        <div class="col" style="text-align: left; align-items: center; width: 350px;">
+                            <label>상호 :</label>
+                            <input th:field="${warehouseCostDTO.warehouseDTO.memberDTO.username}" style="width: 40%" readonly>
+                        </div>
+                        <div class="col" style="display: flex; text-align: left; align-items: center;">
+                            <label>계약 시작 날짜</label>
+                            <input type="date" name="startDate" class="form-control" style="width: 50%">
+                        </div>
+                    </div>
+
+
+                    <div style="display: flex;">
+                        <div style="text-align: left; align-items: center; margin-left: 24px; width: 400px;">
+                            <label>대표명 :</label>
+                            <input type="text" name="name" placeholder="입력" style="width: 20%">
+                        </div>
+                        <div class="col" style="text-align: left; align-items: center;">
+                            <label>대표명 :</label>
+                            <input th:field="${warehouseCostDTO.warehouseDTO.memberDTO.name}" style="width: 13%" readonly>
+                        </div>
+                    </div>
+
+                <div style="display: flex; justify-content: center;">“갑"과 “을"은 다음과 같이 창고(보관)계약을 체결한다.</div>
+                <div style="display: flex; justify-content: center;">다    음</div>
+                <div style="display: flex; justify-content: center;">제1조【목 적】</div>
+                <div style="display: flex; justify-content: center;">“을"은 “갑”이 보관, 위탁하는 제 2조의 보관물을 선량한 관리자의 주의의무를 가지고 책임관리 보관한다.</div>
+                <div style="display: flex; justify-content: center;">제2조【보관장소】</div>
+                <div style="display: flex; justify-content: center;">“을"은 “갑”이 보관 의뢰한 물건을 “을"의 창고에서 보관하여야 하며, 부득이 보관장소를 변경하고자 할 때는 사전에 “갑"에게 동의를 받아야 한다.</div>
+                <div style="display: flex; justify-content: center;">제3조【창고 이용료】</div>
+                <div style="display: flex; justify-content: center;">1. 보관료는 입출고 물품의 크기에 따라 달라지며 창고 임대료는 익월 계약 승인일까지 지급하여야 한다.</div>
+                <div style="display: flex; justify-content: center;">2. “갑"은 익월 계약 승인일까지 “을"에게 전월의 보관료, 관리비, 입출고 수수료 모두 지급하여야 한다.</div>
+                <div style="display: flex; justify-content: center;">
+                    <div style="text-align: center; align-items: center;">
+                        <label>임대료 :</label>
+                        <input style="width: 50%" th:field="${warehouseCostDTO.contractCost}" readonly>
+                    </div>
+                    <div style="text-align: left; align-items: center;">
+                        <label>입고 기본 수수료 :</label>
+                        <input style="width: 30%" th:field="${warehouseCostDTO.inboundBasicFee}" readonly>
+                    </div>
+                    <div style="text-align: left; align-items: center;">
+                        <label>출고 기본 수수료 :</label>
+                        <input style="width: 30%" th:field="${warehouseCostDTO.outboundBasicFee}" readonly>
+                    </div>
+                    <div style="text-align: left; align-items: center;">
+                        <label>0.001CBM 당 비용 :</label>
+                        <input style="width: 20%" th:field="${warehouseCostDTO.storageCostPerArea}" readonly>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center;">제4조【보관인의 책임】</div>
+                <div style="display: flex; justify-content: center;">1. “을"은 보관물을 입고 당시의 모양대로 선량한 관리자의 주의로써 성실하게 보관의무를 수행하여야 하며,</div>
+                <div style="display: flex; justify-content: center;">보관물의 성질에 따라 특별관리가 필요한 경우에는 거래관행에 준하여 “을"이 비용으로 보관에 관한 특별설비나 조치를 위하여야 한다.</div>
+                <div style="display: flex; justify-content: center;">2. 입고 당시에 보관장소 또는 보관설비의 변경, 다른 화물과의 혼합 기타 보관방법의 변경 및 제3자에게 재임치, 양도하는 경우 “갑"의 사전동의를 얻어야 한다.</div>
+                <div style="display: flex; justify-content: center;">제5조【보험 부보】</div>
+                <div style="display: flex; justify-content: center;">“을"은 물품인수 즉시 자기의 비용으로 “갑"을 피보험자로 하여 보관물에 대해서 화재보험에 부보하고 동 보험증권을 “갑"에게 제공한다.</div>
+                <div style="display: flex; justify-content: center;">제6조【보관물 입고】</div>
+                <div style="display: flex; justify-content: center;">1. “갑"은 창고 내 구역에 한 가지의 물품만 입고가 가능하다.</div>
+                <div style="display: flex; justify-content: center;">2. “갑”은 “을"과 출고지시서에 의해서만 할 수 있으며, “을"은 동 입고지시서 소지인에 대해서만 물품을 인도하여야 한다.</div>
+                <div style="display: flex; justify-content: center;">이 때, “을”은 입고지시서의 진위여부 확인의무를 진다.</div>
+                <div style="display: flex; justify-content: center;">제7조【보관물 출고】</div>
+                <div style="display: flex; justify-content: center;">“갑”은 “을"과 출고지시서에 의해서만 출고지시를 할 수 있으며, “을"은 동 출고지시서 소지인에 대해서만 물품을 인도하여야 한다.</div>
+                <div style="display: flex; justify-content: center;">이 때, “을”은 본 출고지시서의 진위여부 확인의무를 진다.</div>
+                <div style="display: flex; justify-content: center;">제8조【재고량 보고의무】</div>
+                <div style="display: flex; justify-content: center;">“을"은 보관화물의 입출고에 관한 기록을 비치하고 매월간의 입출고 내용과 월말재고 현황을 매월 말일 또는 “갑"의 요구시 제출한다.</div>
+                <div style="display: flex; justify-content: center;">제9조【기밀유지의무】</div>
+                <div style="display: flex; justify-content: center;">“을"은 본 계약 수행 중 지득한 “갑"의 업무상 기밀을 어떠한 경우에도 외부에 누설할 수 없다.</div>
+                <div style="display: flex; justify-content: center;">제10조【손해전보액의 결정】</div>
+                <div style="display: flex; justify-content: center;">보관물에 이재가 발생한 경우 이재당시의 가격 및 손해의 정도는 보관물의 보관당시의 가액, 보관기간, 시세, 전매의 경우 기대되는</div>
+                <div style="display: flex; justify-content: center;">손실액 등에 감안하여 “갑"이 정하는 바에 따른다.</div>
+                <div style="display: flex; justify-content: center;">제11조【합의관할】</div>
+                <div style="display: flex; justify-content: center;">본 계약과 관련하여 분쟁이 발생하는 경우 “갑"과 “을"은 상호신뢰를 바탕으로 원만히 해결하기로 하되 합의가 이루어지지 아니하여</div>
+                <div style="display: flex; justify-content: center;">이 소송을 제기하는 경우에는 “갑"의 주된 사무소 소재지 관할법원에 “을"이 소송을 제기하는 경우에는 </div>
+                <div style="display: flex; justify-content: center;">“을”의 주된 사무소 소재지 관할법원에 소송을 제기할 수 있기로 한다.</div>
+                <div style="display: flex; justify-content: center;">제12조【유효기간】</div>
+                <div style="display: flex; justify-content: center;text-align: left; align-items: center;">
+                    본 계약의 유효기간은 계약 체결 후<input type="text" name="date" style="width: 5%">개월로 한다. 만약 계약종료 후에 계약기간 내에 보관된 상품은 폐기처리된다.
+                </div>
+
+                <div style="display: flex; justify-content: center; margin-top: 10px;">
+                    <input type="hidden" id="hiddenId" name="id" value="">
+                    <button type="submit" class="btn btn-primary" style="margin-right: 50px;">신청</button>
+                    <button class="btn btn-primary">취소</button>
+                </div>
+                </form>
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">Your Site Name</a>, All Right Reserved.
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                            </br>
+                            Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalToggle-apply" tabindex="-1" aria-labelledby="exampleModalToggleLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel">중복 조회 결과</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modalMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="confirmButton" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--modal-->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/js/main.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const idValue = urlParams.get('id');
+        console.log(idValue);
+        document.getElementById('hiddenId').value = idValue;
+    </script>
+    </body>
+</html>

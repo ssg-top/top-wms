@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +27,12 @@ public class WarehouseServiceImpl implements WarehouseService{
     private final ModelMapper modelMapper;
 
     @Override
-    public PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<Warehouse> pageRequestDTO) {
+    public PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<WarehouseDTO> pageRequestDTO) {
         List<Warehouse> warehouseList =  warehouseMapper.selectWarehouseList(pageRequestDTO);
-        log.info(warehouseList);
         List<WarehouseDTO> warehouseDTOList = changedListDTO(warehouseList);
         log.info(warehouseDTOList);
         int total = warehouseMapper.getCount(pageRequestDTO);
-        PageResponseDTO pageResponseDTO = PageResponseDTO
+        PageResponseDTO<WarehouseDTO> pageResponseDTO = PageResponseDTO
                 .<WarehouseDTO>withAll()
                 .dtoList(warehouseDTOList)
                 .total(total)
@@ -42,11 +42,14 @@ public class WarehouseServiceImpl implements WarehouseService{
     }
 
     @Override
-    public PageResponseDTO<CellDTO> getCellList(PageRequestDTO<Cell> pageRequestDTO) {
+    public PageResponseDTO<CellDTO> getCellList(PageRequestDTO<CellDTO> pageRequestDTO) {
+        log.info("요긴뎅"+pageRequestDTO);
         List<Cell> cellList = warehouseMapper.selectCellList(pageRequestDTO);
+        log.info("dsjkfdhskfdskfndsnfldsnflkdsn" + cellList);
         List<CellDTO> cellDTOList = cellList.stream().map(vo->modelMapper.map(vo, CellDTO.class)).collect(Collectors.toList());
+        log.info("ekekiekekekekekekekek" + cellDTOList);
         int total = warehouseMapper.getCount(pageRequestDTO);
-        PageResponseDTO pageResponseDTO = PageResponseDTO
+        PageResponseDTO<CellDTO> pageResponseDTO = PageResponseDTO
                 .<CellDTO>withAll()
                 .dtoList(cellDTOList)
                 .total(total)
@@ -81,17 +84,25 @@ public class WarehouseServiceImpl implements WarehouseService{
 
     @Override
     public boolean save(WarehouseDTO warehouseDTO) {
+        double changedLatitude = changedCoordinates(warehouseDTO.getLatitude());
+        double changedLongitude = changedCoordinates(warehouseDTO.getLongitude());
+
+        warehouseDTO.setLatitude(changedLatitude);
+        warehouseDTO.setLongitude(changedLongitude);
+
         Warehouse warehouse = changedVO(warehouseDTO);
+        log.info(warehouse);
         return warehouseMapper.insert(warehouse) > 0;
     }
 
     @Override
     public Warehouse changedVO(WarehouseDTO warehouseDTO) {
         Member memberVO = modelMapper.map((warehouseDTO.getMemberDTO()), Member.class);
+        WarehouseType warehouseType = modelMapper.map((warehouseDTO.getWarehouseType()), WarehouseType.class);
 
         return new Warehouse(warehouseDTO.getId(),
                 memberVO,
-                warehouseDTO.getWarehouseType(),
+                warehouseType,
                 warehouseDTO.getCode(),
                 warehouseDTO.getName(),
                 warehouseDTO.getPhone(),
@@ -112,10 +123,11 @@ public class WarehouseServiceImpl implements WarehouseService{
     @Override
     public WarehouseDTO changedDTO(Warehouse warehouse) {
         MemberDTO memberDTO = modelMapper.map((warehouse.getMember()), MemberDTO.class);
+        WarehouseTypeDTO warehouseTypeDTO = modelMapper.map((warehouse.getWarehouseType()), WarehouseTypeDTO.class);
 
         return new WarehouseDTO(warehouse.getId(),
                 memberDTO,
-                warehouse.getWarehouseType(),
+                warehouseTypeDTO,
                 warehouse.getCode(),
                 warehouse.getName(),
                 warehouse.getPhone(),
@@ -139,7 +151,10 @@ public class WarehouseServiceImpl implements WarehouseService{
 
         warehouseList.stream()
                 .forEach(warehouse -> {
-                    MemberDTO memberDTO = MemberDTO.from(warehouse.getMember());
+                    MemberDTO memberDTO = MemberDTO.builder()
+                            .id(warehouse.getMember().getId())
+                            .username(warehouse.getMember().getUsername())
+                            .build();
                     WarehouseDTO warehouseDTO = modelMapper.map(warehouse, WarehouseDTO.class);
                     warehouseDTO.setMemberDTO(memberDTO);
                     warehouseDTOList.add(warehouseDTO);
@@ -155,5 +170,28 @@ public class WarehouseServiceImpl implements WarehouseService{
                 stream().
                 map(vo -> modelMapper.map(vo, WarehouseTypeDTO.class)).collect(Collectors.toList());
         return typeDTOList;
+    }
+
+    @Override
+    public double getTotalUtilizationAverage() {
+        return warehouseMapper.getTotalUtilizationAverage();
+    }
+
+    @Override
+    public List<WarehouseUtilizationDTO> getWarehouseUtilizationList() {
+        return warehouseMapper.getWarehouseUtilizationList();
+
+    public List<MemberDTO> getAssignableWarehouseManagerList() {
+        List<Member> memberList = warehouseMapper.selectAssignableWarehouseManagerList();
+        List<MemberDTO> memberDTOList = memberList.stream().map(MemberDTO::from).collect(Collectors.toList());
+        return memberDTOList;
+    }
+
+    public Double changedCoordinates(double coordinates){
+        DecimalFormat df = new DecimalFormat("#.######");
+        String changedCoordinate = df.format(coordinates);
+
+        return Double.parseDouble(changedCoordinate);
+
     }
 }

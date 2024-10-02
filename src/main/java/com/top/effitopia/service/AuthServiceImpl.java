@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     @Value("${mail.title.password-inquiry}")
     private String passwordInquiryMailTitle;
     @Value("${mail.auth_code_expiration_time}")
-    private String authCodeExpirationTime;
+    private long authCodeExpirationTime;
 
 
     @Override
@@ -74,11 +74,23 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public MemberDTO getOneByEmail(String email) {
+        Member member = memberMapper.selectOneByEmail(email)
+                .orElseThrow(() -> new BizException(ErrorCode.NOT_EXISTS_MEMBER));
+        return MemberDTO.from(member);
+    }
+
+    @Override
+    public int getCount(MemberSearchCond memberSearchCond) {
+        return memberMapper.selectCount(memberSearchCond);
+    }
+
+    @Override
     public PageResponseDTO<MemberDTO> getList(PageRequestDTO<MemberSearchCond> pageRequestDTO) {
         List<MemberDTO> dtoList = memberMapper.selectAll(pageRequestDTO).stream()
                 .map(MemberDTO::from)
                 .toList();
-        int totalCount = memberMapper.selectCount(pageRequestDTO);
+        int totalCount = memberMapper.selectCount(pageRequestDTO.getSearchCond());
         return new PageResponseDTO<>(pageRequestDTO, dtoList, totalCount);
     }
 
@@ -130,21 +142,22 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String processIdInquiry(String email) {
-        if(!memberMapper.existsByEmail(email)) {
-            throw new BizException(ErrorCode.NOT_EXISTS_EMAIL);
-        }
-        return sendAuthMail(email, idInquiryMailTitle);
+    public void processIdInquiry(String email) {
+        Member member = memberMapper.selectOneByEmail(email)
+                .orElseThrow(() -> new BizException(ErrorCode.NOT_EXISTS_EMAIL));
+        String code = sendAuthMail(email, idInquiryMailTitle);
+        redisService.setValues(member.getEmail(), code, authCodeExpirationTime);
     }
 
     @Override
-    public String processPasswordInquiry(String username) {
+    public void processPasswordInquiry(String username) {
         Member member = memberMapper.selectOneByUsername(username)
                 .orElseThrow(() -> new BizException(ErrorCode.NOT_EXISTS_MEMBER));
         if(MemberStatus.LEAVED.equals(member.getStatus())) {
             throw new BizException(ErrorCode.NOT_EXISTS_MEMBER);
         }
-        return sendAuthMail(member.getEmail(), passwordInquiryMailTitle);
+        String code = sendAuthMail(member.getEmail(), passwordInquiryMailTitle);
+        redisService.setValues(member.getEmail(), code, authCodeExpirationTime);
     }
 
     @Override
@@ -162,7 +175,6 @@ public class AuthServiceImpl implements AuthService {
         params.put("code", code);
         try {
             mailService.sendMail(title, email, mailTemplatePath, params);
-            redisService.setValues(email, code);
         } catch (MessagingException e) {
             throw new BizException(ErrorCode.FAIL_TO_SEND_MAIL);
         }
@@ -183,5 +195,4 @@ public class AuthServiceImpl implements AuthService {
         }
         return sb.toString();
     }
-
 }

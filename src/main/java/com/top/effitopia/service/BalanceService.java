@@ -6,6 +6,8 @@ import com.top.effitopia.domain.MonthlyBalance;
 import com.top.effitopia.dto.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface BalanceService {
 
@@ -26,11 +28,11 @@ public interface BalanceService {
     boolean removeExpense(int id);
     boolean removeRevenue(int id);
 
+    Map<String, String> getRevenueCategoryList();
+    Map<String, String> getExpenseCategoryList();
+
+    Optional<AnnualBalance> getAnnualBalance(int year);
     List<AnnualBalance> getAnnualBalances();
     List<MonthlyBalance> getMonthlyBalances(int year);
-
-
-
-
 
 }

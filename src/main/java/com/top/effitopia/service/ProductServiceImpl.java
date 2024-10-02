@@ -29,7 +29,6 @@ public class ProductServiceImpl implements ProductService {
             .map(ProductDTO::fromEntity)
             .toList();
 
-        // PageResponseDTO 생성 후 반환
         return PageResponseDTO.<ProductDTO>withAll()
             .pageRequestDTO(pageRequestDTO)
             .dtoList(dtoList)

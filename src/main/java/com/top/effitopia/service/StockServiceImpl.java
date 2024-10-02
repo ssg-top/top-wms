@@ -94,9 +94,45 @@ public class StockServiceImpl implements StockService{
     @Override
     public PageResponseDTO<TempStockDTO> getListTempStock(PageRequestDTO pageRequestDTO) {
         List<TempStock> tempStockList = stockMapper.selectListTempStock(pageRequestDTO);
-        List<TempStockDTO> tempStockDTOList = tempStockList.stream().map(tempStock -> modelMapper.map(tempStock, TempStockDTO.class)).collect(Collectors.toList());
+        List<TempStockDTO> tempStockDTOList = new ArrayList<>();
+        tempStockList.forEach(tempStock -> {
+            MemberDTO memberDTO = MemberDTO.builder()
+                    .id(tempStock.getMember().getId())
+                    .name(tempStock.getMember().getName())
+                    .email(tempStock.getMember().getEmail())
+                    .phone(tempStock.getMember().getPhone())
+                    .businessNumber(tempStock.getMember().getBusinessNumber()).build();
+
+            WarehouseDTO warehouseDTO = WarehouseDTO.builder().
+                    id(tempStock.getCell().getWarehouse().getId())
+                    .name(tempStock.getCell().getWarehouse().getName())
+                    .roadName(tempStock.getCell().getWarehouse().getRoadName())
+                    .zipCode(tempStock.getCell().getWarehouse().getZipCode())
+                    .lotNumber(tempStock.getCell().getWarehouse().getLotNumber()).build();
+
+            CellDTO cellDTO = CellDTO.builder()
+                    .id(tempStock.getCell().getId())
+                    .warehouseDTO(warehouseDTO)
+                    .capacity(tempStock.getCell().getCapacity()).build();
+
+            ProductDTO productDTO = modelMapper.map(tempStock.getProduct(), ProductDTO.class);
+
+            TempStockDTO tempStockDTO = TempStockDTO.builder()
+                    .id(tempStock.getId())
+                    .memberDTO(memberDTO)
+                    .cellDTO(cellDTO)
+                    .productDTO(productDTO)
+                    .changeAmount(tempStock.getChangeAmount())
+                    .expirationDate(tempStock.getExpirationDate())
+                    .manufacturingDate(tempStock.getManufacturingDate())
+                    .regDate(tempStock.getRegDate())
+                    .tempStockState(tempStock.isTempStockState()).build();
+
+            tempStockDTOList.add(tempStockDTO);});
+
 
         int total =stockMapper.getTempStockCount(pageRequestDTO);
+
 
         return new PageResponseDTO<>(pageRequestDTO, tempStockDTOList, total);
     }

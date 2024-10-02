@@ -15,14 +15,14 @@ public class StockServiceTests {
 
     @Test
     public void getListStockTest() {
-        StockSearchCond stockSearchCond = StockSearchCond.builder().memberName("판매자4").wareHouseName("용인").productName("닭다리살").build();
+        StockSearchCond stockSearchCond = StockSearchCond.builder().memberName("정사업자").wareHouseName("삼성").productName("요구르트").build();
 
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().searchCond(stockSearchCond).build();
         log.info(pageRequestDTO);
         log.info(pageRequestDTO.getSearchCond());
         PageResponseDTO<StockDTO> pageResponseDTO = stockService.getListStock(pageRequestDTO);
         log.info("response : " + pageResponseDTO);
-        pageResponseDTO.getDtoList().forEach(stockDTO -> log.info(stockDTO));
+        pageResponseDTO.getDtoList().forEach(stockDTO -> log.info("검색어 필터 Test : " + stockDTO));
 
     }
 

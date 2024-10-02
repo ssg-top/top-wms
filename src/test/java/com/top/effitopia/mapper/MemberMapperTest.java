@@ -4,6 +4,7 @@ import com.top.effitopia.domain.Address;
 import com.top.effitopia.domain.Member;
 import com.top.effitopia.enumeration.MemberRole;
 import com.top.effitopia.enumeration.MemberStatus;
+import com.top.effitopia.service.WarehouseService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -43,7 +45,7 @@ class MemberMapperTest {
                 .name("name")
                 .phone("01012345678")
                 .email("example@gmail.com")
-                .status(MemberStatus.REGISTER_REQUEST)
+                .status(MemberStatus.REGISTERED)
                 .role(MemberRole.WAREHOUSE_MANAGER)
                 .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
                 .build();
@@ -71,7 +73,7 @@ class MemberMapperTest {
                 .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
                 .build();
 
-        newMember = admin;
+        newMember = warehouseManager;
     }
 
 
@@ -113,7 +115,7 @@ class MemberMapperTest {
                 .phone("01011111111")
                 .email(UUID.randomUUID().toString().substring(0, 6) + "@gmail.com")
                 .address(Address.builder()
-                        .zipCode("update address1")
+                        .zipCode("12345")
                         .roadNameAddress("update address2")
                         .lotNumberAddress("update address3")
                         .detailAddress("update address4")
@@ -123,6 +125,24 @@ class MemberMapperTest {
         Assertions.assertEquals(memberMapper.update(updateMember), 1);
         Assertions.assertEquals(findMember.getPhone(), updateMember.getPhone());
         Assertions.assertEquals(findMember.getEmail(), updateMember.getEmail());
+    }
+
+    @Test
+    void 창고매니저() {
+        Member warehouseManager = Member.builder()
+                .username("manager" + (int)(Math.random() * 10000))
+                .password(UUID.randomUUID().toString().substring(0, 33))
+                .name("name")
+                .phone("01012345678")
+                .email("example@gmail.com")
+                .status(MemberStatus.REGISTERED)
+                .role(MemberRole.WAREHOUSE_MANAGER)
+                .address(Address.builder().zipCode("").roadNameAddress("").lotNumberAddress("").detailAddress("").build())
+                .build();
+        int size1 = memberMapper.selectAssignableWarehouseManagerList().size();
+        memberMapper.insert(warehouseManager);
+        int size2 = memberMapper.selectAssignableWarehouseManagerList().size();
+        Assertions.assertEquals(size1+1, size2);
     }
 
 }

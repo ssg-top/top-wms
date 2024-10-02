@@ -2,6 +2,9 @@ package com.top.effitopia.service;
 
 import com.top.effitopia.domain.Inbound;
 import com.top.effitopia.domain.Vendor;
+import com.top.effitopia.dto.InboundDTO;
+import com.top.effitopia.dto.PageRequestDTO;
+import com.top.effitopia.dto.PageResponseDTO;
 import com.top.effitopia.dto.VendorDTO;
 import com.top.effitopia.mapper.VendorMapper;
 import java.util.List;
@@ -43,9 +46,24 @@ public class VendorServiceImpl implements VendorService{
     }
 
     @Override
-    public List<VendorDTO> getList() {
-        return null;
+    public PageResponseDTO<VendorDTO> getList(PageRequestDTO<VendorDTO> pageRequestDTO) {
+
+        List<Vendor> vendorList = vendorMapper.selectAllList(pageRequestDTO);
+        int total = vendorMapper.getTotalCount(pageRequestDTO);
+
+        List<VendorDTO> dtoList = vendorList.stream()
+            .map(vendor -> modelMapper.map(vendor, VendorDTO.class))
+            .toList();
+
+        return PageResponseDTO.<VendorDTO>withAll()
+            .pageRequestDTO(pageRequestDTO)
+            .dtoList(dtoList)
+            .total(total)
+            .build();
     }
+
+
+
 
     @Override
     public void saveList(List<VendorDTO> vendorDTOList) {

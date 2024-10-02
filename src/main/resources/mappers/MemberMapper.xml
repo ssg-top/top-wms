@@ -35,11 +35,16 @@
         SELECT * FROM member WHERE username=#{username}
     </select>
 
+    <select id="selectOneByEmail" resultMap="Member" parameterType="String">
+        SELECT * FROM member WHERE email=#{email} LIMIT 1
+    </select>
+
     <select id="selectAll" parameterType="com.top.effitopia.dto.PageRequestDTO" resultMap="Member">
         SELECT * FROM member
         <where>
-            <if test="searchCond.username != null">AND username='%#{searchCond.username}%'</if>
-            <if test="searchCond.role != null">AND role=#{searchCond.role} </if>
+            <if test="username != null">AND username CONCAT('%',#{username},'%')</if>
+            <if test="role != null">AND role=#{role} </if>
+            <if test="status != null">AND status=#{status}</if>
         </where>
         ORDER BY reg_date DESC LIMIT #{skip}, #{size}
     </select>
@@ -93,11 +98,12 @@
         )
     </select>
 
-    <select id="selectCount" parameterType="com.top.effitopia.dto.PageRequestDTO" resultType="int">
+    <select id="selectCount" parameterType="com.top.effitopia.dto.MemberSearchCond" resultType="int">
         SELECT COUNT(member_id) FROM member
         <where>
-            <if test="searchCond.username != null">AND username='%#{searchCond.username}%'</if>
-            <if test="searchCond.role != null">AND role=#{searchCond.role} </if>
+            <if test="username != null">AND username CONCAT('%',#{username},'%')</if>
+            <if test="role != null">AND role=#{role} </if>
+            <if test="status != null">AND status=#{status}</if>
         </where>
     </select>
 
