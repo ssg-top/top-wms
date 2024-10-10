@@ -1,8 +1,42 @@
 # top-wms
+신세계아이앤씨 JAVA 기반 백엔드 개발자 양성 과정 2차 미니 프로젝트
 
-## Gitmoji 컨벤션
-타입(Type)*
+## 프로젝트 소개
+**프로젝트명**: Effitopia (**Effi**ciency + U**topia**)
 
+B2B 창고 관리 시스템(WMS) 개발
+
+
+## 프로젝트 일정
+- **9/26** : 프로젝트 주제 선정, 기획안 작성
+
+- **9/26 - 10/2** : 프로젝트 설계, 구현 및 테스트, 포트폴리오 작성, 마무리 및 발표 준비
+
+- **10/2** : 프로젝트 발표 및 평가
+
+## 개발 팀 소개
+TOP(This is Our Page): 5명
+
+## 개발 환경
+`Java 17`
+- **IDE**: IntelliJ IDEA Ultimate
+- **Framework**: Spring Boot (3.x)
+- **Database**: MySQL
+- **Library**: Spring Security 6, MyBatis, Thymeleaf, Bootstrap
+- **Tools**: GitHub, Notion, Slack
+
+# 주요 기능
+- 로그인/회원 관리
+- 창고 관리
+- 입고 관리
+- 출고 관리
+- 재고 관리
+- 재무 관리
+- 고객 센터
+- 대시 보드
+
+## 커밋 메세지 컨벤션
+**Commit Type Gitmoji**
 <li>🐛 bug: 버그 수정 </li>
 <li>✨ sparkles: 새로운 기능 도입</li>
 <li>🔥 fire: 코드나 파일 삭제</li>
@@ -14,7 +48,3 @@
 <li>🔧 wrench: 설정 파일 추가 또는 업데이트</li>
 <li>📦️ package: 컴파일된 파일이나 패키지 추가 또는 업데이트</li>
 <li>♻️ recycle: 코드 리팩토링</li>
-</br>
-각자 설정되어있는 인텔리제이 commitmessage에서 이모티콘 복붙하셔서 사용하시면 됩니다.
-</br>
-이모티콘은 꼭!! 기능에 맞게 사용해주시길 바랍니다.
