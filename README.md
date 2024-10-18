@@ -1,4 +1,4 @@
-# top-wms
+# WMS
 신세계아이앤씨 JAVA 기반 백엔드 개발자 양성 과정 2차 미니 프로젝트
 
 ## 프로젝트 소개 : Effitopia
@@ -80,9 +80,9 @@ Effitopia는 B2B 창고 관리 시스템(WMS) 개발 프로젝트 입니다. 창
 ## 개발 환경
 `Java 17`
 - **IDE**: IntelliJ IDEA Ultimate
-- **Framework**: Spring Boot (3.x)
-- **Database**: MySQL
-- **Library**: Spring Security 6, MyBatis, Thymeleaf, Bootstrap
+- **Framework**: Spring Boot 3.0.1, Spring Security 6
+- **Database**: MySQL 8.0.21, MyBatis, Spring Data Redis
+- **Library**: Thymeleaf, Bootstrap
 - **Tools**: GitHub, Notion, Slack
 
 ## 프로젝트 구조
@@ -106,6 +106,7 @@ Effitopia는 B2B 창고 관리 시스템(WMS) 개발 프로젝트 입니다. 창
 - 입고 관리
 - 출고 관리
 - 재고 관리
+- 계약 관리
 - 재무 관리
 - 고객 센터
 - 대시 보드
