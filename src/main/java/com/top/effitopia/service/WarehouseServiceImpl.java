@@ -1,9 +1,6 @@
 package com.top.effitopia.service;
 
-import com.top.effitopia.domain.Cell;
-import com.top.effitopia.domain.Member;
-import com.top.effitopia.domain.Warehouse;
-import com.top.effitopia.domain.WarehouseType;
+import com.top.effitopia.domain.*;
 import com.top.effitopia.dto.*;
 import com.top.effitopia.mapper.WarehouseMapper;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +27,7 @@ public class WarehouseServiceImpl implements WarehouseService{
     public PageResponseDTO<WarehouseDTO> getWarehouseList(PageRequestDTO<WarehouseDTO> pageRequestDTO) {
         List<Warehouse> warehouseList =  warehouseMapper.selectWarehouseList(pageRequestDTO);
         List<WarehouseDTO> warehouseDTOList = changedListDTO(warehouseList);
-        log.info(warehouseDTOList);
-        int total = warehouseMapper.getCount(pageRequestDTO);
+        int total = warehouseMapper.getWarehouseCount(pageRequestDTO);
         PageResponseDTO<WarehouseDTO> pageResponseDTO = PageResponseDTO
                 .<WarehouseDTO>withAll()
                 .dtoList(warehouseDTOList)
@@ -43,19 +39,15 @@ public class WarehouseServiceImpl implements WarehouseService{
 
     @Override
     public PageResponseDTO<CellDTO> getCellList(PageRequestDTO<CellDTO> pageRequestDTO) {
-        log.info("요긴뎅"+pageRequestDTO);
         List<Cell> cellList = warehouseMapper.selectCellList(pageRequestDTO);
-        log.info("dsjkfdhskfdskfndsnfldsnflkdsn" + cellList);
         List<CellDTO> cellDTOList = cellList.stream().map(vo->modelMapper.map(vo, CellDTO.class)).collect(Collectors.toList());
-        log.info("ekekiekekekekekekekek" + cellDTOList);
-        int total = warehouseMapper.getCount(pageRequestDTO);
-        PageResponseDTO<CellDTO> pageResponseDTO = PageResponseDTO
+        int total = warehouseMapper.getCellCount(pageRequestDTO);
+        return PageResponseDTO
                 .<CellDTO>withAll()
                 .dtoList(cellDTOList)
                 .total(total)
                 .pageRequestDTO(pageRequestDTO)
                 .build();
-        return pageResponseDTO;
     }
 
     @Override
@@ -91,7 +83,7 @@ public class WarehouseServiceImpl implements WarehouseService{
         warehouseDTO.setLongitude(changedLongitude);
 
         Warehouse warehouse = changedVO(warehouseDTO);
-        log.info(warehouse);
+
         return warehouseMapper.insert(warehouse) > 0;
     }
 
@@ -180,18 +172,52 @@ public class WarehouseServiceImpl implements WarehouseService{
     @Override
     public List<WarehouseUtilizationDTO> getWarehouseUtilizationList() {
         return warehouseMapper.getWarehouseUtilizationList();
+    }
 
-    public List<MemberDTO> getAssignableWarehouseManagerList() {
+    public List<MemberDTO> getAssignableWarehouseManagerList () {
         List<Member> memberList = warehouseMapper.selectAssignableWarehouseManagerList();
         List<MemberDTO> memberDTOList = memberList.stream().map(MemberDTO::from).collect(Collectors.toList());
         return memberDTOList;
     }
 
-    public Double changedCoordinates(double coordinates){
+    public Double changedCoordinates ( double coordinates){
         DecimalFormat df = new DecimalFormat("#.######");
         String changedCoordinate = df.format(coordinates);
-
         return Double.parseDouble(changedCoordinate);
+    }
 
+    @Override
+    public PageResponseDTO<StockDTO> getStockList(PageRequestDTO<CellDTO> pageRequestDTO) {
+        List<Stock> stockList = warehouseMapper.findStockList(pageRequestDTO);
+
+        List<StockDTO> stockDTOList = new ArrayList<>();
+
+        stockList.stream()
+                .forEach(stock -> {
+                    CellDTO cellDTO = CellDTO.builder()
+                            .id(stock.getCell().getId())
+                            .code(stock.getCell().getCode())
+                            .capacity(stock.getCell().getCapacity())
+                            .width(stock.getCell().getWidth())
+                            .length(stock.getCell().getLength())
+                            .build();
+                    ProductDTO productDTO = Optional.ofNullable(stock.getProduct())
+                            .map(product -> ProductDTO.builder()
+                                    .id(product.getId())
+                                    .name(product.getName())
+                                    .build())
+                            .orElse(null);
+                    StockDTO stockDTO = modelMapper.map(stock, StockDTO.class);
+                    stockDTO.setCellDTO(cellDTO);
+                    stockDTO.setProductDTO(productDTO);
+                    stockDTOList.add(stockDTO);
+                });
+        int total = warehouseMapper.getCellCount(pageRequestDTO);
+        return PageResponseDTO
+                .<StockDTO>withAll()
+                .dtoList(stockDTOList)
+                .total(total)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
     }
 }
